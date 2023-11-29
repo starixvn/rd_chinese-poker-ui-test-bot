@@ -8,9 +8,17 @@ interface SlotProps {
   handleOnClickCard?: (slot: string, card: number) => void;
   handleOnClickSlot?: (slot: string) => void;
   active?: boolean;
+  result?: number;
 }
 
 export const Slot = (props: SlotProps) => {
+  const showResult = (num?: number): string => {
+    if (num) {
+      return num > 0 ? "+" + num : num.toString();
+    }
+    return "";
+  };
+
   const handleOnClickCard = (slot: string, card: number) => {
     if (props.handleOnClickCard) {
       props.handleOnClickCard(slot, card);
@@ -33,6 +41,7 @@ export const Slot = (props: SlotProps) => {
           >
             {props.name}
           </Button>
+          {showResult(props.result)}
         </Grid>
         <Grid item xs={11}>
           {props.cards.map((card, index) => (
