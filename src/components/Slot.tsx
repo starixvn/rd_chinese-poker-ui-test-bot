@@ -41,7 +41,19 @@ export const Slot = (props: SlotProps) => {
           >
             {props.name}
           </Button>
-          {showResult(props.result)}
+          <Box
+            sx={{
+              color:
+                props.result && props.result < 0
+                  ? "error.main"
+                  : "success.main",
+              fontSize: 18,
+              fontWeight: 600,
+              marginLeft: 2,
+            }}
+          >
+            {showResult(props.result)}
+          </Box>
         </Grid>
         <Grid item xs={11}>
           {props.cards.map((card, index) => (

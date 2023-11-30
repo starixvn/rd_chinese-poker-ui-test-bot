@@ -46,25 +46,27 @@ export default function Home() {
   async function getBotArrangement(bot: string, data: number[]) {
     if (data.length == 13) {
       let result = await gameService.getBotArrangement(data);
-      switch (bot) {
-        case "bot1":
-          gameData.slot2.hand1 = result.output.segment_1;
-          gameData.slot2.hand2 = result.output.segment_2;
-          gameData.slot2.hand3 = result.output.segment_3;
-          setIsLoadingBot1(false);
-          break;
-        case "bot2":
-          gameData.slot3.hand1 = result.output.segment_1;
-          gameData.slot3.hand2 = result.output.segment_2;
-          gameData.slot3.hand3 = result.output.segment_3;
-          setIsLoadingBot2(false);
-          break;
-        case "bot3":
-          gameData.slot4.hand1 = result.output.segment_1;
-          gameData.slot4.hand2 = result.output.segment_2;
-          gameData.slot4.hand3 = result.output.segment_3;
-          setIsLoadingBot3(false);
-          break;
+      if (result) {
+        switch (bot) {
+          case "bot1":
+            gameData.slot2.hand1 = result.output.segment_1;
+            gameData.slot2.hand2 = result.output.segment_2;
+            gameData.slot2.hand3 = result.output.segment_3;
+            setIsLoadingBot1(false);
+            break;
+          case "bot2":
+            gameData.slot3.hand1 = result.output.segment_1;
+            gameData.slot3.hand2 = result.output.segment_2;
+            gameData.slot3.hand3 = result.output.segment_3;
+            setIsLoadingBot2(false);
+            break;
+          case "bot3":
+            gameData.slot4.hand1 = result.output.segment_1;
+            gameData.slot4.hand2 = result.output.segment_2;
+            gameData.slot4.hand3 = result.output.segment_3;
+            setIsLoadingBot3(false);
+            break;
+        }
       }
     }
   }
@@ -83,15 +85,15 @@ export default function Home() {
       player.push(card);
       setPlayer([...player]);
       switch (slot) {
-        case "Hand 1":
+        case "Back Hand":
           setActiveSlot(1);
           removeCardFromSlot(playerSlot1, card, setPlayerSlot1);
           break;
-        case "Hand 2":
+        case "Middle Hand":
           setActiveSlot(2);
           removeCardFromSlot(playerSlot2, card, setPlayerSlot2);
           break;
-        case "Hand 3":
+        case "Front Hand":
           setActiveSlot(3);
           removeCardFromSlot(playerSlot3, card, setPlayerSlot3);
           break;
@@ -141,13 +143,13 @@ export default function Home() {
 
   const handleOnClickSlot = (slot: string) => {
     switch (slot) {
-      case "Hand 1":
+      case "Back Hand":
         setActiveSlot(1);
         break;
-      case "Hand 2":
+      case "Middle Hand":
         setActiveSlot(2);
         break;
-      case "Hand 3":
+      case "Front Hand":
         setActiveSlot(3);
         break;
     }
@@ -199,6 +201,18 @@ export default function Home() {
         },
       });
     }
+  };
+
+  const handleSortCards = () => {
+    const sortedCards = player.toSorted((a, b) => a - b);
+    setPlayer(sortedCards);
+  };
+
+  const handlePushCards = () => {
+    setPlayerSlot3(player.slice(0, 3));
+    setPlayerSlot2(player.slice(3, 8));
+    setPlayerSlot1(player.slice(8, 13));
+    setPlayer([]);
   };
 
   return isSettled && !isReturn ? (
@@ -272,25 +286,25 @@ export default function Home() {
               </Grid>
               <Grid item xs={12}>
                 <Slot
-                  name="Hand 1"
-                  cards={playerSlot1}
+                  name="Front Hand"
+                  cards={playerSlot3}
                   handleOnClickCard={handleOnClickCard}
-                  active={activeSlot === 1}
+                  active={activeSlot === 3}
                   handleOnClickSlot={handleOnClickSlot}
                 />
-                <Button onClick={handleSwitch}>switch</Button>
                 <Slot
-                  name="Hand 2"
+                  name="Middle Hand"
                   cards={playerSlot2}
                   handleOnClickCard={handleOnClickCard}
                   active={activeSlot === 2}
                   handleOnClickSlot={handleOnClickSlot}
                 />
+                <Button onClick={handleSwitch}>switch</Button>
                 <Slot
-                  name="Hand 3"
-                  cards={playerSlot3}
+                  name="Back Hand"
+                  cards={playerSlot1}
                   handleOnClickCard={handleOnClickCard}
-                  active={activeSlot === 3}
+                  active={activeSlot === 1}
                   handleOnClickSlot={handleOnClickSlot}
                 />
                 <Slot
@@ -300,8 +314,24 @@ export default function Home() {
                 />
                 <Button
                   variant="contained"
+                  color="secondary"
+                  sx={{ mt: 3, mx: 5 }}
+                  onClick={handleSortCards}
+                >
+                  Sort Cards
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  sx={{ mt: 3, mr: 5 }}
+                  onClick={handlePushCards}
+                >
+                  Push
+                </Button>
+                <Button
+                  variant="contained"
                   color="primary"
-                  sx={{ mt: 3, mb: 2 }}
+                  sx={{ mt: 3 }}
                   onClick={handleSubmitHandCard}
                 >
                   Submit
