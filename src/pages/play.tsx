@@ -209,10 +209,12 @@ export default function Home() {
   };
 
   const handlePushCards = () => {
-    setPlayerSlot3(player.slice(0, 3));
-    setPlayerSlot2(player.slice(3, 8));
-    setPlayerSlot1(player.slice(8, 13));
-    setPlayer([]);
+    if (player.length == 13) {
+      setPlayerSlot3(player.slice(0, 3));
+      setPlayerSlot2(player.slice(3, 8));
+      setPlayerSlot1(player.slice(8, 13));
+      setPlayer([]);
+    }
   };
 
   return isSettled && !isReturn ? (
