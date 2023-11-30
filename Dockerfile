@@ -1,11 +1,12 @@
 FROM node:21.2.0-alpine AS base
 WORKDIR /app
 COPY package.json .
-RUN npm install
+RUN npm install 
 
 FROM node:21.2.0-alpine AS builder
 WORKDIR /app
 COPY --from=base /app/node_modules ./node_modules
+COPY --from=base /root/.npm /root/.npm
 COPY . .
 RUN npm run build \
     && rm -rf node_modules \
@@ -13,11 +14,14 @@ RUN npm run build \
 
 FROM node:21.2.0-alpine AS prod
 WORKDIR /app
+
+ENV NEXT_SHARP_PATH=/app/node_modules/sharp
 COPY --from=builder /app/package.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
