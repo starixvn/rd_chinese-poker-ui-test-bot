@@ -12,6 +12,7 @@ import {
 import { initialMatchData, initialMatchResult } from "../interfaces";
 import { GameResult } from "@/components/GameResult";
 import { useRouter } from "next/navigation";
+import { GameSettingsPopup } from "@/components/GameSettingsPopup";
 
 export default function Home() {
   const [bot1, setBot1] = useState([] as number[]);
@@ -31,6 +32,7 @@ export default function Home() {
   const [isSettled, setIsSettled] = useState(false);
   const [isReturn, setIsReturn] = useState(false);
   const [isSuggesting, setIsSuggesting] = useState(false);
+  const [openSettings, setOpenSettings] = useState(false);
   const router = useRouter();
 
   async function getData() {
@@ -239,20 +241,6 @@ export default function Home() {
     }
   };
 
-  const handleSortCards = () => {
-    const sortedCards = player.toSorted((a, b) => a - b);
-    setPlayer(sortedCards);
-  };
-
-  const handlePullCards = () => {
-    if (player.length < 13) {
-      setPlayer([...player, ...playerSlot3, ...playerSlot2, ...playerSlot1]);
-      setPlayerSlot1([]);
-      setPlayerSlot2([]);
-      setPlayerSlot3([]);
-    }
-  };
-
   const handlePushCards = () => {
     if (player.length == 13) {
       setPlayerSlot3(player.slice(0, 3));
@@ -331,7 +319,7 @@ export default function Home() {
             color="primary"
             variant="outlined"
             onClick={() => {
-              router.push("/");
+              setOpenSettings(true);
             }}
           >
             <Settings sx={{ marginRight: 1 }} /> Settings
@@ -419,10 +407,17 @@ export default function Home() {
                   sx={{ mt: 3, mr: 5 }}
                   onClick={handleSubmitHandCard}
                 >
-                  Submit
+                  Submits
                 </Button>
               </Grid>
             </Grid>
+            <GameSettingsPopup
+              title="Settings"
+              openPopup={openSettings}
+              handleClosePopup={() => {
+                setOpenSettings(false);
+              }}
+            />
           </Box>
         </Container>
       </Box>
