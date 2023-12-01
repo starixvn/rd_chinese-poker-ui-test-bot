@@ -14,12 +14,14 @@ interface FormSettings {
   BotAddress1: string;
   BotAddress2: string;
   BotAddress3: string;
+  BotAddress4: string;
 }
 
 let initialFValues = {
   BotAddress1: "https://bots.lumigame.com/chinese-poker-bot-combine",
   BotAddress2: "https://bots.lumigame.com/chinese-poker-bot-combine",
   BotAddress3: "https://bots.lumigame.com/chinese-poker-bot-combine",
+  BotAddress4: "https://bots.lumigame.com/chinese-poker-bot-probability",
 };
 
 export default function Home() {
@@ -117,6 +119,17 @@ export default function Home() {
                 label="Bot Address Slot 3"
                 name="BotAddress3"
                 value={configurations.BotAddress3 ?? " "}
+                fullWidth
+                placeholder="Enter bot address..."
+                autoComplete="off"
+                onChange={handleSettingsChanged}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Bot Address Suggestion"
+                name="BotAddress4"
+                value={configurations.BotAddress4 ?? " "}
                 fullWidth
                 placeholder="Enter bot address..."
                 autoComplete="off"

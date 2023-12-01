@@ -30,6 +30,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSettled, setIsSettled] = useState(false);
   const [isReturn, setIsReturn] = useState(false);
+  const [isSuggesting, setIsSuggesting] = useState(false);
   const router = useRouter();
 
   async function getData() {
@@ -64,6 +65,9 @@ export default function Home() {
           break;
         case "bot3":
           botArr = settings.BotAddress3;
+          break;
+        case "bot4":
+          botArr = settings.BotAddress4;
           break;
       }
     }
@@ -106,6 +110,7 @@ export default function Home() {
     if (isLoading) {
       getData();
     }
+    handlePushCards();
     getBotArrangement("bot1", bot1);
     getBotArrangement("bot2", bot2);
     getBotArrangement("bot3", bot3);
@@ -239,11 +244,42 @@ export default function Home() {
     setPlayer(sortedCards);
   };
 
+  const handlePullCards = () => {
+    if (player.length < 13) {
+      setPlayer([...player, ...playerSlot3, ...playerSlot2, ...playerSlot1]);
+      setPlayerSlot1([]);
+      setPlayerSlot2([]);
+      setPlayerSlot3([]);
+    }
+  };
+
   const handlePushCards = () => {
     if (player.length == 13) {
       setPlayerSlot3(player.slice(0, 3));
       setPlayerSlot2(player.slice(3, 8));
       setPlayerSlot1(player.slice(8, 13));
+      setPlayer([]);
+    }
+  };
+
+  const handleSuggestCards = async () => {
+    setIsSuggesting(true);
+    let botArr = await getBotAddress("bot4");
+    let data: number[] = [];
+
+    if (player.length < 13) {
+      data = [...player, ...playerSlot3, ...playerSlot2, ...playerSlot1];
+    } else {
+      data = [...player];
+    }
+
+    let result = await gameService.getBotArrangement(data, botArr);
+
+    if (result) {
+      setIsSuggesting(false);
+      setPlayerSlot1(result.output.segment_1);
+      setPlayerSlot2(result.output.segment_2);
+      setPlayerSlot3(result.output.segment_3);
       setPlayer([]);
     }
   };
@@ -371,19 +407,11 @@ export default function Home() {
                 />
                 <Button
                   variant="contained"
-                  color="secondary"
-                  sx={{ mt: 3, mx: 5 }}
-                  onClick={handleSortCards}
-                >
-                  Sort Cards
-                </Button>
-                <Button
-                  variant="contained"
-                  color="error"
+                  color={isSuggesting ? "warning" : "success"}
                   sx={{ mt: 3, mr: 5 }}
-                  onClick={handlePushCards}
+                  onClick={handleSuggestCards}
                 >
-                  Push
+                  Suggest
                 </Button>
                 <Button
                   variant="contained"
