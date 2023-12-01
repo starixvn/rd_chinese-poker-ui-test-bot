@@ -14,7 +14,7 @@ function post(url: string, body: any): Promise<any> {
   return fetch(url, requestOptions)
     .then(handleResponse)
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 }
 
@@ -24,7 +24,7 @@ function handleResponse(response: Response): Promise<any> {
     if (!response.ok) {
       const error =
         (data && (data.detail || data.message)) || response.statusText;
-      console.log(error);
+      console.error(error);
 
       return Promise.reject(error);
     }

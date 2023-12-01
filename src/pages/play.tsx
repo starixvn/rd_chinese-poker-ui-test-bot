@@ -3,9 +3,15 @@ import { Box, Button, CircularProgress, Container, Grid } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Slot } from "../components/Slot";
 import { gameService } from "@/services/gameService";
-import { CheckCircle, KeyboardReturn, ChangeCircle } from "@mui/icons-material";
+import {
+  CheckCircle,
+  KeyboardReturn,
+  ChangeCircle,
+  Settings,
+} from "@mui/icons-material";
 import { initialMatchData, initialMatchResult } from "../interfaces";
 import { GameResult } from "@/components/GameResult";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [bot1, setBot1] = useState([] as number[]);
@@ -24,6 +30,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSettled, setIsSettled] = useState(false);
   const [isReturn, setIsReturn] = useState(false);
+  const router = useRouter();
 
   async function getData() {
     const body = ["1", "2", "3", "4"];
@@ -43,9 +50,33 @@ export default function Home() {
     }
   }
 
+  async function getBotAddress(bot: string) {
+    const item = localStorage.getItem("settings");
+    let botArr = "";
+    if (item) {
+      const settings = JSON.parse(item);
+      switch (bot) {
+        case "bot1":
+          botArr = settings.BotAddress1;
+          break;
+        case "bot2":
+          botArr = settings.BotAddress2;
+          break;
+        case "bot3":
+          botArr = settings.BotAddress3;
+          break;
+      }
+    }
+
+    return botArr.length > 0
+      ? botArr
+      : "https://bots.lumigame.com/chinese-poker-bot-combine";
+  }
+
   async function getBotArrangement(bot: string, data: number[]) {
+    let botArr = await getBotAddress(bot);
     if (data.length == 13) {
-      let result = await gameService.getBotArrangement(data);
+      let result = await gameService.getBotArrangement(data, botArr);
       if (result) {
         switch (bot) {
           case "bot1":
@@ -256,7 +287,7 @@ export default function Home() {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 5,
         }}
       >
         <Container maxWidth={false}>
@@ -302,7 +333,16 @@ export default function Home() {
                   handleOnClickSlot={handleOnClickSlot}
                 />
                 <Box ml={63} height={0}>
-                  <Button onClick={handleSwitch} sx={{ marginTop: -4 }}>
+                  <Button
+                    onClick={handleSwitch}
+                    sx={{ marginTop: -4 }}
+                    style={{
+                      display:
+                        playerSlot2.length + playerSlot1.length > 0
+                          ? ""
+                          : "none",
+                    }}
+                  >
                     <ChangeCircle />
                   </Button>
                 </Box>
@@ -337,10 +377,20 @@ export default function Home() {
                 <Button
                   variant="contained"
                   color="primary"
-                  sx={{ mt: 3 }}
+                  sx={{ mt: 3, mr: 5 }}
                   onClick={handleSubmitHandCard}
                 >
                   Submit
+                </Button>
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  sx={{ mt: 3 }}
+                  onClick={() => {
+                    router.push("/");
+                  }}
+                >
+                  <Settings sx={{ marginRight: 1 }} /> Settings
                 </Button>
               </Grid>
             </Grid>

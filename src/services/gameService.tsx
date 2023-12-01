@@ -14,7 +14,7 @@ function getHandCards(data: any): Promise<any> {
   );
 }
 
-function getBotArrangement(data: any): Promise<any> {
+function getBotArrangement(data: any, botArr: string): Promise<any> {
   let body = {
     private: {
       player_id: "string",
@@ -40,10 +40,7 @@ function getBotArrangement(data: any): Promise<any> {
   };
 
   body.private.input = data;
-  return fetchWrapper.post(
-    "https://bots.lumigame.com/chinese-poker-bot-combine/move",
-    body
-  );
+  return fetchWrapper.post(botArr + "/move", body);
 }
 
 function getSettlement(data: MatchData): Promise<any> {
