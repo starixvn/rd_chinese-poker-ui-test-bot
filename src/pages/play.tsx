@@ -290,6 +290,17 @@ export default function Home() {
           py: 5,
         }}
       >
+        <Box display="flex" justifyContent="right" mr={10}>
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => {
+              router.push("/");
+            }}
+          >
+            <Settings sx={{ marginRight: 1 }} /> Settings
+          </Button>
+        </Box>
         <Container maxWidth={false}>
           <Box>
             <Grid container spacing={2}>
@@ -381,16 +392,6 @@ export default function Home() {
                   onClick={handleSubmitHandCard}
                 >
                   Submit
-                </Button>
-                <Button
-                  color="primary"
-                  variant="outlined"
-                  sx={{ mt: 3 }}
-                  onClick={() => {
-                    router.push("/");
-                  }}
-                >
-                  <Settings sx={{ marginRight: 1 }} /> Settings
                 </Button>
               </Grid>
             </Grid>
