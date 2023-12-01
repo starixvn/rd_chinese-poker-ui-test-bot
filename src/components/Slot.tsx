@@ -1,5 +1,5 @@
 import { CardImageSources, CardImageKeys } from "../utils/CardImageSources";
-import { Box, Grid, Button } from "@mui/material";
+import { Box, Grid, Button, hexToRgb } from "@mui/material";
 import Image from "next/image";
 
 interface SlotProps {
@@ -34,8 +34,14 @@ export const Slot = (props: SlotProps) => {
   return (
     <Box>
       <Grid container spacing={2} height={120}>
-        <Grid item xs={1}>
+        <Grid item xs={props.result ? 1.5 : 1}>
           <Button
+            style={{
+              minHeight: props.result ? "0px" : "100px",
+            }}
+            fullWidth
+            disabled={props.name === "Player Cards"}
+            variant={props.result ? "text" : "contained"}
             color={props.active ? "secondary" : "primary"}
             onClick={() => handleOnClickSlot(props.name)}
           >
@@ -55,7 +61,7 @@ export const Slot = (props: SlotProps) => {
             {showResult(props.result)}
           </Box>
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={props.result ? 10.5 : 11}>
           {props.cards.map((card, index) => (
             <Image
               key={CardImageKeys[card]}

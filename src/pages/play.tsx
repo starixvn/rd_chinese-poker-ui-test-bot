@@ -3,7 +3,7 @@ import { Box, Button, CircularProgress, Container, Grid } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Slot } from "../components/Slot";
 import { gameService } from "@/services/gameService";
-import { CheckCircle, KeyboardReturn } from "@mui/icons-material";
+import { CheckCircle, KeyboardReturn, ChangeCircle } from "@mui/icons-material";
 import { initialMatchData, initialMatchResult } from "../interfaces";
 import { GameResult } from "@/components/GameResult";
 
@@ -301,7 +301,11 @@ export default function Home() {
                   active={activeSlot === 2}
                   handleOnClickSlot={handleOnClickSlot}
                 />
-                <Button onClick={handleSwitch}>switch</Button>
+                <Box ml={63} height={0}>
+                  <Button onClick={handleSwitch} sx={{ marginTop: -4 }}>
+                    <ChangeCircle />
+                  </Button>
+                </Box>
                 <Slot
                   name="Back Hand"
                   cards={playerSlot1}

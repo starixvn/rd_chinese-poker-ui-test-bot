@@ -67,7 +67,7 @@ export const GameResult = (props: GameResultProps) => {
           />
         </Grid>
         <Grid item xs={0.5}>
-          <Box>Bot 1</Box>
+          <Box>Bot1</Box>
           <Box
             mt={10}
             sx={{
@@ -87,7 +87,7 @@ export const GameResult = (props: GameResultProps) => {
           />
         </Grid>
         <Grid item xs={0.5}>
-          <Box>Bot 2</Box>
+          <Box>Bot2</Box>
           <Box
             mt={10}
             sx={{
@@ -107,7 +107,7 @@ export const GameResult = (props: GameResultProps) => {
           />
         </Grid>
         <Grid item xs={0.5}>
-          <Box>Bot 3</Box>
+          <Box>Bot3</Box>
           <Box
             mt={10}
             sx={{
