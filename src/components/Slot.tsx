@@ -68,6 +68,7 @@ export const Slot = (props: SlotProps) => {
               src={CardImageSources[card]}
               alt="card"
               height={100}
+              width={70}
               onClick={() => handleOnClickCard(props.name, card)}
             />
           ))}
