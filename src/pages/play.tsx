@@ -113,48 +113,6 @@ export default function Home() {
     getBotArrangement("bot3", bot3);
   }, [bot1, bot2, bot3]);
 
-  const handleOnClickCard = (slot: string, card: number) => {
-    if (slot != "Player Cards") {
-      player.push(card);
-      setPlayer([...player]);
-      switch (slot) {
-        case "Back Hand":
-          setActiveSlot(1);
-          removeCardFromSlot(playerSlot1, card, setPlayerSlot1);
-          break;
-        case "Middle Hand":
-          setActiveSlot(2);
-          removeCardFromSlot(playerSlot2, card, setPlayerSlot2);
-          break;
-        case "Front Hand":
-          setActiveSlot(3);
-          removeCardFromSlot(playerSlot3, card, setPlayerSlot3);
-          break;
-      }
-    } else {
-      switch (activeSlot) {
-        case 1:
-          if (playerSlot1.length < 5) {
-            removeCardFromSlot(player, card, setPlayer);
-            addCardToSlot(playerSlot1, card, setPlayerSlot1);
-          }
-          break;
-        case 2:
-          if (playerSlot2.length < 5) {
-            removeCardFromSlot(player, card, setPlayer);
-            addCardToSlot(playerSlot2, card, setPlayerSlot2);
-          }
-          break;
-        case 3:
-          if (playerSlot3.length < 3) {
-            removeCardFromSlot(player, card, setPlayer);
-            addCardToSlot(playerSlot3, card, setPlayerSlot3);
-          }
-          break;
-      }
-    }
-  };
-
   const removeCardFromSlot = (data: number[], card: number, setSlot: Dispatch<SetStateAction<number[]>>) => {
     let index = data.indexOf(card);
     data.splice(index, 1);
@@ -406,30 +364,18 @@ export default function Home() {
                   <Droppable droppableId="DropSlot3" direction="horizontal" isCombineEnabled={false}>
                     {(provided) => (
                       <Box ref={provided.innerRef} {...provided.droppableProps}>
-                        <Slot
-                          name="Front Hand"
-                          cards={playerSlot3}
-                          handleOnClickCard={handleOnClickCard}
-                          active={activeSlot === 3}
-                          handleOnClickSlot={handleOnClickSlot}
-                        />
+                        <Slot name="Front Hand" cards={playerSlot3} active={activeSlot === 3} handleOnClickSlot={handleOnClickSlot} />
                       </Box>
                     )}
                   </Droppable>
                   <Droppable droppableId="DropSlot2" direction="horizontal" isCombineEnabled={false}>
                     {(provided) => (
                       <Box ref={provided.innerRef} {...provided.droppableProps}>
-                        <Slot
-                          name="Middle Hand"
-                          cards={playerSlot2}
-                          handleOnClickCard={handleOnClickCard}
-                          active={activeSlot === 2}
-                          handleOnClickSlot={handleOnClickSlot}
-                        />
+                        <Slot name="Middle Hand" cards={playerSlot2} active={activeSlot === 2} handleOnClickSlot={handleOnClickSlot} />
                       </Box>
                     )}
                   </Droppable>
-                  <Box sx={{ marginLeft: "calc(9% + 350px)" }} height={0}>
+                  <Box sx={{ marginLeft: "360px" }} height={0}>
                     <Button
                       onClick={handleSwitch}
                       sx={{ marginTop: -4 }}
@@ -445,20 +391,7 @@ export default function Home() {
                   <Droppable droppableId="DropSlot1" direction="horizontal" isCombineEnabled={false}>
                     {(provided) => (
                       <Box ref={provided.innerRef} {...provided.droppableProps}>
-                        <Slot
-                          name="Back Hand"
-                          cards={playerSlot1}
-                          handleOnClickCard={handleOnClickCard}
-                          active={activeSlot === 1}
-                          handleOnClickSlot={handleOnClickSlot}
-                        />
-                      </Box>
-                    )}
-                  </Droppable>
-                  <Droppable droppableId="DropSlotPlayer" direction="horizontal" isCombineEnabled={false}>
-                    {(provided) => (
-                      <Box ref={provided.innerRef} {...provided.droppableProps}>
-                        <Slot name="Player Cards" cards={player} handleOnClickCard={handleOnClickCard} />
+                        <Slot name="Back Hand" cards={playerSlot1} active={activeSlot === 1} handleOnClickSlot={handleOnClickSlot} />
                       </Box>
                     )}
                   </Droppable>

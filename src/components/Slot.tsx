@@ -76,21 +76,7 @@ export const Slot = (props: SlotProps) => {
   ) : (
     <Box>
       <Grid container spacing={2} height={120}>
-        <Grid item xs={1}>
-          <Button
-            style={{
-              minHeight: "100px",
-            }}
-            fullWidth
-            disabled={props.name === "Player Cards"}
-            variant={"contained"}
-            color={props.active ? "secondary" : "primary"}
-            onClick={() => handleOnClickSlot(props.name)}
-          >
-            {props.name}
-          </Button>
-        </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           {props.cards.map((card, index) => (
             <Draggable key={CardImageKeys[card]} draggableId={card.toString()} index={index}>
               {(provided) => (
