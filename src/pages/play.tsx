@@ -261,16 +261,19 @@ export default function Home() {
     let destinationCard = -1;
     switch (destination.droppableId) {
       case "DropSlot1":
+        setActiveSlot(1);
         destinationCard = playerSlot1[destination.index] ?? destinationCard;
         destinationCard = destination.index == 5 ? playerSlot1[4] : destinationCard;
         addDraggedCardToSlot(playerSlot1, setPlayerSlot1, 5, card, destination.index);
         break;
       case "DropSlot2":
+        setActiveSlot(2);
         destinationCard = playerSlot2[destination.index] ?? destinationCard;
         destinationCard = destination.index == 5 ? playerSlot2[4] : destinationCard;
         addDraggedCardToSlot(playerSlot2, setPlayerSlot2, 5, card, destination.index);
         break;
       case "DropSlot3":
+        setActiveSlot(3);
         destinationCard = playerSlot3[destination.index] ?? destinationCard;
         destinationCard = destination.index == 3 ? playerSlot3[2] : destinationCard;
         addDraggedCardToSlot(playerSlot3, setPlayerSlot3, 3, card, destination.index);
@@ -283,7 +286,6 @@ export default function Home() {
 
     switch (source.droppableId) {
       case "DropSlot1":
-        setActiveSlot(1);
         if (destinationCard > -1) {
           playerSlot1[source.index] = destinationCard;
           setPlayerSlot1([...playerSlot1]);
@@ -292,7 +294,6 @@ export default function Home() {
         }
         break;
       case "DropSlot2":
-        setActiveSlot(2);
         if (destinationCard > -1) {
           playerSlot2[source.index] = destinationCard;
           setPlayerSlot2([...playerSlot2]);
@@ -301,7 +302,6 @@ export default function Home() {
         }
         break;
       case "DropSlot3":
-        setActiveSlot(3);
         if (destinationCard > -1) {
           playerSlot3[source.index] = destinationCard;
           setPlayerSlot3([...playerSlot3]);
@@ -429,7 +429,7 @@ export default function Home() {
                       </Box>
                     )}
                   </Droppable>
-                  <Box ml={60} height={0}>
+                  <Box sx={{ marginLeft: "calc(9% + 350px)" }} height={0}>
                     <Button
                       onClick={handleSwitch}
                       sx={{ marginTop: -4 }}
@@ -437,6 +437,7 @@ export default function Home() {
                         display: playerSlot2.length + playerSlot1.length > 0 ? "" : "none",
                       }}
                       variant="outlined"
+                      size="small"
                     >
                       <ImportExport />
                     </Button>
