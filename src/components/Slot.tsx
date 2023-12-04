@@ -1,6 +1,7 @@
 import { CardImageSources, CardImageKeys } from "../utils/CardImageSources";
-import { Box, Grid, Button, hexToRgb } from "@mui/material";
+import { Box, Grid, Button } from "@mui/material";
 import Image from "next/image";
+import { Draggable } from "@/utils/react-beautiful-dnd";
 
 interface SlotProps {
   name: string;
@@ -31,17 +32,17 @@ export const Slot = (props: SlotProps) => {
     }
   };
 
-  return (
+  return props.result ? (
     <Box>
       <Grid container spacing={2} height={120}>
-        <Grid item xs={props.result ? 1.5 : 1}>
+        <Grid item xs={1.5}>
           <Button
             style={{
-              minHeight: props.result ? "0px" : "100px",
+              minHeight: "0px",
             }}
             fullWidth
             disabled={props.name === "Player Cards"}
-            variant={props.result ? "text" : "contained"}
+            variant={"text"}
             color={props.active ? "secondary" : "primary"}
             onClick={() => handleOnClickSlot(props.name)}
           >
@@ -49,10 +50,7 @@ export const Slot = (props: SlotProps) => {
           </Button>
           <Box
             sx={{
-              color:
-                props.result && props.result < 0
-                  ? "error.main"
-                  : "success.main",
+              color: props.result < 0 ? "error.main" : "success.main",
               fontSize: 18,
               fontWeight: 600,
               marginLeft: 2,
@@ -61,7 +59,7 @@ export const Slot = (props: SlotProps) => {
             {showResult(props.result)}
           </Box>
         </Grid>
-        <Grid item xs={props.result ? 10.5 : 11}>
+        <Grid item xs={10.5}>
           {props.cards.map((card, index) => (
             <Image
               key={CardImageKeys[card]}
@@ -71,6 +69,36 @@ export const Slot = (props: SlotProps) => {
               width={70}
               onClick={() => handleOnClickCard(props.name, card)}
             />
+          ))}
+        </Grid>
+      </Grid>
+    </Box>
+  ) : (
+    <Box>
+      <Grid container spacing={2} height={120}>
+        <Grid item xs={1}>
+          <Button
+            style={{
+              minHeight: "100px",
+            }}
+            fullWidth
+            disabled={props.name === "Player Cards"}
+            variant={"contained"}
+            color={props.active ? "secondary" : "primary"}
+            onClick={() => handleOnClickSlot(props.name)}
+          >
+            {props.name}
+          </Button>
+        </Grid>
+        <Grid item xs={11}>
+          {props.cards.map((card, index) => (
+            <Draggable key={CardImageKeys[card]} draggableId={card.toString()} index={index}>
+              {(provided) => (
+                <Box ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} display="inline-flex">
+                  <Image src={CardImageSources[card]} alt="card" height={100} width={70} onClick={() => handleOnClickCard(props.name, card)} />
+                </Box>
+              )}
+            </Draggable>
           ))}
         </Grid>
       </Grid>
