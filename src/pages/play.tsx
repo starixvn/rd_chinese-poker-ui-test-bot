@@ -3,7 +3,7 @@ import { Box, Button, CircularProgress, Container, Grid } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Slot } from "../components/Slot";
 import { gameService } from "@/services/gameService";
-import { CheckCircle, KeyboardReturn, ChangeCircle, Settings } from "@mui/icons-material";
+import { CheckCircle, KeyboardReturn, ImportExport, Settings } from "@mui/icons-material";
 import { initialMatchData, initialMatchResult } from "../interfaces";
 import { GameResult } from "@/components/GameResult";
 import { useRouter } from "next/navigation";
@@ -283,6 +283,7 @@ export default function Home() {
 
     switch (source.droppableId) {
       case "DropSlot1":
+        setActiveSlot(1);
         if (destinationCard > -1) {
           playerSlot1[source.index] = destinationCard;
           setPlayerSlot1([...playerSlot1]);
@@ -291,6 +292,7 @@ export default function Home() {
         }
         break;
       case "DropSlot2":
+        setActiveSlot(2);
         if (destinationCard > -1) {
           playerSlot2[source.index] = destinationCard;
           setPlayerSlot2([...playerSlot2]);
@@ -299,6 +301,7 @@ export default function Home() {
         }
         break;
       case "DropSlot3":
+        setActiveSlot(3);
         if (destinationCard > -1) {
           playerSlot3[source.index] = destinationCard;
           setPlayerSlot3([...playerSlot3]);
@@ -426,15 +429,16 @@ export default function Home() {
                       </Box>
                     )}
                   </Droppable>
-                  <Box ml={63} height={0}>
+                  <Box ml={60} height={0}>
                     <Button
                       onClick={handleSwitch}
                       sx={{ marginTop: -4 }}
                       style={{
                         display: playerSlot2.length + playerSlot1.length > 0 ? "" : "none",
                       }}
+                      variant="outlined"
                     >
-                      <ChangeCircle />
+                      <ImportExport />
                     </Button>
                   </Box>
                   <Droppable droppableId="DropSlot1" direction="horizontal" isCombineEnabled={false}>
