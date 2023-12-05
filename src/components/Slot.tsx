@@ -6,6 +6,7 @@ import { Draggable } from "@/utils/react-beautiful-dnd";
 interface SlotProps {
   name: string;
   cards: number[];
+  dragOverId?: string | null;
 }
 
 interface ResultSlotProps {
@@ -20,9 +21,23 @@ export const Slot = (props: SlotProps) => {
         <Grid item xs={12}>
           {props.cards.map((card, index) => (
             <Draggable key={CardImageKeys[card]} draggableId={card.toString()} index={index}>
-              {(provided) => (
-                <Box ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} display="inline-flex">
-                  <Image src={CardImageSources[card]} alt="card" height={100} width={70} />
+              {(provided, snapshot) => (
+                <Box
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  display="inline-flex"
+                  borderColor="primary.main"
+                >
+                  <Image
+                    src={CardImageSources[card]}
+                    alt="card"
+                    height={100}
+                    width={70}
+                    style={{
+                      filter: snapshot.isDragging || props.dragOverId === card.toString() ? "brightness(50%)" : "",
+                    }}
+                  />
                 </Box>
               )}
             </Draggable>
@@ -73,7 +88,7 @@ export const BackSlot = (props: SlotProps) => {
       <Grid container spacing={2} height={120}>
         <Grid item xs={12}>
           {props.cards.map((card, index) => (
-            <Image key={CardImageKeys[card]} src={CardImageSources[card]} alt="card" height={100} width={70} />
+            <Image key={`${CardImageKeys[card]}+${index}`} src={CardImageSources[card]} alt="card" height={100} width={70} />
           ))}
         </Grid>
       </Grid>

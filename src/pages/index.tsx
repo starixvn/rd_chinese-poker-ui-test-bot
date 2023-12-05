@@ -8,7 +8,7 @@ import { initialMatchData, initialMatchResult } from "../interfaces";
 import { SlotResultShow } from "@/components/GameResult";
 import { GameSettingsPopup } from "@/components/GameSettingsPopup";
 import { DragDropContext, Droppable } from "@/utils/react-beautiful-dnd";
-import { DropResult } from "react-beautiful-dnd";
+import { Combine, DragUpdate, DropResult } from "react-beautiful-dnd";
 
 export default function Home() {
   const [bot1, setBot1] = useState([] as number[]);
@@ -28,6 +28,7 @@ export default function Home() {
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
   const [startNewGame, setStartNewGame] = useState(0);
+  const [dragOVerId, setDragOVerId] = useState<string | null>(null);
 
   async function getData() {
     const body = ["1", "2", "3", "4"];
@@ -193,37 +194,75 @@ export default function Home() {
   };
 
   const handleOnDragEnd = (result: DropResult) => {
-    const { source, destination } = result;
+    const { source, destination, combine } = result;
     const card = Number(result.draggableId);
-    if (!destination) return;
+    setDragOVerId(null);
+    if (destination) {
+      if (destination.droppableId != source.droppableId) {
+        let destinationCard = UpdateDestinationSlot(destination.index, card, destination.droppableId);
 
+        UpdateSourceSlot(source.index, card, destinationCard, source.droppableId);
+      } else {
+        UpdateSameSlot(source.index, destination.index, source.droppableId);
+      }
+    } else if (combine) {
+      let index = -1;
+      switch (combine.droppableId) {
+        case "DropSlot1":
+          index = playerSlot1.indexOf(Number(combine.draggableId));
+          break;
+        case "DropSlot2":
+          index = playerSlot2.indexOf(Number(combine.draggableId));
+          break;
+        case "DropSlot3":
+          index = playerSlot3.indexOf(Number(combine.draggableId));
+          break;
+      }
+
+      if (index > -1) {
+        let destinationCard = UpdateDestinationSlot(index, card, combine.droppableId);
+        UpdateSourceSlot(source.index, card, destinationCard, source.droppableId);
+      }
+    }
+  };
+
+  const handleOnDragUpdate = (update: DragUpdate) => {
+    setDragOVerId(update.combine ? update.combine.draggableId : null);
+  };
+
+  const UpdateDestinationSlot = (index: number, card: number, droppableId: string): number => {
     let destinationCard = -1;
-    switch (destination.droppableId) {
+
+    switch (droppableId) {
       case "DropSlot1":
-        destinationCard = playerSlot1[destination.index] ?? destinationCard;
-        destinationCard = destination.index == 5 ? playerSlot1[4] : destinationCard;
-        addDraggedCardToSlot(playerSlot1, setPlayerSlot1, 5, card, destination.index);
+        destinationCard = playerSlot1[index] ?? destinationCard;
+        destinationCard = index == 5 ? playerSlot1[4] : destinationCard;
+        addDraggedCardToSlot(playerSlot1, setPlayerSlot1, 5, card, index);
         break;
       case "DropSlot2":
-        destinationCard = playerSlot2[destination.index] ?? destinationCard;
-        destinationCard = destination.index == 5 ? playerSlot2[4] : destinationCard;
-        addDraggedCardToSlot(playerSlot2, setPlayerSlot2, 5, card, destination.index);
+        destinationCard = playerSlot2[index] ?? destinationCard;
+        destinationCard = index == 5 ? playerSlot2[4] : destinationCard;
+        addDraggedCardToSlot(playerSlot2, setPlayerSlot2, 5, card, index);
         break;
       case "DropSlot3":
-        destinationCard = playerSlot3[destination.index] ?? destinationCard;
-        destinationCard = destination.index == 3 ? playerSlot3[2] : destinationCard;
-        addDraggedCardToSlot(playerSlot3, setPlayerSlot3, 3, card, destination.index);
+        destinationCard = playerSlot3[index] ?? destinationCard;
+        destinationCard = index == 3 ? playerSlot3[2] : destinationCard;
+        addDraggedCardToSlot(playerSlot3, setPlayerSlot3, 3, card, index);
         break;
       case "DropSlotPlayer":
-        destinationCard = player[destination.index] ?? destinationCard;
-        addDraggedCardToSlot(player, setPlayer, 13, card, destination.index);
+        destinationCard = player[index] ?? destinationCard;
+        addDraggedCardToSlot(player, setPlayer, 13, card, index);
         break;
     }
 
-    switch (source.droppableId) {
+    return destinationCard;
+  };
+
+  const UpdateSourceSlot = (index: number, card: number, destinationCard: number, droppableId: string) => {
+    switch (droppableId) {
       case "DropSlot1":
         if (destinationCard > -1) {
-          playerSlot1[source.index] = destinationCard;
+          playerSlot1[index] = destinationCard;
           setPlayerSlot1([...playerSlot1]);
         } else {
           removeCardFromSlot(playerSlot1, card, setPlayerSlot1);
@@ -231,7 +270,7 @@ export default function Home() {
         break;
       case "DropSlot2":
         if (destinationCard > -1) {
-          playerSlot2[source.index] = destinationCard;
+          playerSlot2[index] = destinationCard;
           setPlayerSlot2([...playerSlot2]);
         } else {
           removeCardFromSlot(playerSlot2, card, setPlayerSlot2);
@@ -239,13 +278,39 @@ export default function Home() {
         break;
       case "DropSlot3":
         if (destinationCard > -1) {
-          playerSlot3[source.index] = destinationCard;
+          playerSlot3[index] = destinationCard;
           setPlayerSlot3([...playerSlot3]);
         } else {
           removeCardFromSlot(playerSlot3, card, setPlayerSlot3);
         }
         break;
     }
+  };
+
+  const UpdateSameSlot = (sourceIndex: number, destinationIndex: number, droppableId: string) => {
+    let orderSlot = [] as number[];
+    switch (droppableId) {
+      case "DropSlot1":
+        orderSlot = reorder(playerSlot1, sourceIndex, destinationIndex);
+        setPlayerSlot1([...orderSlot]);
+        break;
+      case "DropSlot2":
+        orderSlot = reorder(playerSlot2, sourceIndex, destinationIndex);
+        setPlayerSlot2([...orderSlot]);
+        break;
+      case "DropSlot3":
+        orderSlot = reorder(playerSlot3, sourceIndex, destinationIndex);
+        setPlayerSlot3([...orderSlot]);
+        break;
+    }
+  };
+
+  const reorder = (arr: number[], startIndex: number, endIndex: number): number[] => {
+    const result = Array.from(arr);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
   };
 
   const addDraggedCardToSlot = (slotData: number[], setSlot: Dispatch<SetStateAction<number[]>>, limit: number, card: number, index: number) => {
@@ -269,6 +334,7 @@ export default function Home() {
     setStartNewGame(startNewGame + 1);
     setIsLoading(true);
     setIsSettled(false);
+    setIsSuggesting(false);
   };
 
   return (
@@ -314,18 +380,18 @@ export default function Home() {
                 {isSettled ? (
                   <SlotResultShow slotData={gameData.slot1} slotResult={gameResult.slot1} />
                 ) : (
-                  <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <Droppable droppableId="DropSlot3" direction="horizontal" isCombineEnabled={false}>
+                  <DragDropContext onDragEnd={handleOnDragEnd} onDragUpdate={handleOnDragUpdate}>
+                    <Droppable droppableId="DropSlot3" direction="horizontal" isCombineEnabled={true}>
                       {(provided) => (
                         <Box ref={provided.innerRef} {...provided.droppableProps}>
-                          <Slot name="Front Hand" cards={playerSlot3} />
+                          <Slot name="Front Hand" cards={playerSlot3} dragOverId={dragOVerId} />
                         </Box>
                       )}
                     </Droppable>
-                    <Droppable droppableId="DropSlot2" direction="horizontal" isCombineEnabled={false}>
+                    <Droppable droppableId="DropSlot2" direction="horizontal" isCombineEnabled={true}>
                       {(provided) => (
                         <Box ref={provided.innerRef} {...provided.droppableProps}>
-                          <Slot name="Middle Hand" cards={playerSlot2} />
+                          <Slot name="Middle Hand" cards={playerSlot2} dragOverId={dragOVerId} />
                         </Box>
                       )}
                     </Droppable>
@@ -342,10 +408,10 @@ export default function Home() {
                         <ImportExport />
                       </Button>
                     </Box>
-                    <Droppable droppableId="DropSlot1" direction="horizontal" isCombineEnabled={false}>
+                    <Droppable droppableId="DropSlot1" direction="horizontal" isCombineEnabled={true}>
                       {(provided) => (
                         <Box ref={provided.innerRef} {...provided.droppableProps}>
-                          <Slot name="Back Hand" cards={playerSlot1} />
+                          <Slot name="Back Hand" cards={playerSlot1} dragOverId={dragOVerId} />
                         </Box>
                       )}
                     </Droppable>
