@@ -1,11 +1,4 @@
-import {
-  Box,
-  Container,
-  Grid,
-  TextField,
-  Typography,
-  Button,
-} from "@mui/material";
+import { Box, Container, Grid, TextField, Typography, Button } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 
 interface FormSettings {
@@ -22,7 +15,11 @@ let initialFValues = {
   BotAddress4: "https://bots.lumigame.com/chinese-poker-bot-probability",
 };
 
-export const GameSettings = () => {
+interface GameSettingsProps {
+  handleClosePopup?: () => void;
+}
+
+export const GameSettings = (props: GameSettingsProps) => {
   useEffect(() => {
     const item = localStorage.getItem("settings");
     if (item && item.length > 0) {
@@ -34,11 +31,12 @@ export const GameSettings = () => {
 
   const handleSaveSettings = () => {
     localStorage.setItem("settings", JSON.stringify(configurations));
+    if (props.handleClosePopup) {
+      props.handleClosePopup();
+    }
   };
 
-  const handleSettingsChanged = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleSettingsChanged = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setConfigurations({
       ...configurations,
@@ -106,24 +104,12 @@ export const GameSettings = () => {
           />
         </Grid>
         <Grid item xs={6}>
-          <Button
-            color="primary"
-            fullWidth
-            size="large"
-            variant="contained"
-            onClick={handleSaveSettings}
-          >
+          <Button color="primary" fullWidth size="large" variant="contained" onClick={handleSaveSettings}>
             Save
           </Button>
         </Grid>
         <Grid item xs={6}>
-          <Button
-            color="error"
-            fullWidth
-            size="large"
-            variant="contained"
-            onClick={handleResetSettings}
-          >
+          <Button color="error" fullWidth size="large" variant="contained" onClick={handleResetSettings}>
             Reset
           </Button>
         </Grid>
