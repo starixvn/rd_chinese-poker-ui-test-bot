@@ -1,7 +1,6 @@
 import { CardImageSources, CardImageKeys } from "../utils/CardImageSources";
 import { Box, Grid } from "@mui/material";
 import Image from "next/image";
-import { Draggable } from "@/utils/react-beautiful-dnd";
 
 interface SlotProps {
   name: string;
@@ -19,13 +18,7 @@ export const Slot = (props: SlotProps) => {
       <Grid container spacing={2} height={120}>
         <Grid item xs={12}>
           {props.cards.map((card, index) => (
-            <Draggable key={CardImageKeys[card]} draggableId={card.toString()} index={index}>
-              {(provided) => (
-                <Box ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} display="inline-flex">
-                  <Image src={CardImageSources[card]} alt="card" height={100} width={70} />
-                </Box>
-              )}
-            </Draggable>
+            <Image key={CardImageKeys[card]} src={CardImageSources[card]} alt="card" height={100} width={70} />
           ))}
         </Grid>
       </Grid>

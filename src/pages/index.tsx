@@ -7,7 +7,6 @@ import { CheckCircle, ImportExport, Settings } from "@mui/icons-material";
 import { initialMatchData, initialMatchResult } from "../interfaces";
 import { SlotResultShow } from "@/components/GameResult";
 import { GameSettingsPopup } from "@/components/GameSettingsPopup";
-import { DragDropContext, Droppable } from "@/utils/react-beautiful-dnd";
 import { DropResult } from "react-beautiful-dnd";
 
 export default function Home() {
@@ -314,21 +313,9 @@ export default function Home() {
                 {isSettled ? (
                   <SlotResultShow slotData={gameData.slot1} slotResult={gameResult.slot1} />
                 ) : (
-                  <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <Droppable droppableId="DropSlot3" direction="horizontal" isCombineEnabled={false}>
-                      {(provided) => (
-                        <Box ref={provided.innerRef} {...provided.droppableProps}>
-                          <Slot name="Front Hand" cards={playerSlot3} />
-                        </Box>
-                      )}
-                    </Droppable>
-                    <Droppable droppableId="DropSlot2" direction="horizontal" isCombineEnabled={false}>
-                      {(provided) => (
-                        <Box ref={provided.innerRef} {...provided.droppableProps}>
-                          <Slot name="Middle Hand" cards={playerSlot2} />
-                        </Box>
-                      )}
-                    </Droppable>
+                  <Box>
+                    <Slot name="Front Hand" cards={playerSlot3} />
+                    <Slot name="Middle Hand" cards={playerSlot2} />
                     <Box sx={{ marginLeft: "360px" }} height={0}>
                       <Button
                         onClick={handleSwitch}
@@ -342,14 +329,8 @@ export default function Home() {
                         <ImportExport />
                       </Button>
                     </Box>
-                    <Droppable droppableId="DropSlot1" direction="horizontal" isCombineEnabled={false}>
-                      {(provided) => (
-                        <Box ref={provided.innerRef} {...provided.droppableProps}>
-                          <Slot name="Back Hand" cards={playerSlot1} />
-                        </Box>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
+                    <Slot name="Back Hand" cards={playerSlot1} />
+                  </Box>
                 )}
 
                 <Button variant="contained" color={isSuggesting ? "warning" : "success"} sx={{ mt: 3, mr: 5 }} onClick={handleSuggestCards}>
