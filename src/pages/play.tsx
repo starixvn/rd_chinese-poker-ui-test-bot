@@ -1,12 +1,11 @@
 import Head from "next/head";
 import { Box, Button, CircularProgress, Container, Grid } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { BackHand, BackSlot, Slot } from "../components/Slot";
+import { BackHand, Slot } from "../components/Slot";
 import { gameService } from "@/services/gameService";
-import { CheckCircle, KeyboardReturn, ImportExport, Settings } from "@mui/icons-material";
+import { CheckCircle, ImportExport, Settings } from "@mui/icons-material";
 import { initialMatchData, initialMatchResult } from "../interfaces";
-import { GameResult } from "@/components/GameResult";
-import { useRouter } from "next/navigation";
+import { SlotResultShow } from "@/components/GameResult";
 import { GameSettingsPopup } from "@/components/GameSettingsPopup";
 import { DragDropContext, Droppable } from "@/utils/react-beautiful-dnd";
 import { DropResult } from "react-beautiful-dnd";
@@ -26,10 +25,9 @@ export default function Home() {
   const [isLoadingBot3, setIsLoadingBot3] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [isSettled, setIsSettled] = useState(false);
-  const [isReturn, setIsReturn] = useState(false);
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
-  const router = useRouter();
+  const [startNewGame, setStartNewGame] = useState(0);
 
   async function getData() {
     const body = ["1", "2", "3", "4"];
@@ -104,13 +102,16 @@ export default function Home() {
 
   useEffect(() => {
     if (isLoading) {
+      setIsLoadingBot1(true);
+      setIsLoadingBot2(true);
+      setIsLoadingBot3(true);
       getData();
     }
     handlePushCards();
     getBotArrangement("bot1", bot1);
     getBotArrangement("bot2", bot2);
     getBotArrangement("bot3", bot3);
-  }, [bot1, bot2, bot3]);
+  }, [bot1, bot2, bot3, startNewGame]);
 
   const removeCardFromSlot = (data: number[], card: number, setSlot: Dispatch<SetStateAction<number[]>>) => {
     let index = data.indexOf(card);
@@ -131,7 +132,6 @@ export default function Home() {
       gameData.slot1.hand3 = playerSlot3;
       let result = await gameService.getSettlement(gameData);
       setIsSettled(true);
-      setIsReturn(false);
       setGameResult({
         slot1: {
           hand1: result["1"].scores.segment_1,
@@ -260,35 +260,17 @@ export default function Home() {
     setSlot([...slotData]);
   };
 
-  return isSettled && !isReturn ? (
-    <>
-      <Head>
-        <title>Chinese Poker</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8,
-        }}
-      >
-        <Container maxWidth={false}>
-          <Box>
-            <Button
-              onClick={() => {
-                setIsReturn(true);
-              }}
-            >
-              <KeyboardReturn /> Return
-            </Button>
-            <GameResult matchData={gameData} matchResult={gameResult} />
-          </Box>
-        </Container>
-      </Box>
-    </>
-  ) : (
+  const handleEditHandCard = () => {
+    setIsSettled(false);
+  };
+
+  const handleStartNewGame = () => {
+    setStartNewGame(startNewGame + 1);
+    setIsLoading(true);
+    setIsSettled(false);
+  };
+
+  return (
     <>
       <Head>
         <title>Chinese Poker</title>
@@ -321,60 +303,72 @@ export default function Home() {
                 <Box height={200} />
                 <Box>Bot 2</Box>
                 {isLoadingBot2 ? <CircularProgress /> : <CheckCircle color="secondary" fontSize="large" />}
-                <BackHand />
+                {isSettled ? <SlotResultShow slotData={gameData.slot3} slotResult={gameResult.slot3} /> : <BackHand />}
               </Grid>
               <Grid item xs={4}>
                 <Box>Bot 1</Box>
                 {isLoadingBot1 ? <CircularProgress /> : <CheckCircle color="secondary" fontSize="large" />}
-                <BackHand />
+                {isSettled ? <SlotResultShow slotData={gameData.slot2} slotResult={gameResult.slot2} /> : <BackHand />}
                 <Box height={30} />
-                <DragDropContext onDragEnd={handleOnDragEnd}>
-                  <Droppable droppableId="DropSlot3" direction="horizontal" isCombineEnabled={false}>
-                    {(provided) => (
-                      <Box ref={provided.innerRef} {...provided.droppableProps}>
-                        <Slot name="Front Hand" cards={playerSlot3} />
-                      </Box>
-                    )}
-                  </Droppable>
-                  <Droppable droppableId="DropSlot2" direction="horizontal" isCombineEnabled={false}>
-                    {(provided) => (
-                      <Box ref={provided.innerRef} {...provided.droppableProps}>
-                        <Slot name="Middle Hand" cards={playerSlot2} />
-                      </Box>
-                    )}
-                  </Droppable>
-                  <Box sx={{ marginLeft: "360px" }} height={0}>
-                    <Button
-                      onClick={handleSwitch}
-                      sx={{ marginTop: -4 }}
-                      style={{
-                        display: playerSlot2.length + playerSlot1.length > 0 ? "" : "none",
-                      }}
-                      variant="outlined"
-                      size="small"
-                    >
-                      <ImportExport />
-                    </Button>
-                  </Box>
-                  <Droppable droppableId="DropSlot1" direction="horizontal" isCombineEnabled={false}>
-                    {(provided) => (
-                      <Box ref={provided.innerRef} {...provided.droppableProps}>
-                        <Slot name="Back Hand" cards={playerSlot1} />
-                      </Box>
-                    )}
-                  </Droppable>
-                </DragDropContext>
+                {isSettled ? (
+                  <SlotResultShow slotData={gameData.slot1} slotResult={gameResult.slot1} />
+                ) : (
+                  <DragDropContext onDragEnd={handleOnDragEnd}>
+                    <Droppable droppableId="DropSlot3" direction="horizontal" isCombineEnabled={false}>
+                      {(provided) => (
+                        <Box ref={provided.innerRef} {...provided.droppableProps}>
+                          <Slot name="Front Hand" cards={playerSlot3} />
+                        </Box>
+                      )}
+                    </Droppable>
+                    <Droppable droppableId="DropSlot2" direction="horizontal" isCombineEnabled={false}>
+                      {(provided) => (
+                        <Box ref={provided.innerRef} {...provided.droppableProps}>
+                          <Slot name="Middle Hand" cards={playerSlot2} />
+                        </Box>
+                      )}
+                    </Droppable>
+                    <Box sx={{ marginLeft: "360px" }} height={0}>
+                      <Button
+                        onClick={handleSwitch}
+                        sx={{ marginTop: -4 }}
+                        style={{
+                          display: playerSlot2.length + playerSlot1.length > 0 ? "" : "none",
+                        }}
+                        variant="outlined"
+                        size="small"
+                      >
+                        <ImportExport />
+                      </Button>
+                    </Box>
+                    <Droppable droppableId="DropSlot1" direction="horizontal" isCombineEnabled={false}>
+                      {(provided) => (
+                        <Box ref={provided.innerRef} {...provided.droppableProps}>
+                          <Slot name="Back Hand" cards={playerSlot1} />
+                        </Box>
+                      )}
+                    </Droppable>
+                  </DragDropContext>
+                )}
+
                 <Button variant="contained" color={isSuggesting ? "warning" : "success"} sx={{ mt: 3, mr: 5 }} onClick={handleSuggestCards}>
-                  Suggest
+                  {isSuggesting ? "Waiting..." : "Suggest"}
                 </Button>
                 <Button variant="contained" color="primary" sx={{ mt: 3, mr: 5 }} onClick={handleSubmitHandCard}>
-                  Submits
+                  Submit
+                </Button>
+                <Button variant="contained" color="secondary" sx={{ mt: 3, mr: 5 }} onClick={handleEditHandCard}>
+                  Edit
+                </Button>
+                <Button variant="contained" color="info" sx={{ mt: 3, mr: 5 }} onClick={handleStartNewGame}>
+                  New Game
                 </Button>
               </Grid>
               <Grid item xs={4}>
                 <Box height={200} />
                 <Box>Bot 3</Box>
-                {isLoadingBot3 ? <CircularProgress /> : <CheckCircle color="secondary" fontSize="large" />} <BackHand />
+                {isLoadingBot3 ? <CircularProgress /> : <CheckCircle color="secondary" fontSize="large" />}
+                {isSettled ? <SlotResultShow slotData={gameData.slot4} slotResult={gameResult.slot4} /> : <BackHand />}
               </Grid>
             </Grid>
             <GameSettingsPopup
