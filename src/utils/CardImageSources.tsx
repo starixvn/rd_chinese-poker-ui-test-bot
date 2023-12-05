@@ -11,4 +11,7 @@ faces.forEach((face) => {
   });
 });
 
+CardImageKeys.push(`back`);
+CardImageSources.push(`/images/back.png`);
+
 export { CardImageSources, CardImageKeys };
