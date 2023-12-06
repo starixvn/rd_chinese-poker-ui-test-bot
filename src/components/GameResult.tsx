@@ -15,9 +15,8 @@ export const SlotResultShow = (props: SlotResultProps) => {
   return (
     <Box>
       <Grid container spacing={5}>
-        <Grid item xs={1}>
+        <Grid item xs={1} alignSelf={"center"}>
           <Box
-            mt={14}
             sx={{
               color: props.slotResult.sum < 0 ? "error.main" : "success.main",
               fontSize: 25,

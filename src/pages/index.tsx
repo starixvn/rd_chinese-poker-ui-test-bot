@@ -395,7 +395,7 @@ export default function Home() {
                         </Box>
                       )}
                     </Droppable>
-                    <Box sx={{ marginLeft: "360px" }} height={0}>
+                    <Box sx={{ marginLeft: "calc(11% + 360px);" }} height={0}>
                       <Button
                         onClick={handleSwitch}
                         sx={{ marginTop: -4 }}

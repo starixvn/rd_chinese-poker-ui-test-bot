@@ -2,6 +2,7 @@ import { CardImageSources, CardImageKeys } from "../utils/CardImageSources";
 import { Box, Grid } from "@mui/material";
 import Image from "next/image";
 import { Draggable } from "@/utils/react-beautiful-dnd";
+import { TypeChecker } from "@/utils/TypeChecker";
 
 interface SlotProps {
   name: string;
@@ -15,10 +16,23 @@ interface ResultSlotProps {
 }
 
 export const Slot = (props: SlotProps) => {
+  const slotTypeChecker = new TypeChecker([...props.cards]);
+  const slotHandType = slotTypeChecker.getType();
   return (
     <Box>
       <Grid container spacing={2} height={120}>
-        <Grid item xs={12}>
+        <Grid item xs={1.3} alignSelf={"center"}>
+          <Box
+            sx={{
+              color: "green",
+              fontSize: 18,
+              fontWeight: 600,
+            }}
+          >
+            {slotHandType}
+          </Box>
+        </Grid>
+        <Grid item xs={10.7}>
           {props.cards.map((card, index) => (
             <Draggable key={CardImageKeys[card]} draggableId={card.toString()} index={index}>
               {(provided, snapshot) => (
@@ -59,14 +73,13 @@ export const ResultSlot = (props: ResultSlotProps) => {
   return (
     <Box>
       <Grid container spacing={2} height={120}>
-        <Grid item xs={1}>
+        <Grid item xs={1} alignSelf={"center"}>
           <Box
             sx={{
               color: props.result < 0 ? "error.main" : "success.main",
               fontSize: 18,
               fontWeight: 600,
               marginLeft: 2,
-              marginTop: 5,
             }}
           >
             {showResult(props.result)}

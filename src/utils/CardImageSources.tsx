@@ -1,13 +1,13 @@
 let CardImageSources: any[] = [];
 let CardImageKeys: string[] = [];
-let suits = ["spades", "clubs", "diamonds", "hearts"];
-let faces = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+const suits = ["spades", "clubs", "diamonds", "hearts"];
+const ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
 
-faces.forEach((face) => {
+ranks.forEach((rank) => {
   suits.forEach((suit) => {
-    let card = `/images/${face}_${suit}.png`;
+    let card = `/images/${rank}_${suit}.png`;
     CardImageSources.push(card);
-    CardImageKeys.push(`${face}_${suit}`);
+    CardImageKeys.push(`${rank}_${suit}`);
   });
 });
 
