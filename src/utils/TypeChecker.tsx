@@ -89,7 +89,7 @@ export class TypeChecker {
   }
 
   private isFlush(): boolean {
-    return this.setSuits.size == 1;
+    return this.setSuits.size == 1 && this.ranks.length === 5;
   }
 
   private isFullHouseOrFourOfKinds(): boolean {

@@ -8,13 +8,16 @@ import { initialMatchData, initialMatchResult } from "../interfaces";
 import { SlotResultShow } from "@/components/GameResult";
 import { GameSettingsPopup } from "@/components/GameSettingsPopup";
 import { DragDropContext, Droppable } from "@/utils/react-beautiful-dnd";
-import { Combine, DragUpdate, DropResult } from "react-beautiful-dnd";
+import { DragUpdate, DropResult } from "react-beautiful-dnd";
+import { SuggestData } from "@/interfaces/SuggestData";
+import { SuggestPopup } from "@/components/SuggestPopup";
 
 export default function Home() {
   const [bot1, setBot1] = useState([] as number[]);
   const [bot2, setBot2] = useState([] as number[]);
   const [bot3, setBot3] = useState([] as number[]);
-  const [player, setPlayer] = useState([] as number[]);
+  const [playerData, setPlayerData] = useState([] as number[]);
+  const [suggestData, setSuggestData] = useState([] as SuggestData[]);
   const [playerSlot1, setPlayerSlot1] = useState([] as number[]);
   const [playerSlot2, setPlayerSlot2] = useState([] as number[]);
   const [playerSlot3, setPlayerSlot3] = useState([] as number[]);
@@ -26,8 +29,10 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSettled, setIsSettled] = useState(false);
   const [isSuggesting, setIsSuggesting] = useState(false);
+  const [isSuggested, setIsSuggested] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
   const [openArrangement, setOpenArrangement] = useState(true);
+  const [openSuggestion, setOpenSuggestion] = useState(false);
   const [startNewGame, setStartNewGame] = useState(0);
   const [dragOVerId, setDragOVerId] = useState<string | null>(null);
 
@@ -35,7 +40,7 @@ export default function Home() {
     const body = ["1", "2", "3", "4"];
     let data = await gameService.getHandCards(body);
     if (data) {
-      setPlayer(data.player_input["1"].input);
+      setPlayerData(data.player_input["1"].input);
       setBot1(data.player_input["2"].input);
       setBot2(data.player_input["3"].input);
       setBot3(data.player_input["4"].input);
@@ -128,7 +133,7 @@ export default function Home() {
   };
 
   const handleSubmitHandCard = async () => {
-    if (player.length == 0 && !isLoadingBot1 && !isLoadingBot2 && !isLoadingBot3) {
+    if (!isLoadingBot1 && !isLoadingBot2 && !isLoadingBot3) {
       gameData.slot1.hand1 = playerSlot1;
       gameData.slot1.hand2 = playerSlot2;
       gameData.slot1.hand3 = playerSlot3;
@@ -164,33 +169,32 @@ export default function Home() {
   };
 
   const handlePushCards = () => {
-    if (player.length == 13) {
-      setPlayerSlot3(player.slice(0, 3));
-      setPlayerSlot2(player.slice(3, 8));
-      setPlayerSlot1(player.slice(8, 13));
-      setPlayer([]);
+    if (playerData.length == 13) {
+      setPlayerSlot3(playerData.slice(0, 3));
+      setPlayerSlot2(playerData.slice(3, 8));
+      setPlayerSlot1(playerData.slice(8, 13));
+      setPlayerData([]);
     }
   };
 
   const handleSuggestCards = async () => {
-    setIsSuggesting(true);
-    let botArr = await getBotAddress("bot4");
-    let data: number[] = [];
-
-    if (player.length < 13) {
-      data = [...player, ...playerSlot3, ...playerSlot2, ...playerSlot1];
+    if (isSuggested) {
+      setOpenSuggestion(true);
     } else {
-      data = [...player];
-    }
+      setIsSuggesting(true);
+      let botArr = await getBotAddress("bot4");
+      let data: number[] = [];
 
-    let result = await gameService.getBotArrangement(data, botArr);
+      data = [...playerSlot3, ...playerSlot2, ...playerSlot1];
 
-    if (result) {
-      setIsSuggesting(false);
-      setPlayerSlot1(result.output.segment_1);
-      setPlayerSlot2(result.output.segment_2);
-      setPlayerSlot3(result.output.segment_3);
-      setPlayer([]);
+      let result = await gameService.getBotSuggestion(data, botArr);
+
+      if (result) {
+        setIsSuggested(true);
+        setIsSuggesting(false);
+        setSuggestData(result.output);
+        setOpenSuggestion(true);
+      }
     }
   };
 
@@ -249,10 +253,6 @@ export default function Home() {
         destinationCard = playerSlot3[index] ?? destinationCard;
         destinationCard = index == 3 ? playerSlot3[2] : destinationCard;
         addDraggedCardToSlot(playerSlot3, setPlayerSlot3, 3, card, index);
-        break;
-      case "DropSlotPlayer":
-        destinationCard = player[index] ?? destinationCard;
-        addDraggedCardToSlot(player, setPlayer, 13, card, index);
         break;
     }
 
@@ -337,10 +337,18 @@ export default function Home() {
     setIsLoading(true);
     setIsSettled(false);
     setIsSuggesting(false);
+    setIsSuggested(false);
   };
 
   const handleReady = () => {
     setOpenArrangement(false);
+  };
+
+  const handleCloseSuggestion = (item: number) => {
+    setPlayerSlot1([...suggestData[item].segment_1]);
+    setPlayerSlot2([...suggestData[item].segment_2]);
+    setPlayerSlot3([...suggestData[item].segment_3]);
+    setOpenSuggestion(false);
   };
 
   return (
@@ -424,6 +432,7 @@ export default function Home() {
                 </Container>
               </DialogContent>
             </Dialog>
+            <SuggestPopup data={suggestData} openPopup={openSuggestion} handleClosePopup={handleCloseSuggestion} />
             <Grid container spacing={2}>
               <Grid item xs={4}>
                 <Box height={200} />
@@ -463,6 +472,7 @@ export default function Home() {
               openPopup={openSettings}
               handleClosePopup={() => {
                 setOpenSettings(false);
+                setIsSuggested(false);
               }}
             />
           </Box>

@@ -5,13 +5,11 @@ export const gameService = {
   getHandCards,
   getBotArrangement,
   getSettlement,
+  getBotSuggestion,
 };
 
 function getHandCards(data: any): Promise<any> {
-  return fetchWrapper.post(
-    "https://bots.lumigame.com/chinese-poker-game-service/play",
-    data
-  );
+  return fetchWrapper.post("https://bots.lumigame.com/chinese-poker-game-service/play", data);
 }
 
 function getBotArrangement(data: any, botArr: string): Promise<any> {
@@ -43,6 +41,34 @@ function getBotArrangement(data: any, botArr: string): Promise<any> {
   return fetchWrapper.post(botArr + "/move", body);
 }
 
+function getBotSuggestion(data: any, botArr: string): Promise<any> {
+  let body = {
+    private: {
+      player_id: "string",
+      arrangement_id: "string",
+      input_hash: 0,
+      input: [0],
+      output: {
+        segment_1: [0],
+        segment_2: [0],
+        segment_3: [0],
+      },
+    },
+    shared: {
+      match: {
+        id: "string",
+        hash_slot_1: 0,
+        hash_slot_2: 0,
+        hash_slot_3: 0,
+        hash_slot_4: 0,
+      },
+      is_have_output: [],
+    },
+  };
+
+  body.private.input = data;
+  return fetchWrapper.post(botArr + "/suggest", body);
+}
 function getSettlement(data: MatchData): Promise<any> {
   let body = {
     match_id: data.matchId,
@@ -92,8 +118,5 @@ function getSettlement(data: MatchData): Promise<any> {
     },
   };
 
-  return fetchWrapper.post(
-    "https://bots.lumigame.com/chinese-poker-game-service/settle-game-client",
-    body
-  );
+  return fetchWrapper.post("https://bots.lumigame.com/chinese-poker-game-service/settle-game-client", body);
 }
