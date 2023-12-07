@@ -1,7 +1,7 @@
 import Head from "next/head";
-import { Box, Button, CircularProgress, Container, Grid } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Dialog, DialogContent, Grid } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { BackHand, Slot } from "../components/Slot";
+import { BackHand, Slot, StaticHand } from "../components/Slot";
 import { gameService } from "@/services/gameService";
 import { CheckCircle, ImportExport, Settings } from "@mui/icons-material";
 import { initialMatchData, initialMatchResult } from "../interfaces";
@@ -27,6 +27,7 @@ export default function Home() {
   const [isSettled, setIsSettled] = useState(false);
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
+  const [openArrangement, setOpenArrangement] = useState(true);
   const [startNewGame, setStartNewGame] = useState(0);
   const [dragOVerId, setDragOVerId] = useState<string | null>(null);
 
@@ -328,6 +329,7 @@ export default function Home() {
 
   const handleEditHandCard = () => {
     setIsSettled(false);
+    setOpenArrangement(true);
   };
 
   const handleStartNewGame = () => {
@@ -335,6 +337,10 @@ export default function Home() {
     setIsLoading(true);
     setIsSettled(false);
     setIsSuggesting(false);
+  };
+
+  const handleReady = () => {
+    setOpenArrangement(false);
   };
 
   return (
@@ -365,21 +371,9 @@ export default function Home() {
         </Box>
         <Container maxWidth={false}>
           <Box>
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <Box height={200} />
-                <Box>Bot 2</Box>
-                {isLoadingBot2 ? <CircularProgress /> : <CheckCircle color="secondary" fontSize="large" />}
-                {isSettled ? <SlotResultShow slotData={gameData.slot3} slotResult={gameResult.slot3} /> : <BackHand />}
-              </Grid>
-              <Grid item xs={4}>
-                <Box>Bot 1</Box>
-                {isLoadingBot1 ? <CircularProgress /> : <CheckCircle color="secondary" fontSize="large" />}
-                {isSettled ? <SlotResultShow slotData={gameData.slot2} slotResult={gameResult.slot2} /> : <BackHand />}
-                <Box height={30} />
-                {isSettled ? (
-                  <SlotResultShow slotData={gameData.slot1} slotResult={gameResult.slot1} />
-                ) : (
+            <Dialog open={openArrangement} maxWidth={false}>
+              <DialogContent>
+                <Container style={{ width: 1000 }}>
                   <DragDropContext onDragEnd={handleOnDragEnd} onDragUpdate={handleOnDragUpdate}>
                     <Droppable droppableId="DropSlot3" direction="horizontal" isCombineEnabled={true}>
                       {(provided) => (
@@ -395,9 +389,8 @@ export default function Home() {
                         </Box>
                       )}
                     </Droppable>
-                    <Box sx={{ marginLeft: "calc(11% + 360px);" }} height={0}>
+                    <Box sx={{ marginLeft: "calc(11% + 720px);" }} height={0}>
                       <Button
-                        onClick={handleSwitch}
                         sx={{ marginTop: -4 }}
                         style={{
                           display: playerSlot2.length + playerSlot1.length > 0 ? "" : "none",
@@ -405,7 +398,7 @@ export default function Home() {
                         variant="outlined"
                         size="small"
                       >
-                        <ImportExport />
+                        <ImportExport onClick={handleSwitch} fontSize="large" />
                       </Button>
                     </Box>
                     <Droppable droppableId="DropSlot1" direction="horizontal" isCombineEnabled={true}>
@@ -416,16 +409,43 @@ export default function Home() {
                       )}
                     </Droppable>
                   </DragDropContext>
+                  <Button
+                    size="large"
+                    variant="contained"
+                    color={isSuggesting ? "warning" : "success"}
+                    sx={{ mt: 3, mr: 5, fontSize: 20, ml: 13 }}
+                    onClick={handleSuggestCards}
+                  >
+                    {isSuggesting ? "Waiting..." : "Suggest"}
+                  </Button>
+                  <Button variant="contained" color="error" sx={{ mt: 3, mr: 5, fontSize: 20 }} onClick={handleReady} size="large">
+                    Ready
+                  </Button>
+                </Container>
+              </DialogContent>
+            </Dialog>
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
+                <Box height={200} />
+                <Box>Bot 2</Box>
+                {isLoadingBot2 ? <CircularProgress /> : <CheckCircle color="secondary" fontSize="large" />}
+                {isSettled ? <SlotResultShow slotData={gameData.slot3} slotResult={gameResult.slot3} /> : <BackHand />}
+              </Grid>
+              <Grid item xs={4}>
+                <Box>Bot 1</Box>
+                {isLoadingBot1 ? <CircularProgress /> : <CheckCircle color="secondary" fontSize="large" />}
+                {isSettled ? <SlotResultShow slotData={gameData.slot2} slotResult={gameResult.slot2} /> : <BackHand />}
+                <Box height={30} />
+                {isSettled ? (
+                  <SlotResultShow slotData={gameData.slot1} slotResult={gameResult.slot1} />
+                ) : (
+                  <StaticHand cards={[...playerSlot3, ...playerSlot2, ...playerSlot1]} />
                 )}
-
-                <Button variant="contained" color={isSuggesting ? "warning" : "success"} sx={{ mt: 3, mr: 5 }} onClick={handleSuggestCards}>
-                  {isSuggesting ? "Waiting..." : "Suggest"}
-                </Button>
                 <Button variant="contained" color="primary" sx={{ mt: 3, mr: 5 }} onClick={handleSubmitHandCard}>
                   Submit
                 </Button>
                 <Button variant="contained" color="secondary" sx={{ mt: 3, mr: 5 }} onClick={handleEditHandCard}>
-                  Edit
+                  Rearrange
                 </Button>
                 <Button variant="contained" color="info" sx={{ mt: 3, mr: 5 }} onClick={handleStartNewGame}>
                   New Game
