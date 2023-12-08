@@ -40,20 +40,23 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
   };
 
   return (
-    <Dialog open={props.openPopup} maxWidth={false}>
-      <DialogContent dividers>
-        {props.data.map((slot, index) => (
-          <Box key={`suggest_${index}`} mb={2}>
-            {index > 0 ? <Divider variant="middle" sx={{ marginBottom: 2, borderBottomWidth: 5 }} /> : null}
-            <Radio {...controlProps(index.toString())} />
-            <StaticSlot name="" cards={slot.segment_3} />
-            <StaticSlot name="" cards={slot.segment_2} />
-            <StaticSlot name="" cards={slot.segment_1} />
-          </Box>
-        ))}
+    <Dialog open={props.openPopup} maxWidth={"lg"} fullWidth>
+      <DialogContent>
+        <div className="suggest-block">
+          {props.data.map((slot, index) => (
+            <div key={`suggest_${index}`} className="suggest-slot">
+              <Radio {...controlProps(index.toString())} />
+              <StaticSlot name="" cards={slot.segment_3} />
+              <StaticSlot name="" cards={slot.segment_2} />
+              <StaticSlot name="" cards={slot.segment_1} />
+            </div>
+          ))}
+        </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>OK</Button>
+        <Button variant="contained" color="info" onClick={handleClose}>
+          OK
+        </Button>
       </DialogActions>
     </Dialog>
   );

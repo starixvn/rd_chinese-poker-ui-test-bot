@@ -1,20 +1,32 @@
 import Head from "next/head";
-import { Box, Button, CircularProgress, Container, Dialog, DialogContent, Grid } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Dialog,
+  DialogContent,
+  Grid,
+} from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { BackHand, Slot, StaticHand } from "../components/Slot";
 import { gameService } from "@/services/gameService";
 import { CheckCircle, ImportExport, Settings } from "@mui/icons-material";
+import { isMobileOnly, isIOS } from "react-device-detect";
 import { initialMatchData, initialMatchResult } from "../interfaces";
 import { SlotResultShow } from "@/components/GameResult";
 import { GameSettingsPopup } from "@/components/GameSettingsPopup";
 import { DragDropContext, Droppable } from "@/utils/react-beautiful-dnd";
-import { Combine, DragUpdate, DropResult } from "react-beautiful-dnd";
+import { DragUpdate, DropResult } from "react-beautiful-dnd";
+import { SuggestData } from "@/interfaces/SuggestData";
+import { SuggestPopup } from "@/components/SuggestPopup";
 
 export default function Home() {
   const [bot1, setBot1] = useState([] as number[]);
   const [bot2, setBot2] = useState([] as number[]);
   const [bot3, setBot3] = useState([] as number[]);
-  const [player, setPlayer] = useState([] as number[]);
+  const [playerData, setPlayerData] = useState([] as number[]);
+  const [suggestData, setSuggestData] = useState([] as SuggestData[]);
   const [playerSlot1, setPlayerSlot1] = useState([] as number[]);
   const [playerSlot2, setPlayerSlot2] = useState([] as number[]);
   const [playerSlot3, setPlayerSlot3] = useState([] as number[]);
@@ -26,8 +38,10 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSettled, setIsSettled] = useState(false);
   const [isSuggesting, setIsSuggesting] = useState(false);
+  const [isSuggested, setIsSuggested] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
   const [openArrangement, setOpenArrangement] = useState(true);
+  const [openSuggestion, setOpenSuggestion] = useState(false);
   const [startNewGame, setStartNewGame] = useState(0);
   const [dragOVerId, setDragOVerId] = useState<string | null>(null);
 
@@ -35,7 +49,7 @@ export default function Home() {
     const body = ["1", "2", "3", "4"];
     let data = await gameService.getHandCards(body);
     if (data) {
-      setPlayer(data.player_input["1"].input);
+      setPlayerData(data.player_input["1"].input);
       setBot1(data.player_input["2"].input);
       setBot2(data.player_input["3"].input);
       setBot3(data.player_input["4"].input);
@@ -70,7 +84,9 @@ export default function Home() {
       }
     }
 
-    return botArr.length > 0 ? botArr : "https://bots.lumigame.com/chinese-poker-bot-combine";
+    return botArr.length > 0
+      ? botArr
+      : "https://bots.lumigame.com/chinese-poker-bot-combine";
   }
 
   async function getBotArrangement(bot: string, data: number[]) {
@@ -115,7 +131,11 @@ export default function Home() {
     getBotArrangement("bot3", bot3);
   }, [bot1, bot2, bot3, startNewGame]);
 
-  const removeCardFromSlot = (data: number[], card: number, setSlot: Dispatch<SetStateAction<number[]>>) => {
+  const removeCardFromSlot = (
+    data: number[],
+    card: number,
+    setSlot: Dispatch<SetStateAction<number[]>>
+  ) => {
     let index = data.indexOf(card);
     data.splice(index, 1);
     setSlot([...data]);
@@ -128,7 +148,7 @@ export default function Home() {
   };
 
   const handleSubmitHandCard = async () => {
-    if (player.length == 0 && !isLoadingBot1 && !isLoadingBot2 && !isLoadingBot3) {
+    if (!isLoadingBot1 && !isLoadingBot2 && !isLoadingBot3) {
       gameData.slot1.hand1 = playerSlot1;
       gameData.slot1.hand2 = playerSlot2;
       gameData.slot1.hand3 = playerSlot3;
@@ -164,33 +184,32 @@ export default function Home() {
   };
 
   const handlePushCards = () => {
-    if (player.length == 13) {
-      setPlayerSlot3(player.slice(0, 3));
-      setPlayerSlot2(player.slice(3, 8));
-      setPlayerSlot1(player.slice(8, 13));
-      setPlayer([]);
+    if (playerData.length == 13) {
+      setPlayerSlot3(playerData.slice(0, 3));
+      setPlayerSlot2(playerData.slice(3, 8));
+      setPlayerSlot1(playerData.slice(8, 13));
+      setPlayerData([]);
     }
   };
 
   const handleSuggestCards = async () => {
-    setIsSuggesting(true);
-    let botArr = await getBotAddress("bot4");
-    let data: number[] = [];
-
-    if (player.length < 13) {
-      data = [...player, ...playerSlot3, ...playerSlot2, ...playerSlot1];
+    if (isSuggested) {
+      setOpenSuggestion(true);
     } else {
-      data = [...player];
-    }
+      setIsSuggesting(true);
+      let botArr = await getBotAddress("bot4");
+      let data: number[] = [];
 
-    let result = await gameService.getBotArrangement(data, botArr);
+      data = [...playerSlot3, ...playerSlot2, ...playerSlot1];
 
-    if (result) {
-      setIsSuggesting(false);
-      setPlayerSlot1(result.output.segment_1);
-      setPlayerSlot2(result.output.segment_2);
-      setPlayerSlot3(result.output.segment_3);
-      setPlayer([]);
+      let result = await gameService.getBotSuggestion(data, botArr);
+
+      if (result) {
+        setIsSuggested(true);
+        setIsSuggesting(false);
+        setSuggestData(result.output);
+        setOpenSuggestion(true);
+      }
     }
   };
 
@@ -200,9 +219,18 @@ export default function Home() {
     setDragOVerId(null);
     if (destination) {
       if (destination.droppableId != source.droppableId) {
-        let destinationCard = UpdateDestinationSlot(destination.index, card, destination.droppableId);
+        let destinationCard = UpdateDestinationSlot(
+          destination.index,
+          card,
+          destination.droppableId
+        );
 
-        UpdateSourceSlot(source.index, card, destinationCard, source.droppableId);
+        UpdateSourceSlot(
+          source.index,
+          card,
+          destinationCard,
+          source.droppableId
+        );
       } else {
         UpdateSameSlot(source.index, destination.index, source.droppableId);
       }
@@ -221,8 +249,17 @@ export default function Home() {
       }
 
       if (index > -1) {
-        let destinationCard = UpdateDestinationSlot(index, card, combine.droppableId);
-        UpdateSourceSlot(source.index, card, destinationCard, source.droppableId);
+        let destinationCard = UpdateDestinationSlot(
+          index,
+          card,
+          combine.droppableId
+        );
+        UpdateSourceSlot(
+          source.index,
+          card,
+          destinationCard,
+          source.droppableId
+        );
       }
     }
   };
@@ -231,7 +268,11 @@ export default function Home() {
     setDragOVerId(update.combine ? update.combine.draggableId : null);
   };
 
-  const UpdateDestinationSlot = (index: number, card: number, droppableId: string): number => {
+  const UpdateDestinationSlot = (
+    index: number,
+    card: number,
+    droppableId: string
+  ): number => {
     let destinationCard = -1;
 
     switch (droppableId) {
@@ -250,16 +291,17 @@ export default function Home() {
         destinationCard = index == 3 ? playerSlot3[2] : destinationCard;
         addDraggedCardToSlot(playerSlot3, setPlayerSlot3, 3, card, index);
         break;
-      case "DropSlotPlayer":
-        destinationCard = player[index] ?? destinationCard;
-        addDraggedCardToSlot(player, setPlayer, 13, card, index);
-        break;
     }
 
     return destinationCard;
   };
 
-  const UpdateSourceSlot = (index: number, card: number, destinationCard: number, droppableId: string) => {
+  const UpdateSourceSlot = (
+    index: number,
+    card: number,
+    destinationCard: number,
+    droppableId: string
+  ) => {
     switch (droppableId) {
       case "DropSlot1":
         if (destinationCard > -1) {
@@ -288,7 +330,11 @@ export default function Home() {
     }
   };
 
-  const UpdateSameSlot = (sourceIndex: number, destinationIndex: number, droppableId: string) => {
+  const UpdateSameSlot = (
+    sourceIndex: number,
+    destinationIndex: number,
+    droppableId: string
+  ) => {
     let orderSlot = [] as number[];
     switch (droppableId) {
       case "DropSlot1":
@@ -306,7 +352,11 @@ export default function Home() {
     }
   };
 
-  const reorder = (arr: number[], startIndex: number, endIndex: number): number[] => {
+  const reorder = (
+    arr: number[],
+    startIndex: number,
+    endIndex: number
+  ): number[] => {
     const result = Array.from(arr);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -314,7 +364,13 @@ export default function Home() {
     return result;
   };
 
-  const addDraggedCardToSlot = (slotData: number[], setSlot: Dispatch<SetStateAction<number[]>>, limit: number, card: number, index: number) => {
+  const addDraggedCardToSlot = (
+    slotData: number[],
+    setSlot: Dispatch<SetStateAction<number[]>>,
+    limit: number,
+    card: number,
+    index: number
+  ) => {
     if (index < limit) {
       if (slotData.length > index) {
         slotData[index] = card;
@@ -337,11 +393,24 @@ export default function Home() {
     setIsLoading(true);
     setIsSettled(false);
     setIsSuggesting(false);
+    setIsSuggested(false);
   };
 
   const handleReady = () => {
     setOpenArrangement(false);
   };
+
+  const handleCloseSuggestion = (item: number) => {
+    setPlayerSlot1([...suggestData[item].segment_1]);
+    setPlayerSlot2([...suggestData[item].segment_2]);
+    setPlayerSlot3([...suggestData[item].segment_3]);
+    setOpenSuggestion(false);
+  };
+
+  let deviceClass = "";
+  if (isMobileOnly) {
+    deviceClass = isIOS ? "ios-device" : "android-device";
+  }
 
   return (
     <>
@@ -350,124 +419,211 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 2,
-          px: 2,
-        }}
-      >
-        <Box display="flex" justifyContent="right" mr={10}>
-          <Button
-            color="primary"
-            variant="outlined"
-            onClick={() => {
-              setOpenSettings(true);
-            }}
-          >
-            <Settings sx={{ marginRight: 1 }} /> Settings
-          </Button>
-        </Box>
-        <Container maxWidth={false}>
-          <Box>
-            <Dialog open={openArrangement} maxWidth={false}>
-              <DialogContent>
-                <Container style={{ width: 1000 }}>
-                  <DragDropContext onDragEnd={handleOnDragEnd} onDragUpdate={handleOnDragUpdate}>
-                    <Droppable droppableId="DropSlot3" direction="horizontal" isCombineEnabled={true}>
-                      {(provided) => (
-                        <Box ref={provided.innerRef} {...provided.droppableProps}>
-                          <Slot name="Front Hand" cards={playerSlot3} dragOverId={dragOVerId} />
-                        </Box>
-                      )}
-                    </Droppable>
-                    <Droppable droppableId="DropSlot2" direction="horizontal" isCombineEnabled={true}>
-                      {(provided) => (
-                        <Box ref={provided.innerRef} {...provided.droppableProps}>
-                          <Slot name="Middle Hand" cards={playerSlot2} dragOverId={dragOVerId} />
-                        </Box>
-                      )}
-                    </Droppable>
-                    <Box sx={{ marginLeft: "calc(11% + 720px);" }} height={0}>
-                      <Button
-                        sx={{ marginTop: -4 }}
-                        style={{
-                          display: playerSlot2.length + playerSlot1.length > 0 ? "" : "none",
-                        }}
-                        variant="outlined"
-                        size="small"
-                      >
-                        <ImportExport onClick={handleSwitch} fontSize="large" />
-                      </Button>
+      <div className={`main ${deviceClass}`}>
+        <Button
+          className="settings"
+          color="primary"
+          variant="contained"
+          onClick={() => {
+            setOpenSettings(true);
+          }}
+        >
+          <Settings sx={{ marginRight: 1 }} /> Settings
+        </Button>
+
+        <div className="bot-container">
+          <div className="bot-item bot-2">
+            <div className="bot-info">
+              <span className="bot-name">Bot 2</span>
+              {isLoadingBot2 ? (
+                <CircularProgress />
+              ) : (
+                <CheckCircle color="secondary" fontSize="large" />
+              )}
+            </div>
+            {isSettled ? (
+              <SlotResultShow
+                slotData={gameData.slot3}
+                slotResult={gameResult.slot3}
+              />
+            ) : (
+              <BackHand />
+            )}
+          </div>
+          <div className="bot-item bot-1">
+            <div className="bot-info">
+              <span className="bot-name">Bot 1</span>
+              {isLoadingBot1 ? (
+                <CircularProgress />
+              ) : (
+                <CheckCircle color="secondary" fontSize="large" />
+              )}
+            </div>
+            {isSettled ? (
+              <SlotResultShow
+                slotData={gameData.slot2}
+                slotResult={gameResult.slot2}
+              />
+            ) : (
+              <BackHand />
+            )}
+          </div>
+          <div className="bot-item bot-3">
+            <div className="bot-info">
+              <span className="bot-name">Bot 3</span>
+              {isLoadingBot3 ? (
+                <CircularProgress />
+              ) : (
+                <CheckCircle color="secondary" fontSize="large" />
+              )}
+            </div>
+            {isSettled ? (
+              <SlotResultShow
+                slotData={gameData.slot4}
+                slotResult={gameResult.slot4}
+              />
+            ) : (
+              <BackHand />
+            )}
+          </div>
+        </div>
+        <Dialog open={openArrangement} maxWidth={false} fullWidth>
+          <DialogContent className="popup-arrangement">
+            <div className="drag-drop-container">
+              <DragDropContext
+                onDragEnd={handleOnDragEnd}
+                onDragUpdate={handleOnDragUpdate}
+              >
+                <Droppable
+                  droppableId="DropSlot3"
+                  direction="horizontal"
+                  isCombineEnabled={true}
+                >
+                  {(provided) => (
+                    <Box ref={provided.innerRef} {...provided.droppableProps}>
+                      <Slot
+                        name="Front Hand"
+                        cards={playerSlot3}
+                        dragOverId={dragOVerId}
+                      />
                     </Box>
-                    <Droppable droppableId="DropSlot1" direction="horizontal" isCombineEnabled={true}>
-                      {(provided) => (
-                        <Box ref={provided.innerRef} {...provided.droppableProps}>
-                          <Slot name="Back Hand" cards={playerSlot1} dragOverId={dragOVerId} />
-                        </Box>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
-                  <Button
-                    size="large"
-                    variant="contained"
-                    color={isSuggesting ? "warning" : "success"}
-                    sx={{ mt: 3, mr: 5, fontSize: 20, ml: 13 }}
-                    onClick={handleSuggestCards}
-                  >
-                    {isSuggesting ? "Waiting..." : "Suggest"}
-                  </Button>
-                  <Button variant="contained" color="error" sx={{ mt: 3, mr: 5, fontSize: 20 }} onClick={handleReady} size="large">
-                    Ready
-                  </Button>
-                </Container>
-              </DialogContent>
-            </Dialog>
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <Box height={200} />
-                <Box>Bot 2</Box>
-                {isLoadingBot2 ? <CircularProgress /> : <CheckCircle color="secondary" fontSize="large" />}
-                {isSettled ? <SlotResultShow slotData={gameData.slot3} slotResult={gameResult.slot3} /> : <BackHand />}
-              </Grid>
-              <Grid item xs={4}>
-                <Box>Bot 1</Box>
-                {isLoadingBot1 ? <CircularProgress /> : <CheckCircle color="secondary" fontSize="large" />}
-                {isSettled ? <SlotResultShow slotData={gameData.slot2} slotResult={gameResult.slot2} /> : <BackHand />}
-                <Box height={30} />
-                {isSettled ? (
-                  <SlotResultShow slotData={gameData.slot1} slotResult={gameResult.slot1} />
-                ) : (
-                  <StaticHand cards={[...playerSlot3, ...playerSlot2, ...playerSlot1]} />
-                )}
-                <Button variant="contained" color="primary" sx={{ mt: 3, mr: 5 }} onClick={handleSubmitHandCard}>
-                  Submit
+                  )}
+                </Droppable>
+                <Droppable
+                  droppableId="DropSlot2"
+                  direction="horizontal"
+                  isCombineEnabled={true}
+                >
+                  {(provided) => (
+                    <Box ref={provided.innerRef} {...provided.droppableProps}>
+                      <Slot
+                        name="Middle Hand"
+                        cards={playerSlot2}
+                        dragOverId={dragOVerId}
+                      />
+                    </Box>
+                  )}
+                </Droppable>
+
+                <Droppable
+                  droppableId="DropSlot1"
+                  direction="horizontal"
+                  isCombineEnabled={true}
+                >
+                  {(provided) => (
+                    <Box ref={provided.innerRef} {...provided.droppableProps}>
+                      <Slot
+                        name="Back Hand"
+                        cards={playerSlot1}
+                        dragOverId={dragOVerId}
+                      />
+                    </Box>
+                  )}
+                </Droppable>
+                <Button
+                  style={{
+                    display:
+                      playerSlot2.length + playerSlot1.length > 0 ? "" : "none",
+                  }}
+                  variant="contained"
+                  size="small"
+                  className="btn-switch"
+                >
+                  <ImportExport onClick={handleSwitch} fontSize="large" />
                 </Button>
-                <Button variant="contained" color="secondary" sx={{ mt: 3, mr: 5 }} onClick={handleEditHandCard}>
-                  Rearrange
-                </Button>
-                <Button variant="contained" color="info" sx={{ mt: 3, mr: 5 }} onClick={handleStartNewGame}>
-                  New Game
-                </Button>
-              </Grid>
-              <Grid item xs={4}>
-                <Box height={200} />
-                <Box>Bot 3</Box>
-                {isLoadingBot3 ? <CircularProgress /> : <CheckCircle color="secondary" fontSize="large" />}
-                {isSettled ? <SlotResultShow slotData={gameData.slot4} slotResult={gameResult.slot4} /> : <BackHand />}
-              </Grid>
-            </Grid>
-            <GameSettingsPopup
-              title="Settings"
-              openPopup={openSettings}
-              handleClosePopup={() => {
-                setOpenSettings(false);
-              }}
+              </DragDropContext>
+            </div>
+            <div className="btn-container">
+              <Button
+                size="large"
+                variant="contained"
+                color={isSuggesting ? "warning" : "success"}
+                onClick={handleSuggestCards}
+              >
+                {isSuggesting ? "Waiting..." : "Suggest"}
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleReady}
+                size="large"
+              >
+                Ready
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+        <SuggestPopup
+          data={suggestData}
+          openPopup={openSuggestion}
+          handleClosePopup={handleCloseSuggestion}
+        />
+
+        <div className="main-player">
+          {isSettled ? (
+            <SlotResultShow
+              slotData={gameData.slot1}
+              slotResult={gameResult.slot1}
             />
-          </Box>
-        </Container>
-      </Box>
+          ) : (
+            <StaticHand
+              cards={[...playerSlot3, ...playerSlot2, ...playerSlot1]}
+            />
+          )}
+          <div className="button-group">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSubmitHandCard}
+            >
+              Submit
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleEditHandCard}
+            >
+              Rearrange
+            </Button>
+            <Button
+              variant="contained"
+              color="info"
+              onClick={handleStartNewGame}
+            >
+              New Game
+            </Button>
+          </div>
+        </div>
+
+        <GameSettingsPopup
+          title="Settings"
+          openPopup={openSettings}
+          handleClosePopup={() => {
+            setOpenSettings(false);
+            setIsSuggested(false);
+          }}
+        />
+      </div>
     </>
   );
 }
