@@ -12,7 +12,7 @@ let initialFValues = {
   BotAddress1: "https://bots.lumigame.com/chinese-poker-bot-pick",
   BotAddress2: "https://bots.lumigame.com/chinese-poker-bot-pick",
   BotAddress3: "https://bots.lumigame.com/chinese-poker-bot-pick",
-  BotAddress4: "https://bots.lumigame.com/chinese-poker-bot-probability",
+  BotAddress4: "https://bots.lumigame.com/chinese-poker-bot-pick",
 };
 
 interface GameSettingsProps {
