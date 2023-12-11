@@ -81,7 +81,6 @@ export const ResultSlot = (props: ResultSlotProps) => {
           {showResult(props.result)}
         </span>
       </div>
-      <span className="result-hand-type">{slotHandType}</span>
 
       <div className={`card-slot card-slot-${props.cards.length}`}>
         {props.cards.map((card, index) => (
