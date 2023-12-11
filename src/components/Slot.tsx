@@ -40,11 +40,10 @@ export const Slot = (props: SlotProps) => {
               display="inline-flex"
               borderColor="primary.main"
             >
-              <Image
+              <img
                 src={CardImageSources[card]}
                 alt="card"
-                height={150}
-                width={100}
+                className="card-arrange"
                 style={{
                   filter:
                     snapshot.isDragging || props.dragOverId === card.toString()
@@ -72,12 +71,15 @@ export const ResultSlot = (props: ResultSlotProps) => {
 
   return (
     <div className="result-item">
-      <div
-        className={`result-count ${
-          props.result < 0 ? "result-red" : "result-green"
-        }`}
-      >
-        {showResult(props.result)}
+      <div className="result-hand-type">
+        {slotHandType}
+        <span
+          className={`result-count ${
+            props.result < 0 ? "result-red" : "result-green"
+          }`}
+        >
+          {showResult(props.result)}
+        </span>
       </div>
       <span className="result-hand-type">{slotHandType}</span>
 

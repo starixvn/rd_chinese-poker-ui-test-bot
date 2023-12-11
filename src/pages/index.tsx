@@ -11,7 +11,7 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { BackHand, Slot, StaticHand } from "../components/Slot";
 import { gameService } from "@/services/gameService";
-import { CheckCircle, ImportExport, Settings } from "@mui/icons-material";
+import { CheckCircle, ImportExport, Settings, Help } from "@mui/icons-material";
 import { isMobileOnly, isIOS } from "react-device-detect";
 import { initialMatchData, initialMatchResult } from "../interfaces";
 import { SlotResultShow } from "@/components/GameResult";
@@ -420,6 +420,19 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={`main ${deviceClass}`}>
+        <a
+          href="https://kami.com.ph/112525-how-play-pusoy-dos-win.html"
+          target="_blank"
+          className="game-name"
+        >
+          Pusoy (Chinese Poker)
+          <Help />
+        </a>
+        <p
+          style={{ position: "absolute", left: 10, top: 33, color: "#f3f3f3" }}
+        >
+          (Testing...)
+        </p>
         <Button
           className="settings"
           color="primary"
@@ -433,14 +446,6 @@ export default function Home() {
 
         <div className="bot-container">
           <div className="bot-item bot-2">
-            <div className="bot-info">
-              <span className="bot-name">Bot 2</span>
-              {isLoadingBot2 ? (
-                <CircularProgress />
-              ) : (
-                <CheckCircle color="secondary" fontSize="large" />
-              )}
-            </div>
             {isSettled ? (
               <SlotResultShow
                 slotData={gameData.slot3}
@@ -449,16 +454,24 @@ export default function Home() {
             ) : (
               <BackHand />
             )}
-          </div>
-          <div className="bot-item bot-1">
             <div className="bot-info">
-              <span className="bot-name">Bot 1</span>
-              {isLoadingBot1 ? (
+              <div className="bot-profile">
+                <img
+                  className="bot-avatar"
+                  src="/images/avatar-2.png"
+                  alt="bot2"
+                />
+                <span className="bot-name">Bot 2</span>
+              </div>
+
+              {isLoadingBot2 ? (
                 <CircularProgress />
               ) : (
                 <CheckCircle color="secondary" fontSize="large" />
               )}
             </div>
+          </div>
+          <div className="bot-item bot-1">
             {isSettled ? (
               <SlotResultShow
                 slotData={gameData.slot2}
@@ -467,16 +480,24 @@ export default function Home() {
             ) : (
               <BackHand />
             )}
-          </div>
-          <div className="bot-item bot-3">
             <div className="bot-info">
-              <span className="bot-name">Bot 3</span>
-              {isLoadingBot3 ? (
+              <div className="bot-profile">
+                <img
+                  className="bot-avatar"
+                  src="/images/avatar-1.png"
+                  alt="bot1"
+                />
+                <span className="bot-name">Bot 1</span>
+              </div>
+
+              {isLoadingBot1 ? (
                 <CircularProgress />
               ) : (
                 <CheckCircle color="secondary" fontSize="large" />
               )}
             </div>
+          </div>
+          <div className="bot-item bot-3">
             {isSettled ? (
               <SlotResultShow
                 slotData={gameData.slot4}
@@ -485,6 +506,22 @@ export default function Home() {
             ) : (
               <BackHand />
             )}
+            <div className="bot-info">
+              <div className="bot-profile">
+                <img
+                  className="bot-avatar"
+                  src="/images/avatar-3.png"
+                  alt="bot3"
+                />
+                <span className="bot-name">Bot 3</span>
+              </div>
+
+              {isLoadingBot3 ? (
+                <CircularProgress />
+              ) : (
+                <CheckCircle color="secondary" fontSize="large" />
+              )}
+            </div>
           </div>
         </div>
         <Dialog
@@ -573,7 +610,7 @@ export default function Home() {
                 onClick={handleReady}
                 size="large"
               >
-                Ready
+                Done
               </Button>
             </div>
           </DialogContent>
@@ -595,13 +632,17 @@ export default function Home() {
               cards={[...playerSlot3, ...playerSlot2, ...playerSlot1]}
             />
           )}
+          <div className={`main-profile ${isSettled ? "settled" : ""}`}>
+            <img className="bot-avatar" src="/images/avatar-4.png" alt="bot1" />
+            <span className="bot-name">Player</span>
+          </div>
           <div className="button-group">
             <Button
               variant="contained"
               color="primary"
               onClick={handleSubmitHandCard}
             >
-              Submit
+              Ready
             </Button>
             <Button
               variant="contained"

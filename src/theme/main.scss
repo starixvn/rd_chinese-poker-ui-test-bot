@@ -1,11 +1,26 @@
 body {
-  background: url("/images/tienlen_table.png") no-repeat top center #172d4d;
+  background: url("/images/tienlen_table.png") no-repeat top #172d4d;
   background-attachment: fixed;
 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+
+.game-name {
+  color: antiquewhite;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  position: absolute;
+  left: 10px;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .settings {
@@ -82,16 +97,6 @@ body {
 .bot-2,
 .bot-3 {
   transform: translateY(120px);
-
-  .result-sum {
-    transform: translate(40px, -100px);
-  }
-}
-
-.bot-1 {
-  .result-sum {
-    transform: translate(40px, -100px);
-  }
 }
 
 .bot-name {
@@ -102,6 +107,20 @@ body {
 .bot-info {
   display: flex;
   justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: -25px;
+  right: 108px;
+
+  .bot-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bot-avatar {
+    width: 60px;
+  }
 }
 
 .back-hand .card-slot,
@@ -118,6 +137,7 @@ body {
   display: flex;
   justify-content: center;
   position: relative;
+  margin-top: 50px;
 
   .card {
     width: 100px;
@@ -126,7 +146,7 @@ body {
   .result-sum {
     position: absolute;
     bottom: 100px;
-    transform: translateX(-34px);
+    transform: translateX(-22px);
   }
 
   .static-hand .card-slot-3 .card-0,
@@ -165,11 +185,30 @@ body {
       transform: translateY(-120px);
     }
   }
+
+  .main-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: -40px;
+    transform: translateX(-80px);
+
+    &.settled {
+      transform: translateX(-11px);
+    }
+
+    .bot-avatar {
+      width: 100px;
+    }
+  }
 }
 
 .slot {
   display: flex;
   align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
 
   .result {
     color: white;
@@ -188,8 +227,8 @@ body {
 
   .btn-switch {
     position: absolute;
-    right: 65px;
-    bottom: 130px;
+    right: 35px;
+    bottom: 120px;
   }
 }
 
@@ -223,9 +262,14 @@ body {
   }
 }
 
+.card-arrange {
+  width: 100px;
+}
+
 .popup-arrangement .MuiPaper-rounded {
   background-color: transparent !important;
   box-shadow: none !important;
+  max-height: calc(100% - 10px);
 }
 
 .popup-arrangement .MuiModal-backdrop {
@@ -251,45 +295,88 @@ body {
   display: grid;
   grid-auto-flow: column;
   align-items: center;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 130px 1fr;
 
   .result-hand-type {
-    position: absolute;
-    left: 35px;
     color: whitesmoke;
     font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(55px);
   }
 }
 
 .result-count {
   width: 30px;
-  height: 30px;
-  border-radius: 100%;
   text-align: center;
   color: whitesmoke;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: -5px;
 
   &.result-red {
-    background: rgb(250, 53, 53);
+    color: rgb(250, 53, 53);
   }
 
   &.result-green {
-    background: rgb(64, 204, 71);
+    color: rgb(64, 204, 71);
   }
 }
 
 .result-sum {
+  position: absolute;
   color: white;
   font-size: 26px;
-  background-color: rgb(255, 171, 69);
   padding: 5px 30px;
-  border-radius: 5px;
+  border-radius: 10px;
   text-align: center;
   font-weight: bold;
+  bottom: 68px;
+  right: 88px;
+
+  &.result-red {
+    background-color: rgb(250, 53, 53);
+  }
+
+  &.result-green {
+    background-color: rgb(64, 204, 71);
+  }
 }
 
 .bot-item {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.main-player .result-slot {
+  position: relative;
+
+  .result-sum {
+    transform: translateX(-92px);
+  }
+}
+
+@media screen and (max-width: 935px) {
+  .card-arrange {
+    width: 70px;
+  }
+  .drag-drop-container .btn-switch {
+    right: 193px;
+    bottom: 76px;
+  }
+  .bot-container {
+    column-gap: 0;
+  }
+  .back-hand .card,
+  .static-hand .card,
+  .result-item .card {
+    width: 45px;
+  }
+  .bot-2,
+  .bot-3 {
+    transform: translateY(40px);
+  }
 }
