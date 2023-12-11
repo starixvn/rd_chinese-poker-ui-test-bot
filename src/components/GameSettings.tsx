@@ -9,9 +9,9 @@ interface FormSettings {
 }
 
 let initialFValues = {
-  BotAddress1: "https://bots.lumigame.com/chinese-poker-bot-combine",
-  BotAddress2: "https://bots.lumigame.com/chinese-poker-bot-combine",
-  BotAddress3: "https://bots.lumigame.com/chinese-poker-bot-combine",
+  BotAddress1: "https://bots.lumigame.com/chinese-poker-bot-pick",
+  BotAddress2: "https://bots.lumigame.com/chinese-poker-bot-pick",
+  BotAddress3: "https://bots.lumigame.com/chinese-poker-bot-pick",
   BotAddress4: "https://bots.lumigame.com/chinese-poker-bot-probability",
 };
 
