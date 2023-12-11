@@ -67,6 +67,8 @@ export const ResultSlot = (props: ResultSlotProps) => {
     }
     return "";
   };
+  const slotTypeChecker = new TypeChecker([...props.cards]);
+  const slotHandType = slotTypeChecker.getType();
 
   return (
     <div className="result-item">
@@ -77,6 +79,7 @@ export const ResultSlot = (props: ResultSlotProps) => {
       >
         {showResult(props.result)}
       </div>
+      <span className="result-hand-type">{slotHandType}</span>
 
       <div className={`card-slot card-slot-${props.cards.length}`}>
         {props.cards.map((card, index) => (

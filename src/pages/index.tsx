@@ -487,8 +487,13 @@ export default function Home() {
             )}
           </div>
         </div>
-        <Dialog open={openArrangement} maxWidth={false} fullWidth>
-          <DialogContent className="popup-arrangement">
+        <Dialog
+          open={openArrangement}
+          maxWidth={false}
+          fullWidth
+          className="popup-arrangement"
+        >
+          <DialogContent className="arrangement">
             <div className="drag-drop-container">
               <DragDropContext
                 onDragEnd={handleOnDragEnd}

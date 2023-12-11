@@ -40,7 +40,12 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
   };
 
   return (
-    <Dialog open={props.openPopup} maxWidth={"lg"} fullWidth>
+    <Dialog
+      open={props.openPopup}
+      maxWidth={"lg"}
+      fullWidth
+      className="suggest-popup"
+    >
       <DialogContent>
         <div className="suggest-block">
           {props.data.map((slot, index) => (

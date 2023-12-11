@@ -68,6 +68,15 @@ body {
   display: flex;
   justify-content: center;
   column-gap: 150px;
+
+  .result-item {
+    &:nth-child(2) {
+      transform: translateY(-42px);
+    }
+    &:nth-child(3) {
+      transform: translateY(-80px);
+    }
+  }
 }
 
 .bot-2,
@@ -75,13 +84,13 @@ body {
   transform: translateY(120px);
 
   .result-sum {
-    transform: translateY(-140px);
+    transform: translate(40px, -100px);
   }
 }
 
 .bot-1 {
   .result-sum {
-    transform: translateY(-140px);
+    transform: translate(40px, -100px);
   }
 }
 
@@ -117,7 +126,44 @@ body {
   .result-sum {
     position: absolute;
     bottom: 100px;
-    transform: translateX(-60px);
+    transform: translateX(-34px);
+  }
+
+  .static-hand .card-slot-3 .card-0,
+  .result-item .card-slot-3 .card-0 {
+    transform: rotate(-12deg) translate(44px, 15px);
+  }
+  .static-hand .card-slot-3 .card-2,
+  .result-item .card-slot-3 .card-2 {
+    transform: rotate(12deg) translate(-44px, 18px);
+  }
+
+  .static-hand .card-slot-5 .card-0,
+  .result-item .card-slot-5 .card-0 {
+    transform: rotate(-25deg) translate(80px, 62px);
+  }
+  .static-hand .card-slot-5 .card-1,
+  .result-item .card-slot-5 .card-1 {
+    transform: rotate(-12deg) translate(44px, 15px);
+  }
+
+  .static-hand .card-slot-5 .card-3,
+  .result-item .card-slot-5 .card-3 {
+    transform: rotate(12deg) translate(-44px, 18px);
+  }
+
+  .static-hand .card-slot-5 .card-4,
+  .result-item .card-slot-5 .card-4 {
+    transform: rotate(25deg) translate(-80px, 67px);
+  }
+
+  .result-item {
+    &:nth-child(2) {
+      transform: translateY(-60px);
+    }
+    &:nth-child(3) {
+      transform: translateY(-120px);
+    }
   }
 }
 
@@ -162,7 +208,7 @@ body {
   }
 }
 
-.popup-arrangement {
+.arrangement {
   width: 900px;
   margin: 0 auto;
   position: relative;
@@ -177,12 +223,12 @@ body {
   }
 }
 
-.MuiPaper-rounded {
+.popup-arrangement .MuiPaper-rounded {
   background-color: transparent !important;
   box-shadow: none !important;
 }
 
-.MuiModal-backdrop {
+.popup-arrangement .MuiModal-backdrop {
   background-color: rgba(0, 0, 0, 0.7) !important;
 }
 
@@ -201,16 +247,17 @@ body {
 }
 
 .result-item {
+  position: relative;
   display: grid;
   grid-auto-flow: column;
   align-items: center;
-  grid-template-columns: 20px 1fr;
+  grid-template-columns: 100px 1fr;
 
-  &:nth-child(2) {
-    transform: translateY(-60px);
-  }
-  &:nth-child(3) {
-    transform: translateY(-120px);
+  .result-hand-type {
+    position: absolute;
+    left: 35px;
+    color: whitesmoke;
+    font-size: 18px;
   }
 }
 
@@ -220,8 +267,7 @@ body {
   border-radius: 100%;
   text-align: center;
   color: whitesmoke;
-  font-weight: bold;
-  font-size: 20px;
+  font-size: 18px;
 
   &.result-red {
     background: rgb(250, 53, 53);
@@ -234,11 +280,12 @@ body {
 
 .result-sum {
   color: white;
-  font-size: 20px;
+  font-size: 26px;
   background-color: rgb(255, 171, 69);
   padding: 5px 30px;
   border-radius: 5px;
   text-align: center;
+  font-weight: bold;
 }
 
 .bot-item {
