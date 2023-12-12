@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { StaticSlot } from "./Slot";
 import { useState } from "react";
+import { TypeChecker } from "@/utils/TypeChecker";
 
 interface SuggestPopupProps {
   openPopup: boolean;
@@ -38,7 +39,9 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
   const handleClose = () => {
     props.handleClosePopup(Number(selectedValue));
   };
+  console.log(props.data);
 
+  //const frontHandType = new TypeChecker([...props.data[0].segment_3]).getType();
   return (
     <Dialog
       open={props.openPopup}
@@ -51,15 +54,22 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
           {props.data.map((slot, index) => (
             <div key={`suggest_${index}`} className="suggest-slot">
               <Radio {...controlProps(index.toString())} />
-              <StaticSlot name="" cards={slot.segment_3} />
-              <StaticSlot name="" cards={slot.segment_2} />
-              <StaticSlot name="" cards={slot.segment_1} />
+              <div className="suggest-card">
+                <StaticSlot name="" cards={slot.segment_3} />
+                <StaticSlot name="" cards={slot.segment_2} />
+                <StaticSlot name="" cards={slot.segment_1} />
+              </div>
             </div>
           ))}
         </div>
       </DialogContent>
-      <DialogActions>
-        <Button variant="contained" color="info" onClick={handleClose}>
+      <DialogActions className="suggest-actions">
+        <Button
+          className="button-ok"
+          variant="contained"
+          color="info"
+          onClick={handleClose}
+        >
           OK
         </Button>
       </DialogActions>

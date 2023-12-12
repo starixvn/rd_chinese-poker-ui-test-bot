@@ -394,6 +394,7 @@ export default function Home() {
     setIsSettled(false);
     setIsSuggesting(false);
     setIsSuggested(false);
+    setOpenArrangement(true);
   };
 
   const handleReady = () => {
@@ -420,19 +421,17 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={`main ${deviceClass}`}>
-        <a
-          href="https://kami.com.ph/112525-how-play-pusoy-dos-win.html"
-          target="_blank"
-          className="game-name"
-        >
-          Pusoy (Chinese Poker)
-          <Help />
-        </a>
-        <p
-          style={{ position: "absolute", left: 10, top: 33, color: "#f3f3f3" }}
-        >
-          (Testing...)
-        </p>
+        <div className="game-name">
+          <a
+            href="https://kami.com.ph/112525-how-play-pusoy-dos-win.html"
+            target="_blank"
+          >
+            Pusoy (Chinese Poker)
+            <Help />
+          </a>{" "}
+          <p>(Testing...)</p>
+        </div>
+
         <Button
           className="settings"
           color="primary"
@@ -656,7 +655,7 @@ export default function Home() {
               color="info"
               onClick={handleStartNewGame}
             >
-              New Game
+              New Round
             </Button>
           </div>
         </div>

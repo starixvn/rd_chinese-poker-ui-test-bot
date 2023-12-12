@@ -9,17 +9,17 @@ body {
 }
 
 .game-name {
-  color: antiquewhite;
-  font-size: 25px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
   position: absolute;
   left: 10px;
+  color: antiquewhite;
+  font-size: 25px;
 
-  &:hover {
-    text-decoration: underline;
+  a {
+    color: antiquewhite;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -123,8 +123,7 @@ body {
   }
 }
 
-.back-hand .card-slot,
-.static-hand .card-slot {
+.back-hand .card-slot {
   &:nth-child(2) {
     transform: translateY(-40px);
   }
@@ -191,8 +190,8 @@ body {
     flex-direction: column;
     align-items: center;
     position: absolute;
-    bottom: -40px;
-    transform: translateX(-80px);
+    bottom: -25px;
+    transform: translateX(-16px);
 
     &.settled {
       transform: translateX(-11px);
@@ -286,7 +285,34 @@ body {
   }
 
   .suggest-slot {
+    position: relative;
     border: 1px dashed;
+    height: 260px;
+  }
+
+  .MuiRadio-root {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    color: transparent;
+  }
+
+  .Mui-checked {
+    background-color: #ffe6b8;
+  }
+
+  .suggest-card {
+    position: absolute;
+    top: 10px;
+    right: 130px;
+
+    .card-slot {
+      text-align: left;
+
+      img {
+        margin-right: 5px;
+      }
+    }
   }
 }
 
@@ -359,6 +385,41 @@ body {
   }
 }
 
+.suggest-actions {
+  justify-content: center;
+}
+
+.button-ok {
+  width: 150px;
+}
+
+.static-hand-block {
+  .static-hand {
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    grid-template-columns: 130px 1fr;
+
+    &:nth-child(2) {
+      transform: translateY(-60px);
+    }
+
+    &:nth-child(3) {
+      transform: translateY(-120px);
+    }
+  }
+
+  .hand-type {
+    color: whitesmoke;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(55px);
+  }
+}
+
 @media screen and (max-width: 935px) {
   .card-arrange {
     width: 70px;
@@ -373,10 +434,130 @@ body {
   .back-hand .card,
   .static-hand .card,
   .result-item .card {
-    width: 45px;
+    width: 40px;
   }
   .bot-2,
   .bot-3 {
-    transform: translateY(40px);
+    transform: translateY(0);
+  }
+
+  .arrangement .btn-container {
+    margin-top: 4px;
+  }
+
+  .suggest-block .suggest-card {
+    right: 20px;
+  }
+
+  .back-hand .card-slot-3 .card-2,
+  .static-hand .card-slot-3 .card-2,
+  .result-item .card-slot-3 .card-2 {
+    transform: rotate(10deg) translate(-20px, 10px);
+  }
+
+  .back-hand .card-slot-3 .card-0,
+  .static-hand .card-slot-3 .card-0,
+  .result-item .card-slot-3 .card-0 {
+    transform: rotate(-10deg) translate(20px, 10px);
+  }
+
+  .back-hand .card-slot-5 .card-1,
+  .static-hand .card-slot-5 .card-1,
+  .result-item .card-slot-5 .card-1 {
+    transform: rotate(-10deg) translate(20px, 10px);
+  }
+
+  .back-hand .card-slot-5 .card-3,
+  .static-hand .card-slot-5 .card-3,
+  .result-item .card-slot-5 .card-3 {
+    transform: rotate(10deg) translate(-20px, 10px);
+  }
+
+  .back-hand .card-slot-5 .card-4,
+  .static-hand .card-slot-5 .card-4,
+  .result-item .card-slot-5 .card-4 {
+    transform: rotate(20deg) translate(-33px, 30px);
+  }
+
+  .back-hand .card-slot-5 .card-0,
+  .static-hand .card-slot-5 .card-0,
+  .result-item .card-slot-5 .card-0 {
+    transform: rotate(-20deg) translate(33px, 30px);
+  }
+
+  .bot-info {
+    right: 42px;
+    bottom: 16px;
+  }
+
+  .bot-info .bot-avatar {
+    width: 30px;
+  }
+
+  .main-player {
+    margin-top: -10px;
+  }
+
+  .game-name {
+    top: auto;
+    bottom: 10px;
+    font-size: 18px;
+  }
+
+  .main-player .main-profile {
+    display: none;
+  }
+
+  .main-player .card {
+    width: 50px;
+  }
+
+  .main-player .static-hand .card-slot-5 .card-0,
+  .main-player .result-item .card-slot-5 .card-0 {
+    transform: rotate(-20deg) translate(33px, 30px);
+  }
+
+  .main-player .static-hand .card-slot-5 .card-1,
+  .main-player .result-item .card-slot-5 .card-1,
+  .main-player .static-hand .card-slot-3 .card-0,
+  .main-player .result-item .card-slot-3 .card-0 {
+    transform: rotate(-10deg) translate(20px, 10px);
+  }
+
+  .main-player .static-hand .card-slot-5 .card-3,
+  .main-player .result-item .card-slot-5 .card-3,
+  .main-player .static-hand .card-slot-3 .card-2,
+  .main-player .result-item .card-slot-3 .card-2 {
+    transform: rotate(10deg) translate(-20px, 10px);
+  }
+
+  .main-player .static-hand .card-slot-5 .card-4,
+  .main-player .result-item .card-slot-5 .card-4 {
+    transform: rotate(20deg) translate(-33px, 30px);
+  }
+
+  .static-hand-block .static-hand:nth-child(2) {
+    transform: translateY(-35px);
+  }
+
+  .static-hand-block .static-hand:nth-child(3) {
+    transform: translateY(-70px);
+  }
+
+  .static-hand-block .hand-type {
+    transform: translateX(36px);
+  }
+
+  .button-group > button {
+    height: 40px;
+  }
+
+  .button-group {
+    justify-content: flex-start;
+  }
+
+  .result-sum {
+    padding: 0 5px;
+    font-size: 20px;
   }
 }

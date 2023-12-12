@@ -115,11 +115,24 @@ export const StaticHand = (props: StaticHandProps) => {
   const frontHand = props.cards.slice(0, 3);
   const middleHand = props.cards.slice(3, 8);
   const backHand = props.cards.slice(8, 13);
+
+  const frontHandType = new TypeChecker([...frontHand]).getType();
+  const middleHandType = new TypeChecker([...middleHand]).getType();
+  const backHandType = new TypeChecker([...backHand]).getType();
   return (
-    <div className="static-hand">
-      <StaticSlot name="" cards={frontHand} />
-      <StaticSlot name="" cards={middleHand} />
-      <StaticSlot name="" cards={backHand} />
+    <div className="static-hand-block">
+      <div className="static-hand">
+        <span className="hand-type">{frontHandType}</span>
+        <StaticSlot name="" cards={frontHand} />
+      </div>
+      <div className="static-hand">
+        <span className="hand-type">{middleHandType}</span>
+        <StaticSlot name="" cards={middleHand} />
+      </div>
+      <div className="static-hand">
+        <span className="hand-type">{backHandType}</span>
+        <StaticSlot name="" cards={backHand} />
+      </div>
     </div>
   );
 };
