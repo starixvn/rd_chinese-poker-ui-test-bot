@@ -5,7 +5,7 @@ import { Draggable } from "@/utils/react-beautiful-dnd";
 import { TypeChecker } from "@/utils/TypeChecker";
 
 interface SlotProps {
-  name: string;
+  name?: string;
   cards: number[];
   dragOverId?: string | null;
 }
@@ -123,15 +123,15 @@ export const StaticHand = (props: StaticHandProps) => {
     <div className="static-hand-block">
       <div className="static-hand">
         <span className="hand-type">{frontHandType}</span>
-        <StaticSlot name="" cards={frontHand} />
+        <StaticSlot cards={frontHand} />
       </div>
       <div className="static-hand">
         <span className="hand-type">{middleHandType}</span>
-        <StaticSlot name="" cards={middleHand} />
+        <StaticSlot cards={middleHand} />
       </div>
       <div className="static-hand">
         <span className="hand-type">{backHandType}</span>
-        <StaticSlot name="" cards={backHand} />
+        <StaticSlot cards={backHand} />
       </div>
     </div>
   );
@@ -140,9 +140,34 @@ export const StaticHand = (props: StaticHandProps) => {
 export const BackHand = () => {
   return (
     <div className="back-hand">
-      <StaticSlot name="" cards={[52, 52, 52]} />
-      <StaticSlot name="" cards={[52, 52, 52, 52, 52]} />
-      <StaticSlot name="" cards={[52, 52, 52, 52, 52]} />
+      <StaticSlot cards={[52, 52, 52]} />
+      <StaticSlot cards={[52, 52, 52, 52, 52]} />
+      <StaticSlot cards={[52, 52, 52, 52, 52]} />
     </div>
+  );
+};
+
+export const SuggestSlot = (props: SlotProps) => {
+  const slotTypeChecker = new TypeChecker([...props.cards]);
+  const slotHandType = slotTypeChecker.getType();
+
+  return (
+    <Grid container>
+      <Grid item xs={2}>
+        {slotHandType}
+      </Grid>
+      <Grid item xs={10}>
+        <div className={`card-slot card-slot-${props.cards.length}`}>
+          {props.cards.map((card, index) => (
+            <img
+              key={`${CardImageKeys[card]}+${index}`}
+              src={CardImageSources[card]}
+              alt="card"
+              className={`card card-${index}`}
+            />
+          ))}
+        </div>
+      </Grid>
+    </Grid>
   );
 };

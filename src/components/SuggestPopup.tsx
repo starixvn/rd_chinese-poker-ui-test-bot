@@ -1,19 +1,12 @@
 import { SuggestData } from "@/interfaces/SuggestData";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
-  Divider,
-  FormControl,
-  FormLabel,
   Radio,
-  RadioGroup,
-  Typography,
 } from "@mui/material";
-import { StaticSlot } from "./Slot";
+import { StaticSlot, StaticHand, SuggestSlot } from "./Slot";
 import { useState } from "react";
 import { TypeChecker } from "@/utils/TypeChecker";
 
@@ -39,9 +32,7 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
   const handleClose = () => {
     props.handleClosePopup(Number(selectedValue));
   };
-  console.log(props.data);
 
-  //const frontHandType = new TypeChecker([...props.data[0].segment_3]).getType();
   return (
     <Dialog
       open={props.openPopup}
@@ -55,9 +46,9 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
             <div key={`suggest_${index}`} className="suggest-slot">
               <Radio {...controlProps(index.toString())} />
               <div className="suggest-card">
-                <StaticSlot name="" cards={slot.segment_3} />
-                <StaticSlot name="" cards={slot.segment_2} />
-                <StaticSlot name="" cards={slot.segment_1} />
+                <SuggestSlot cards={slot.segment_3} />
+                <SuggestSlot cards={slot.segment_2} />
+                <SuggestSlot cards={slot.segment_1} />
               </div>
             </div>
           ))}
