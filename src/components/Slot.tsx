@@ -171,3 +171,28 @@ export const SuggestSlot = (props: SlotProps) => {
     </Grid>
   );
 };
+
+export const ResultSlotBack = (props: ResultSlotProps) => {
+  return (
+    <div className="result-item">
+      <div className="result-hand-type">
+        <span
+          className={`result-count ${
+            props.result < 0 ? "result-red" : "result-green"
+          }`}
+        ></span>
+      </div>
+
+      <div className={`card-slot card-slot-${props.cards.length}`}>
+        {props.cards.map((card, index) => (
+          <img
+            key={CardImageKeys[card]}
+            src={CardImageSources[card]}
+            alt="card"
+            className={`card card-${index}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
