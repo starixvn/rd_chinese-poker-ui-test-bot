@@ -426,25 +426,46 @@ body {
   }
 }
 
+.rotate {
+  display: none;
+  font-size: 20px;
+  color: wheat;
+  padding: 10px;
+  @media screen and (orientation: portrait) {
+    display: block;
+  }
+}
+
+.main-container {
+  display: block;
+  @media screen and (orientation: portrait) {
+    display: none;
+  }
+}
+
 @media screen and (max-width: 935px) {
   .game-name {
-    top: auto;
-    bottom: 10px;
-    font-size: 18px;
+    position: initial;
+    font-size: 15px;
   }
 
   .card-arrange {
-    width: 70px;
+    width: 50px;
+  }
+
+  .slot .result {
+    font-size: 17px;
+    width: 150px;
   }
   .drag-drop-container .btn-switch {
-    right: 193px;
-    bottom: 76px;
+    right: 336px;
+    bottom: 50px;
   }
 
   .back-hand .card,
   .static-hand .card,
   .result-item .card {
-    width: 40px;
+    width: 35px;
   }
 
   .arrangement .btn-container {
@@ -601,8 +622,7 @@ body {
   }
 
   .settings {
-    top: auto;
-    bottom: 20px;
+    position: initial !important;
     z-index: 111;
   }
 

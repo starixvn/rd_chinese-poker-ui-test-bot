@@ -12,7 +12,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { BackHand, Slot, StaticHand } from "../components/Slot";
 import { gameService } from "@/services/gameService";
 import { CheckCircle, ImportExport, Settings, Help } from "@mui/icons-material";
-import { isMobileOnly, isIOS } from "react-device-detect";
+import { isMobileOnly, isIOS, useMobileOrientation } from "react-device-detect";
 import { initialMatchData, initialMatchResult } from "../interfaces";
 import { SlotResultShow } from "@/components/GameResult";
 import { GameSettingsPopup } from "@/components/GameSettingsPopup";
@@ -408,11 +408,6 @@ export default function Home() {
     setOpenSuggestion(false);
   };
 
-  let deviceClass = "";
-  if (isMobileOnly) {
-    deviceClass = isIOS ? "ios-device" : "android-device";
-  }
-
   return (
     <>
       <Head>
@@ -420,29 +415,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className={`main ${deviceClass}`}>
-        <div className="game-name">
-          <a
-            href="https://kami.com.ph/112525-how-play-pusoy-dos-win.html"
-            target="_blank"
-          >
-            Pusoy (Chinese Poker)
-            <Help />
-          </a>{" "}
-          <p>(Testing...)</p>
-        </div>
-
-        <Button
-          className="settings"
-          color="primary"
-          variant="contained"
-          onClick={() => {
-            setOpenSettings(true);
-          }}
-        >
-          <Settings sx={{ marginRight: 1 }} /> Settings
-        </Button>
-
+      <p className="rotate">Please rotate your device to landscape</p>
+      <div className="main-container">
         <div className="bot-container">
           <div className="bot-item bot-2">
             {isSettled ? (
@@ -658,6 +632,28 @@ export default function Home() {
               New Round
             </Button>
           </div>
+        </div>
+
+        <Button
+          className="settings"
+          color="primary"
+          variant="contained"
+          onClick={() => {
+            setOpenSettings(true);
+          }}
+        >
+          <Settings sx={{ marginRight: 1 }} /> Settings
+        </Button>
+
+        <div className="game-name">
+          <a
+            href="https://kami.com.ph/112525-how-play-pusoy-dos-win.html"
+            target="_blank"
+          >
+            Pusoy (Chinese Poker)
+            <Help />
+          </a>{" "}
+          <p>(Testing...)</p>
         </div>
 
         <GameSettingsPopup
