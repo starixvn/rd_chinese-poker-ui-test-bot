@@ -183,7 +183,7 @@ export const ResultSlotBack = (props: ResultSlotProps) => {
       <div className={`card-slot card-slot-${props.cards.length}`}>
         {props.cards.map((card, index) => (
           <img
-            key={CardImageKeys[card]}
+            key={`${CardImageKeys[card]}_${index}`}
             src={CardImageSources[card]}
             alt="card"
             className={`card card-${index}`}

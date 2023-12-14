@@ -1,4 +1,11 @@
-import { Box, Container, Grid, TextField, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+  Button,
+} from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 
 interface FormSettings {
@@ -6,6 +13,15 @@ interface FormSettings {
   BotAddress2: string;
   BotAddress3: string;
   BotAddress4: string;
+  DelayTime: number;
+}
+
+interface FormSettingsErrors {
+  BotAddress1Error: string;
+  BotAddress2Error: string;
+  BotAddress3Error: string;
+  BotAddress4Error: string;
+  DelayTimeError: string;
 }
 
 let initialFValues = {
@@ -13,6 +29,12 @@ let initialFValues = {
   BotAddress2: "https://bots.lumigame.com/chinese-poker-bot-pick",
   BotAddress3: "https://bots.lumigame.com/chinese-poker-bot-pick",
   BotAddress4: "https://bots.lumigame.com/chinese-poker-bot-pick",
+  DelayTime: 2000,
+};
+
+const errorStates = {
+  BotAddressError: "Invalid Address",
+  DelayTimeError: "Invalid Delay Time",
 };
 
 interface GameSettingsProps {
@@ -20,6 +42,8 @@ interface GameSettingsProps {
 }
 
 export const GameSettings = (props: GameSettingsProps) => {
+  const [errors, setErrors] = useState({} as FormSettingsErrors);
+
   useEffect(() => {
     const item = localStorage.getItem("settings");
     if (item && item.length > 0) {
@@ -36,15 +60,27 @@ export const GameSettings = (props: GameSettingsProps) => {
     }
   };
 
-  const handleSettingsChanged = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleSettingsChanged = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setConfigurations({
       ...configurations,
       [name]: value,
     });
+
+    if (name === "DelayTime") {
+      const num = Number(value);
+      if (Number.isNaN(num) || num < 0) {
+        errors.DelayTimeError = errorStates.DelayTimeError;
+      } else {
+        errors.DelayTimeError = "";
+      }
+    }
   };
 
   const handleResetSettings = () => {
+    setErrors({} as FormSettingsErrors);
     setConfigurations(initialFValues);
     localStorage.setItem("settings", JSON.stringify(initialFValues));
   };
@@ -103,13 +139,38 @@ export const GameSettings = (props: GameSettingsProps) => {
             onChange={handleSettingsChanged}
           />
         </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Delay Time"
+            name="DelayTime"
+            value={configurations.DelayTime ?? " "}
+            fullWidth
+            placeholder="Enter delay time..."
+            autoComplete="off"
+            onChange={handleSettingsChanged}
+            error={errors.DelayTimeError === errorStates.DelayTimeError}
+            helperText={errors.DelayTimeError}
+          />
+        </Grid>
         <Grid item xs={6}>
-          <Button color="primary" fullWidth size="large" variant="contained" onClick={handleSaveSettings}>
+          <Button
+            color="primary"
+            fullWidth
+            size="large"
+            variant="contained"
+            onClick={handleSaveSettings}
+          >
             Save
           </Button>
         </Grid>
         <Grid item xs={6}>
-          <Button color="error" fullWidth size="large" variant="contained" onClick={handleResetSettings}>
+          <Button
+            color="error"
+            fullWidth
+            size="large"
+            variant="contained"
+            onClick={handleResetSettings}
+          >
             Reset
           </Button>
         </Grid>

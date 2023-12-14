@@ -15,9 +15,17 @@ export const SlotResultShow = (props: SlotResultProps) => {
 
   useEffect(() => {
     if (showSlot < 4) {
+      let delayTime = 2000;
+      const item = localStorage.getItem("settings");
+      if (item) {
+        const settings = JSON.parse(item);
+        if (settings.DelayTime >= 0) {
+          delayTime = settings.DelayTime;
+        }
+      }
       setTimeout(() => {
         setShowSlot(showSlot + 1);
-      }, 2000);
+      }, delayTime);
     }
   }, [showSlot]);
 
