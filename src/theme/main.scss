@@ -82,7 +82,6 @@ body {
 .bot-container {
   display: flex;
   justify-content: center;
-  column-gap: 150px;
 
   .result-item {
     &:nth-child(2) {
@@ -92,11 +91,6 @@ body {
       transform: translateY(-80px);
     }
   }
-}
-
-.bot-2,
-.bot-3 {
-  transform: translateY(120px);
 }
 
 .bot-name {
@@ -304,7 +298,6 @@ body {
   .suggest-card {
     position: absolute;
     top: 10px;
-    right: 130px;
 
     .card-slot {
       text-align: left;
@@ -373,7 +366,6 @@ body {
 .bot-item {
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
 }
 
@@ -391,6 +383,20 @@ body {
 
 .button-ok {
   width: 150px;
+}
+
+.suggest-item {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  grid-gap: 5px;
+  grid-template-columns: 130px 1fr;
+
+  .hand-type {
+    justify-self: center;
+    text-align: center;
+  }
 }
 
 .static-hand-block {
@@ -421,6 +427,12 @@ body {
 }
 
 @media screen and (max-width: 935px) {
+  .game-name {
+    top: auto;
+    bottom: 10px;
+    font-size: 18px;
+  }
+
   .card-arrange {
     width: 70px;
   }
@@ -428,66 +440,56 @@ body {
     right: 193px;
     bottom: 76px;
   }
-  .bot-container {
-    column-gap: 0;
-  }
+
   .back-hand .card,
   .static-hand .card,
   .result-item .card {
     width: 40px;
-  }
-  .bot-2,
-  .bot-3 {
-    transform: translateY(0);
   }
 
   .arrangement .btn-container {
     margin-top: 4px;
   }
 
-  .suggest-block .suggest-card {
-    right: 20px;
-  }
-
   .back-hand .card-slot-3 .card-2,
   .static-hand .card-slot-3 .card-2,
   .result-item .card-slot-3 .card-2 {
-    transform: rotate(10deg) translate(-20px, 10px);
+    transform: rotate(10deg) translate(-20px, 6px);
   }
 
   .back-hand .card-slot-3 .card-0,
   .static-hand .card-slot-3 .card-0,
   .result-item .card-slot-3 .card-0 {
-    transform: rotate(-10deg) translate(20px, 10px);
+    transform: rotate(-10deg) translate(20px, 6px);
   }
 
   .back-hand .card-slot-5 .card-1,
   .static-hand .card-slot-5 .card-1,
   .result-item .card-slot-5 .card-1 {
-    transform: rotate(-10deg) translate(20px, 10px);
+    transform: rotate(-10deg) translate(20px, 6px);
   }
 
   .back-hand .card-slot-5 .card-3,
   .static-hand .card-slot-5 .card-3,
   .result-item .card-slot-5 .card-3 {
-    transform: rotate(10deg) translate(-20px, 10px);
+    transform: rotate(10deg) translate(-20px, 6px);
   }
 
   .back-hand .card-slot-5 .card-4,
   .static-hand .card-slot-5 .card-4,
   .result-item .card-slot-5 .card-4 {
-    transform: rotate(20deg) translate(-33px, 30px);
+    transform: rotate(20deg) translate(-33px, 22px);
   }
 
   .back-hand .card-slot-5 .card-0,
   .static-hand .card-slot-5 .card-0,
   .result-item .card-slot-5 .card-0 {
-    transform: rotate(-20deg) translate(33px, 30px);
+    transform: rotate(-20deg) translate(33px, 22px);
   }
 
   .bot-info {
     right: 42px;
-    bottom: 16px;
+    bottom: -16px;
   }
 
   .bot-info .bot-avatar {
@@ -495,21 +497,23 @@ body {
   }
 
   .main-player {
-    margin-top: -10px;
-  }
-
-  .game-name {
-    top: auto;
-    bottom: 10px;
-    font-size: 18px;
-  }
-
-  .main-player .main-profile {
-    display: none;
-  }
-
-  .main-player .card {
-    width: 50px;
+    margin-top: 10px;
+    .result-item:nth-child(2) {
+      transform: translateY(-30px);
+    }
+    .result-item:nth-child(3) {
+      transform: translateY(-60px);
+    }
+    .result-slot .result-sum {
+      transform: translateX(-28px);
+      bottom: 49px;
+    }
+    .main-profile {
+      display: none;
+    }
+    .card {
+      width: 50px;
+    }
   }
 
   .main-player .static-hand .card-slot-5 .card-0,
@@ -550,6 +554,7 @@ body {
 
   .button-group > button {
     height: 40px;
+    width: 116px;
   }
 
   .button-group {
@@ -559,5 +564,53 @@ body {
   .result-sum {
     padding: 0 5px;
     font-size: 20px;
+    bottom: 41px;
+    right: 54px;
+  }
+
+  .suggest-block .suggest-slot {
+    height: 220px;
+  }
+
+  .suggest-block .card {
+    width: 45px;
+  }
+
+  .suggest-item {
+    grid-template-columns: 90px 1fr;
+  }
+  .result-item {
+    grid-template-columns: 81px 1fr;
+  }
+  .result-item .result-hand-type {
+    transform: translateX(20px);
+    font-size: 15px;
+  }
+
+  .bot-container .result-item:nth-child(2) {
+    transform: translateY(-22px);
+  }
+
+  .bot-container .result-item:nth-child(3) {
+    transform: translateY(-44px);
+  }
+
+  .result-count {
+    margin-top: -10px;
+    font-size: 15px;
+  }
+
+  .settings {
+    top: auto;
+    bottom: 20px;
+    z-index: 111;
+  }
+
+  .back-hand .card-slot:nth-child(2) {
+    transform: translateY(-25px);
+  }
+
+  .back-hand .card-slot:nth-child(3) {
+    transform: translateY(-50px);
   }
 }

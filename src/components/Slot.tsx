@@ -152,23 +152,20 @@ export const SuggestSlot = (props: SlotProps) => {
   const slotHandType = slotTypeChecker.getType();
 
   return (
-    <Grid container>
-      <Grid item xs={2}>
-        {slotHandType}
-      </Grid>
-      <Grid item xs={10}>
-        <div className={`card-slot card-slot-${props.cards.length}`}>
-          {props.cards.map((card, index) => (
-            <img
-              key={`${CardImageKeys[card]}+${index}`}
-              src={CardImageSources[card]}
-              alt="card"
-              className={`card card-${index}`}
-            />
-          ))}
-        </div>
-      </Grid>
-    </Grid>
+    <div className="suggest-item">
+      <div className="hand-type">{slotHandType}</div>
+
+      <div className={`card-slot card-slot-${props.cards.length}`}>
+        {props.cards.map((card, index) => (
+          <img
+            key={`${CardImageKeys[card]}+${index}`}
+            src={CardImageSources[card]}
+            alt="card"
+            className={`card card-${index}`}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
