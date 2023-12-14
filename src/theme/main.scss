@@ -259,6 +259,13 @@ body {
   width: 100px;
 }
 
+.popup-arrangement {
+  display: block;
+  @media screen and (orientation: portrait) {
+    display: none;
+  }
+}
+
 .popup-arrangement .MuiPaper-rounded {
   background-color: transparent !important;
   box-shadow: none !important;
@@ -450,26 +457,27 @@ body {
   }
 
   .card-arrange {
-    width: 50px;
+    width: 45px;
   }
 
   .slot .result {
-    font-size: 17px;
-    width: 150px;
+    font-size: 16px;
+    width: 140px;
   }
   .drag-drop-container .btn-switch {
-    right: 336px;
+    right: 360px;
     bottom: 50px;
   }
 
   .back-hand .card,
   .static-hand .card,
   .result-item .card {
-    width: 35px;
+    width: 30px;
   }
 
   .arrangement .btn-container {
     margin-top: 4px;
+    margin-left: 155px;
   }
 
   .back-hand .card-slot-3 .card-2,
@@ -526,7 +534,7 @@ body {
       transform: translateY(-60px);
     }
     .result-slot .result-sum {
-      transform: translateX(-28px);
+      transform: translateX(-35px);
       bottom: 49px;
     }
     .main-profile {
@@ -569,8 +577,12 @@ body {
     transform: translateY(-70px);
   }
 
-  .static-hand-block .hand-type {
-    transform: translateX(36px);
+  .static-hand-block {
+    margin-top: 10px;
+    .hand-type {
+      transform: translateX(36px);
+      font-size: 15px;
+    }
   }
 
   .button-group > button {
@@ -584,28 +596,28 @@ body {
 
   .result-sum {
     padding: 0 5px;
-    font-size: 20px;
+    font-size: 15px;
     bottom: 41px;
-    right: 54px;
+    right: 48px;
   }
 
   .suggest-block .suggest-slot {
-    height: 220px;
+    height: 157px;
   }
 
   .suggest-block .card {
-    width: 45px;
+    width: 30px;
   }
 
   .suggest-item {
     grid-template-columns: 90px 1fr;
   }
   .result-item {
-    grid-template-columns: 81px 1fr;
+    grid-template-columns: 71px 1fr;
   }
   .result-item .result-hand-type {
     transform: translateX(20px);
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .bot-container .result-item:nth-child(2) {
@@ -618,7 +630,7 @@ body {
 
   .result-count {
     margin-top: -10px;
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .settings {
@@ -632,5 +644,14 @@ body {
 
   .back-hand .card-slot:nth-child(3) {
     transform: translateY(-50px);
+  }
+
+  .bot-name {
+    font-size: 14px;
+  }
+
+  .bot-info > svg {
+    width: 20px !important;
+    height: 20px !important;
   }
 }
