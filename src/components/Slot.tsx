@@ -149,13 +149,14 @@ export const BackHand = () => {
 export const SuggestSlot = (props: SlotProps) => {
   const slotTypeChecker = new TypeChecker([...props.cards]);
   const slotHandType = slotTypeChecker.getType();
+  const cards = props.cards.sort((n1, n2) => n2 - n1);
 
   return (
     <div className="suggest-item">
       <div className="hand-type">{slotHandType}</div>
 
-      <div className={`card-slot card-slot-${props.cards.length}`}>
-        {props.cards.map((card, index) => (
+      <div className={`card-slot card-slot-${cards.length}`}>
+        {cards.map((card, index) => (
           <img
             key={`${CardImageKeys[card]}+${index}`}
             src={CardImageSources[card]}

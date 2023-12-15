@@ -24,16 +24,26 @@ import { SuggestData } from "@/interfaces/SuggestData";
 import { SuggestPopup } from "@/components/SuggestPopup";
 import { FormSettings } from "@/components/GameSettings";
 
+const arrangement = {
+  player: "player",
+  bot1: "bot1",
+  bot2: "bot2",
+  bot3: "bot3",
+};
+
 export default function Home() {
   const [bot1, setBot1] = useState([] as number[]);
   const [bot2, setBot2] = useState([] as number[]);
   const [bot3, setBot3] = useState([] as number[]);
-  const [playerData, setPlayerData] = useState([] as number[]);
   const [suggestData, setSuggestData] = useState([] as SuggestData[]);
-  const [playerSlot1, setPlayerSlot1] = useState([] as number[]);
-  const [playerSlot2, setPlayerSlot2] = useState([] as number[]);
-  const [playerSlot3, setPlayerSlot3] = useState([] as number[]);
-  const [gameData, setGameData] = useState(initialMatchData);
+  const [playerData, setPlayerData] = useState([] as number[]);
+  const [currentArrangement, setCurrentArrangement] = useState(
+    arrangement.player
+  );
+  const [arrangeHand1, setArrangeHand1] = useState([] as number[]);
+  const [arrangeHand2, setArrangeHand2] = useState([] as number[]);
+  const [arrangeHand3, setArrangeHand3] = useState([] as number[]);
+  const gameData = initialMatchData;
   const [gameResult, setGameResult] = useState(initialMatchResult);
   const [isLoadingBot1, setIsLoadingBot1] = useState(true);
   const [isLoadingBot2, setIsLoadingBot2] = useState(true);
@@ -54,7 +64,11 @@ export default function Home() {
     const body = ["1", "2", "3", "4"];
     let data = await gameService.getHandCards(body);
     if (data) {
-      setPlayerData(data.player_input["1"].input);
+      let playerDataInitial = data.player_input["1"].input;
+      setArrangeHand3(playerDataInitial.slice(0, 3));
+      setArrangeHand2(playerDataInitial.slice(3, 8));
+      setArrangeHand1(playerDataInitial.slice(8, 13));
+      setPlayerData(playerDataInitial);
       setBot1(data.player_input["2"].input);
       setBot2(data.player_input["3"].input);
       setBot3(data.player_input["4"].input);
@@ -136,7 +150,6 @@ export default function Home() {
         setCountDown(countDown - 1);
       }, 1000);
     } else {
-      handlePushCards();
       getBotArrangement("bot1", bot1);
       getBotArrangement("bot2", bot2);
       getBotArrangement("bot3", bot3);
@@ -154,18 +167,26 @@ export default function Home() {
   };
 
   const handleSwitch = () => {
-    let tmp = playerSlot1;
-    setPlayerSlot1([...playerSlot2]);
-    setPlayerSlot2([...tmp]);
+    let tmp = arrangeHand1;
+    setArrangeHand1([...arrangeHand2]);
+    setArrangeHand2([...tmp]);
   };
 
   const handleSubmitHandCard = async () => {
     if (!isLoadingBot1 && !isLoadingBot2 && !isLoadingBot3) {
-      gameData.slot1.hand1 = playerSlot1;
-      gameData.slot1.hand2 = playerSlot2;
-      gameData.slot1.hand3 = playerSlot3;
+      if (isSettled) {
+        if (currentArrangement === arrangement.player) {
+          gameData.slot1.hand1 = [...arrangeHand1];
+          gameData.slot1.hand2 = [...arrangeHand2];
+          gameData.slot1.hand3 = [...arrangeHand3];
+        }
+      } else {
+        gameData.slot1.hand1 = playerData.slice(8, 13);
+        gameData.slot1.hand2 = playerData.slice(3, 8);
+        gameData.slot1.hand3 = playerData.slice(0, 3);
+        setIsSettled(true);
+      }
       let result = await gameService.getSettlement(gameData);
-      setIsSettled(true);
       setGameResult({
         slot1: {
           hand1: result["1"].scores.segment_1,
@@ -195,15 +216,6 @@ export default function Home() {
     }
   };
 
-  const handlePushCards = () => {
-    if (playerData.length == 13) {
-      setPlayerSlot3(playerData.slice(0, 3));
-      setPlayerSlot2(playerData.slice(3, 8));
-      setPlayerSlot1(playerData.slice(8, 13));
-      setPlayerData([]);
-    }
-  };
-
   const handleSuggestCards = async () => {
     if (isSuggested) {
       setOpenSuggestion(true);
@@ -212,7 +224,7 @@ export default function Home() {
       let botArr = await getBotAddress("bot4");
       let data: number[] = [];
 
-      data = [...playerSlot3, ...playerSlot2, ...playerSlot1];
+      data = [...arrangeHand3, ...arrangeHand2, ...arrangeHand1];
 
       let result = await gameService.getBotSuggestion(data, botArr);
 
@@ -250,13 +262,13 @@ export default function Home() {
       let index = -1;
       switch (combine.droppableId) {
         case "DropSlot1":
-          index = playerSlot1.indexOf(Number(combine.draggableId));
+          index = arrangeHand1.indexOf(Number(combine.draggableId));
           break;
         case "DropSlot2":
-          index = playerSlot2.indexOf(Number(combine.draggableId));
+          index = arrangeHand2.indexOf(Number(combine.draggableId));
           break;
         case "DropSlot3":
-          index = playerSlot3.indexOf(Number(combine.draggableId));
+          index = arrangeHand3.indexOf(Number(combine.draggableId));
           break;
       }
 
@@ -289,19 +301,19 @@ export default function Home() {
 
     switch (droppableId) {
       case "DropSlot1":
-        destinationCard = playerSlot1[index] ?? destinationCard;
-        destinationCard = index == 5 ? playerSlot1[4] : destinationCard;
-        addDraggedCardToSlot(playerSlot1, setPlayerSlot1, 5, card, index);
+        destinationCard = arrangeHand1[index] ?? destinationCard;
+        destinationCard = index == 5 ? arrangeHand1[4] : destinationCard;
+        addDraggedCardToSlot(arrangeHand1, setArrangeHand1, 5, card, index);
         break;
       case "DropSlot2":
-        destinationCard = playerSlot2[index] ?? destinationCard;
-        destinationCard = index == 5 ? playerSlot2[4] : destinationCard;
-        addDraggedCardToSlot(playerSlot2, setPlayerSlot2, 5, card, index);
+        destinationCard = arrangeHand2[index] ?? destinationCard;
+        destinationCard = index == 5 ? arrangeHand2[4] : destinationCard;
+        addDraggedCardToSlot(arrangeHand2, setArrangeHand2, 5, card, index);
         break;
       case "DropSlot3":
-        destinationCard = playerSlot3[index] ?? destinationCard;
-        destinationCard = index == 3 ? playerSlot3[2] : destinationCard;
-        addDraggedCardToSlot(playerSlot3, setPlayerSlot3, 3, card, index);
+        destinationCard = arrangeHand3[index] ?? destinationCard;
+        destinationCard = index == 3 ? arrangeHand3[2] : destinationCard;
+        addDraggedCardToSlot(arrangeHand3, setArrangeHand3, 3, card, index);
         break;
     }
 
@@ -317,26 +329,26 @@ export default function Home() {
     switch (droppableId) {
       case "DropSlot1":
         if (destinationCard > -1) {
-          playerSlot1[index] = destinationCard;
-          setPlayerSlot1([...playerSlot1]);
+          arrangeHand1[index] = destinationCard;
+          setArrangeHand1([...arrangeHand1]);
         } else {
-          removeCardFromSlot(playerSlot1, card, setPlayerSlot1);
+          removeCardFromSlot(arrangeHand1, card, setArrangeHand1);
         }
         break;
       case "DropSlot2":
         if (destinationCard > -1) {
-          playerSlot2[index] = destinationCard;
-          setPlayerSlot2([...playerSlot2]);
+          arrangeHand2[index] = destinationCard;
+          setArrangeHand2([...arrangeHand2]);
         } else {
-          removeCardFromSlot(playerSlot2, card, setPlayerSlot2);
+          removeCardFromSlot(arrangeHand2, card, setArrangeHand2);
         }
         break;
       case "DropSlot3":
         if (destinationCard > -1) {
-          playerSlot3[index] = destinationCard;
-          setPlayerSlot3([...playerSlot3]);
+          arrangeHand3[index] = destinationCard;
+          setArrangeHand3([...arrangeHand3]);
         } else {
-          removeCardFromSlot(playerSlot3, card, setPlayerSlot3);
+          removeCardFromSlot(arrangeHand3, card, setArrangeHand3);
         }
         break;
     }
@@ -350,16 +362,16 @@ export default function Home() {
     let orderSlot = [] as number[];
     switch (droppableId) {
       case "DropSlot1":
-        orderSlot = reorder(playerSlot1, sourceIndex, destinationIndex);
-        setPlayerSlot1([...orderSlot]);
+        orderSlot = reorder(arrangeHand1, sourceIndex, destinationIndex);
+        setArrangeHand1([...orderSlot]);
         break;
       case "DropSlot2":
-        orderSlot = reorder(playerSlot2, sourceIndex, destinationIndex);
-        setPlayerSlot2([...orderSlot]);
+        orderSlot = reorder(arrangeHand2, sourceIndex, destinationIndex);
+        setArrangeHand2([...orderSlot]);
         break;
       case "DropSlot3":
-        orderSlot = reorder(playerSlot3, sourceIndex, destinationIndex);
-        setPlayerSlot3([...orderSlot]);
+        orderSlot = reorder(arrangeHand3, sourceIndex, destinationIndex);
+        setArrangeHand3([...orderSlot]);
         break;
     }
   };
@@ -396,8 +408,17 @@ export default function Home() {
   };
 
   const handleEditHandCard = () => {
-    setIsSettled(false);
+    if (currentArrangement !== arrangement.player) {
+      setIsSuggested(false);
+      setCurrentArrangement(arrangement.player);
+    }
+
     setOpenArrangement(true);
+    if (isSettled) {
+      setArrangeHand1([...gameData.slot1.hand1]);
+      setArrangeHand2([...gameData.slot1.hand2]);
+      setArrangeHand3([...gameData.slot1.hand3]);
+    }
   };
 
   const handleStartNewGame = () => {
@@ -409,15 +430,77 @@ export default function Home() {
     setOpenArrangement(true);
   };
 
-  const handleReady = () => {
+  const handleDoneArrange = () => {
+    switch (currentArrangement) {
+      case arrangement.player:
+        setPlayerData([...arrangeHand3, ...arrangeHand2, ...arrangeHand1]);
+        gameData.slot1.hand1 = [...arrangeHand1];
+        gameData.slot1.hand2 = [...arrangeHand2];
+        gameData.slot1.hand3 = [...arrangeHand3];
+        break;
+      case arrangement.bot1:
+        gameData.slot2.hand1 = [...arrangeHand1];
+        gameData.slot2.hand2 = [...arrangeHand2];
+        gameData.slot2.hand3 = [...arrangeHand3];
+        break;
+      case arrangement.bot2:
+        gameData.slot3.hand1 = [...arrangeHand1];
+        gameData.slot3.hand2 = [...arrangeHand2];
+        gameData.slot3.hand3 = [...arrangeHand3];
+        break;
+      case arrangement.bot3:
+        gameData.slot4.hand1 = [...arrangeHand1];
+        gameData.slot4.hand2 = [...arrangeHand2];
+        gameData.slot4.hand3 = [...arrangeHand3];
+        break;
+    }
+
+    if (isSettled) {
+      handleSubmitHandCard();
+    }
+
     setOpenArrangement(false);
   };
 
   const handleCloseSuggestion = (item: number) => {
-    setPlayerSlot1([...suggestData[item].segment_1]);
-    setPlayerSlot2([...suggestData[item].segment_2]);
-    setPlayerSlot3([...suggestData[item].segment_3]);
+    setArrangeHand1([...suggestData[item].segment_1]);
+    setArrangeHand2([...suggestData[item].segment_2]);
+    setArrangeHand3([...suggestData[item].segment_3]);
     setOpenSuggestion(false);
+  };
+
+  const handleReArrangeSlot = (slot: string) => {
+    if (currentArrangement !== slot) {
+      setIsSuggested(false);
+    }
+    switch (slot) {
+      case arrangement.player:
+        setCurrentArrangement(arrangement.player);
+        setArrangeHand1([...gameData.slot1.hand1]);
+        setArrangeHand2([...gameData.slot1.hand2]);
+        setArrangeHand3([...gameData.slot1.hand3]);
+        break;
+      case arrangement.bot1:
+        setCurrentArrangement(arrangement.bot1);
+        setArrangeHand1([...gameData.slot2.hand1]);
+        setArrangeHand2([...gameData.slot2.hand2]);
+        setArrangeHand3([...gameData.slot2.hand3]);
+        break;
+      case arrangement.bot2:
+        setCurrentArrangement(arrangement.bot2);
+        setArrangeHand1([...gameData.slot3.hand1]);
+        setArrangeHand2([...gameData.slot3.hand2]);
+        setArrangeHand3([...gameData.slot3.hand3]);
+        break;
+      case arrangement.bot3:
+        setCurrentArrangement(arrangement.bot3);
+        setArrangeHand1([...gameData.slot4.hand1]);
+        setArrangeHand2([...gameData.slot4.hand2]);
+        setArrangeHand3([...gameData.slot4.hand3]);
+        break;
+    }
+
+    setOpenArrangement(true);
   };
 
   return countDown > 0 ? (
@@ -443,7 +526,10 @@ export default function Home() {
       <p className="rotate">Please rotate your device to landscape</p>
       <div className="main-container">
         <div className="bot-container">
-          <div className="bot-item bot-2">
+          <div
+            className="bot-item bot-2"
+            onClick={() => handleReArrangeSlot(arrangement.bot2)}
+          >
             {isSettled ? (
               <SlotResultShow
                 slotData={gameData.slot3}
@@ -471,7 +557,10 @@ export default function Home() {
               </div>
             </Tooltip>
           </div>
-          <div className="bot-item bot-1">
+          <div
+            className="bot-item bot-1"
+            onClick={() => handleReArrangeSlot(arrangement.bot1)}
+          >
             {isSettled ? (
               <SlotResultShow
                 slotData={gameData.slot2}
@@ -499,7 +588,10 @@ export default function Home() {
               </div>
             </Tooltip>
           </div>
-          <div className="bot-item bot-3">
+          <div
+            className="bot-item bot-3"
+            onClick={() => handleReArrangeSlot(arrangement.bot3)}
+          >
             {isSettled ? (
               <SlotResultShow
                 slotData={gameData.slot4}
@@ -549,7 +641,7 @@ export default function Home() {
                     <Box ref={provided.innerRef} {...provided.droppableProps}>
                       <Slot
                         name="Front Hand"
-                        cards={playerSlot3}
+                        cards={arrangeHand3}
                         dragOverId={dragOVerId}
                       />
                     </Box>
@@ -564,7 +656,7 @@ export default function Home() {
                     <Box ref={provided.innerRef} {...provided.droppableProps}>
                       <Slot
                         name="Middle Hand"
-                        cards={playerSlot2}
+                        cards={arrangeHand2}
                         dragOverId={dragOVerId}
                       />
                     </Box>
@@ -580,7 +672,7 @@ export default function Home() {
                     <Box ref={provided.innerRef} {...provided.droppableProps}>
                       <Slot
                         name="Back Hand"
-                        cards={playerSlot1}
+                        cards={arrangeHand1}
                         dragOverId={dragOVerId}
                       />
                     </Box>
@@ -589,7 +681,9 @@ export default function Home() {
                 <Button
                   style={{
                     display:
-                      playerSlot2.length + playerSlot1.length > 0 ? "" : "none",
+                      arrangeHand2.length + arrangeHand1.length > 0
+                        ? ""
+                        : "none",
                   }}
                   variant="contained"
                   size="small"
@@ -611,7 +705,7 @@ export default function Home() {
               <Button
                 variant="contained"
                 color="error"
-                onClick={handleReady}
+                onClick={handleDoneArrange}
                 size="large"
               >
                 Done
@@ -632,11 +726,12 @@ export default function Home() {
               slotResult={gameResult.slot1}
             />
           ) : (
-            <StaticHand
-              cards={[...playerSlot3, ...playerSlot2, ...playerSlot1]}
-            />
+            <StaticHand cards={playerData} />
           )}
-          <div className={`main-profile ${isSettled ? "settled" : ""}`}>
+          <div
+            className={`main-profile ${isSettled ? "settled" : ""}`}
+            onClick={() => handleReArrangeSlot(arrangement.player)}
+          >
             <img className="bot-avatar" src="/images/avatar-4.png" alt="bot1" />
             <span className="bot-name">Player</span>
           </div>
