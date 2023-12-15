@@ -470,37 +470,39 @@ export default function Home() {
   };
 
   const handleReArrangeSlot = (slot: string) => {
-    if (currentArrangement !== slot) {
-      setIsSuggested(false);
-    }
-    switch (slot) {
-      case arrangement.player:
-        setCurrentArrangement(arrangement.player);
-        setArrangeHand1([...gameData.slot1.hand1]);
-        setArrangeHand2([...gameData.slot1.hand2]);
-        setArrangeHand3([...gameData.slot1.hand3]);
-        break;
-      case arrangement.bot1:
-        setCurrentArrangement(arrangement.bot1);
-        setArrangeHand1([...gameData.slot2.hand1]);
-        setArrangeHand2([...gameData.slot2.hand2]);
-        setArrangeHand3([...gameData.slot2.hand3]);
-        break;
-      case arrangement.bot2:
-        setCurrentArrangement(arrangement.bot2);
-        setArrangeHand1([...gameData.slot3.hand1]);
-        setArrangeHand2([...gameData.slot3.hand2]);
-        setArrangeHand3([...gameData.slot3.hand3]);
-        break;
-      case arrangement.bot3:
-        setCurrentArrangement(arrangement.bot3);
-        setArrangeHand1([...gameData.slot4.hand1]);
-        setArrangeHand2([...gameData.slot4.hand2]);
-        setArrangeHand3([...gameData.slot4.hand3]);
-        break;
-    }
+    if (isSettled) {
+      if (currentArrangement !== slot) {
+        setIsSuggested(false);
+      }
+      switch (slot) {
+        case arrangement.player:
+          setCurrentArrangement(arrangement.player);
+          setArrangeHand1([...gameData.slot1.hand1]);
+          setArrangeHand2([...gameData.slot1.hand2]);
+          setArrangeHand3([...gameData.slot1.hand3]);
+          break;
+        case arrangement.bot1:
+          setCurrentArrangement(arrangement.bot1);
+          setArrangeHand1([...gameData.slot2.hand1]);
+          setArrangeHand2([...gameData.slot2.hand2]);
+          setArrangeHand3([...gameData.slot2.hand3]);
+          break;
+        case arrangement.bot2:
+          setCurrentArrangement(arrangement.bot2);
+          setArrangeHand1([...gameData.slot3.hand1]);
+          setArrangeHand2([...gameData.slot3.hand2]);
+          setArrangeHand3([...gameData.slot3.hand3]);
+          break;
+        case arrangement.bot3:
+          setCurrentArrangement(arrangement.bot3);
+          setArrangeHand1([...gameData.slot4.hand1]);
+          setArrangeHand2([...gameData.slot4.hand2]);
+          setArrangeHand3([...gameData.slot4.hand3]);
+          break;
+      }
 
-    setOpenArrangement(true);
+      setOpenArrangement(true);
+    }
   };
 
   return countDown > 0 ? (
