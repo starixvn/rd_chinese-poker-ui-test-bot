@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 
-interface FormSettings {
+export interface FormSettings {
   BotAddress1: string;
   BotAddress2: string;
   BotAddress3: string;

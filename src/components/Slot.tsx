@@ -1,6 +1,5 @@
 import { CardImageSources, CardImageKeys } from "../utils/CardImageSources";
 import { Box, Grid } from "@mui/material";
-import Image from "next/image";
 import { Draggable } from "@/utils/react-beautiful-dnd";
 import { TypeChecker } from "@/utils/TypeChecker";
 

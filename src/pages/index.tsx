@@ -7,6 +7,8 @@ import {
   Dialog,
   DialogContent,
   Grid,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { BackHand, Slot, StaticHand } from "../components/Slot";
@@ -20,6 +22,7 @@ import { DragDropContext, Droppable } from "@/utils/react-beautiful-dnd";
 import { DragUpdate, DropResult } from "react-beautiful-dnd";
 import { SuggestData } from "@/interfaces/SuggestData";
 import { SuggestPopup } from "@/components/SuggestPopup";
+import { FormSettings } from "@/components/GameSettings";
 
 export default function Home() {
   const [bot1, setBot1] = useState([] as number[]);
@@ -44,6 +47,8 @@ export default function Home() {
   const [openSuggestion, setOpenSuggestion] = useState(false);
   const [startNewGame, setStartNewGame] = useState(0);
   const [dragOVerId, setDragOVerId] = useState<string | null>(null);
+  const [countDown, setCountDown] = useState(5);
+  const [settings, setSettings] = useState({} as FormSettings);
 
   async function getData() {
     const body = ["1", "2", "3", "4"];
@@ -68,6 +73,7 @@ export default function Home() {
     let botArr = "";
     if (item) {
       const settings = JSON.parse(item);
+      setSettings(settings);
       switch (bot) {
         case "bot1":
           botArr = settings.BotAddress1;
@@ -125,11 +131,17 @@ export default function Home() {
       setIsLoadingBot3(true);
       getData();
     }
-    handlePushCards();
-    getBotArrangement("bot1", bot1);
-    getBotArrangement("bot2", bot2);
-    getBotArrangement("bot3", bot3);
-  }, [bot1, bot2, bot3, startNewGame]);
+    if (countDown > 0) {
+      setTimeout(() => {
+        setCountDown(countDown - 1);
+      }, 1000);
+    } else {
+      handlePushCards();
+      getBotArrangement("bot1", bot1);
+      getBotArrangement("bot2", bot2);
+      getBotArrangement("bot3", bot3);
+    }
+  }, [bot1, bot2, bot3, startNewGame, countDown]);
 
   const removeCardFromSlot = (
     data: number[],
@@ -408,7 +420,20 @@ export default function Home() {
     setOpenSuggestion(false);
   };
 
-  return (
+  return countDown > 0 ? (
+    <>
+      <Head>
+        <title>Chinese Poker</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Box alignSelf="center" height="100vh" alignItems="center" display="flex">
+        <Typography variant="h3" color={"white"}>
+          Start game in {countDown} second(s)
+        </Typography>
+      </Box>
+    </>
+  ) : (
     <>
       <Head>
         <title>Chinese Poker</title>
@@ -427,22 +452,24 @@ export default function Home() {
             ) : (
               <BackHand />
             )}
-            <div className="bot-info">
-              <div className="bot-profile">
-                <img
-                  className="bot-avatar"
-                  src="/images/avatar-2.png"
-                  alt="bot2"
-                />
-                <span className="bot-name">Bot 2</span>
-              </div>
+            <Tooltip title={settings.BotAddress2}>
+              <div className="bot-info">
+                <div className="bot-profile">
+                  <img
+                    className="bot-avatar"
+                    src="/images/avatar-2.png"
+                    alt="bot2"
+                  />
+                  <span className="bot-name">Bot 2</span>
+                </div>
 
-              {isLoadingBot2 ? (
-                <CircularProgress />
-              ) : (
-                <CheckCircle color="secondary" fontSize="large" />
-              )}
-            </div>
+                {isLoadingBot2 ? (
+                  <CircularProgress />
+                ) : (
+                  <CheckCircle color="secondary" fontSize="large" />
+                )}
+              </div>
+            </Tooltip>
           </div>
           <div className="bot-item bot-1">
             {isSettled ? (
@@ -453,22 +480,24 @@ export default function Home() {
             ) : (
               <BackHand />
             )}
-            <div className="bot-info">
-              <div className="bot-profile">
-                <img
-                  className="bot-avatar"
-                  src="/images/avatar-1.png"
-                  alt="bot1"
-                />
-                <span className="bot-name">Bot 1</span>
-              </div>
+            <Tooltip title={settings.BotAddress1}>
+              <div className="bot-info">
+                <div className="bot-profile">
+                  <img
+                    className="bot-avatar"
+                    src="/images/avatar-1.png"
+                    alt="bot1"
+                  />
+                  <span className="bot-name">Bot 1</span>
+                </div>
 
-              {isLoadingBot1 ? (
-                <CircularProgress />
-              ) : (
-                <CheckCircle color="secondary" fontSize="large" />
-              )}
-            </div>
+                {isLoadingBot1 ? (
+                  <CircularProgress />
+                ) : (
+                  <CheckCircle color="secondary" fontSize="large" />
+                )}
+              </div>
+            </Tooltip>
           </div>
           <div className="bot-item bot-3">
             {isSettled ? (
@@ -479,22 +508,24 @@ export default function Home() {
             ) : (
               <BackHand />
             )}
-            <div className="bot-info">
-              <div className="bot-profile">
-                <img
-                  className="bot-avatar"
-                  src="/images/avatar-3.png"
-                  alt="bot3"
-                />
-                <span className="bot-name">Bot 3</span>
-              </div>
+            <Tooltip title={settings.BotAddress1}>
+              <div className="bot-info">
+                <div className="bot-profile">
+                  <img
+                    className="bot-avatar"
+                    src="/images/avatar-3.png"
+                    alt="bot3"
+                  />
+                  <span className="bot-name">Bot 3</span>
+                </div>
 
-              {isLoadingBot3 ? (
-                <CircularProgress />
-              ) : (
-                <CheckCircle color="secondary" fontSize="large" />
-              )}
-            </div>
+                {isLoadingBot3 ? (
+                  <CircularProgress />
+                ) : (
+                  <CheckCircle color="secondary" fontSize="large" />
+                )}
+              </div>
+            </Tooltip>
           </div>
         </div>
         <Dialog
