@@ -3,10 +3,8 @@ import {
   Box,
   Button,
   CircularProgress,
-  Container,
   Dialog,
   DialogContent,
-  Grid,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -14,7 +12,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { BackHand, Slot, StaticHand } from "../components/Slot";
 import { gameService } from "@/services/gameService";
 import { CheckCircle, ImportExport, Settings, Help } from "@mui/icons-material";
-import { isMobileOnly, isIOS, useMobileOrientation } from "react-device-detect";
 import { initialMatchData, initialMatchResult } from "../interfaces";
 import { SlotResultShow } from "@/components/GameResult";
 import { GameSettingsPopup } from "@/components/GameSettingsPopup";
@@ -22,7 +19,7 @@ import { DragDropContext, Droppable } from "@/utils/react-beautiful-dnd";
 import { DragUpdate, DropResult } from "react-beautiful-dnd";
 import { SuggestData } from "@/interfaces/SuggestData";
 import { SuggestPopup } from "@/components/SuggestPopup";
-import { FormSettings } from "@/components/GameSettings";
+import { FormSettings, initialGameSettings } from "@/components/GameSettings";
 
 const arrangement = {
   player: "player",
@@ -58,11 +55,16 @@ export default function Home() {
   const [startNewGame, setStartNewGame] = useState(0);
   const [dragOVerId, setDragOVerId] = useState<string | null>(null);
   const [countDown, setCountDown] = useState(5);
-  const [settings, setSettings] = useState({} as FormSettings);
+  const [gameSettings, setGameSettings] = useState({} as FormSettings);
+  const botAddressList = [
+    "https://bots.lumigame.com/chinese-poker-bot-pick",
+    "https://bots.lumigame.com/chinese-poker-bot-probability",
+  ];
+  const defaultBot = "https://bots.lumigame.com/chinese-poker-bot-pick";
 
   async function getData() {
     const body = ["1", "2", "3", "4"];
-    let data = await gameService.getHandCards(body);
+    const data = await gameService.getHandCards(body);
     if (data) {
       let playerDataInitial = data.player_input["1"].input;
       setArrangeHand3(playerDataInitial.slice(0, 3));
@@ -83,34 +85,27 @@ export default function Home() {
   }
 
   async function getBotAddress(bot: string) {
-    const item = localStorage.getItem("settings");
     let botArr = "";
-    if (item) {
-      const settings = JSON.parse(item);
-      setSettings(settings);
-      switch (bot) {
-        case "bot1":
-          botArr = settings.BotAddress1;
-          break;
-        case "bot2":
-          botArr = settings.BotAddress2;
-          break;
-        case "bot3":
-          botArr = settings.BotAddress3;
-          break;
-        case "bot4":
-          botArr = settings.BotAddress4;
-          break;
-      }
+    switch (bot) {
+      case "bot1":
+        botArr = gameSettings.BotAddress1;
+        break;
+      case "bot2":
+        botArr = gameSettings.BotAddress2;
+        break;
+      case "bot3":
+        botArr = gameSettings.BotAddress3;
+        break;
+      case "bot4":
+        botArr = gameSettings.BotAddress4;
+        break;
     }
 
-    return botArr.length > 0
-      ? botArr
-      : "https://bots.lumigame.com/chinese-poker-bot-combine";
+    return botArr && botArr.length > 0 ? botArr : defaultBot;
   }
 
   async function getBotArrangement(bot: string, data: number[]) {
-    let botArr = await getBotAddress(bot);
+    const botArr = await getBotAddress(bot);
     if (data.length == 13) {
       let result = await gameService.getBotArrangement(data, botArr);
       if (result) {
@@ -138,8 +133,18 @@ export default function Home() {
     }
   }
 
+  const updateGameSettings = () => {
+    const item = localStorage.getItem("settings");
+    if (item && item.length > 0) {
+      setGameSettings(JSON.parse(item));
+    } else {
+      setGameSettings(initialGameSettings);
+    }
+  };
+
   useEffect(() => {
     if (isLoading) {
+      updateGameSettings();
       setIsLoadingBot1(true);
       setIsLoadingBot2(true);
       setIsLoadingBot3(true);
@@ -221,16 +226,16 @@ export default function Home() {
       setOpenSuggestion(true);
     } else {
       setIsSuggesting(true);
-      let botArr = await getBotAddress("bot4");
-      let data: number[] = [];
+      const data = [...arrangeHand3, ...arrangeHand2, ...arrangeHand1];
+      const result = await gameService.getBotSuggestion(
+        data,
+        gameSettings.BotAddress4
+      );
 
-      data = [...arrangeHand3, ...arrangeHand2, ...arrangeHand1];
-
-      let result = await gameService.getBotSuggestion(data, botArr);
+      setIsSuggesting(false);
 
       if (result) {
         setIsSuggested(true);
-        setIsSuggesting(false);
         setSuggestData(result.output);
         setOpenSuggestion(true);
       }
@@ -469,6 +474,15 @@ export default function Home() {
     setOpenSuggestion(false);
   };
 
+  const handleCloseSettings = (isSaved: boolean) => {
+    setOpenSettings(false);
+
+    if (isSaved) {
+      setIsSuggested(false);
+      updateGameSettings();
+    }
+  };
+
   const handleReArrangeSlot = (slot: string) => {
     if (isSettled) {
       if (currentArrangement !== slot) {
@@ -502,6 +516,22 @@ export default function Home() {
       }
 
       setOpenArrangement(true);
+    }
+  };
+
+  const handleChangeSuggestionBot = async (botAddr: string) => {
+    setIsSuggesting(true);
+    const data = [...arrangeHand3, ...arrangeHand2, ...arrangeHand1];
+    let settings = { ...gameSettings };
+    settings.BotAddress4 = botAddr;
+    setGameSettings(settings);
+    localStorage.setItem("settings", JSON.stringify(settings));
+    const result = await gameService.getBotSuggestion(data, botAddr);
+    setIsSuggesting(false);
+    if (result) {
+      setIsSuggested(true);
+      setSuggestData(result.output);
+      setOpenSuggestion(true);
     }
   };
 
@@ -540,7 +570,7 @@ export default function Home() {
             ) : (
               <BackHand />
             )}
-            <Tooltip title={settings.BotAddress2}>
+            <Tooltip title={gameSettings.BotAddress2}>
               <div className="bot-info">
                 <div className="bot-profile">
                   <img
@@ -571,7 +601,7 @@ export default function Home() {
             ) : (
               <BackHand />
             )}
-            <Tooltip title={settings.BotAddress1}>
+            <Tooltip title={gameSettings.BotAddress1}>
               <div className="bot-info">
                 <div className="bot-profile">
                   <img
@@ -602,7 +632,7 @@ export default function Home() {
             ) : (
               <BackHand />
             )}
-            <Tooltip title={settings.BotAddress1}>
+            <Tooltip title={gameSettings.BotAddress3}>
               <div className="bot-info">
                 <div className="bot-profile">
                   <img
@@ -719,6 +749,10 @@ export default function Home() {
           data={suggestData}
           openPopup={openSuggestion}
           handleClosePopup={handleCloseSuggestion}
+          handleChangeBot={handleChangeSuggestionBot}
+          botAddressList={botAddressList}
+          currentSuggestionBot={gameSettings.BotAddress4}
+          isSuggesting={isSuggesting}
         />
 
         <div className="main-player">
@@ -787,10 +821,7 @@ export default function Home() {
         <GameSettingsPopup
           title="Settings"
           openPopup={openSettings}
-          handleClosePopup={() => {
-            setOpenSettings(false);
-            setIsSuggested(false);
-          }}
+          handleClosePopup={handleCloseSettings}
         />
       </div>
     </>

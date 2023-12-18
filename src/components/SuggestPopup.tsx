@@ -1,22 +1,32 @@
 import { SuggestData } from "@/interfaces/SuggestData";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
+  DialogTitle,
+  Menu,
+  MenuItem,
   Radio,
+  Typography,
 } from "@mui/material";
-import { StaticSlot, StaticHand, SuggestSlot } from "./Slot";
+import { SuggestSlot } from "./Slot";
 import { useState } from "react";
-import { TypeChecker } from "@/utils/TypeChecker";
 
 interface SuggestPopupProps {
   openPopup: boolean;
   handleClosePopup: (item: number) => void;
+  handleChangeBot: (botAddr: string) => void;
   data: SuggestData[];
+  botAddressList: string[];
+  currentSuggestionBot: string;
+  isSuggesting: boolean;
 }
 export const SuggestPopup = (props: SuggestPopupProps) => {
   const [selectedValue, setSelectedValue] = useState("0");
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValue(event.target.value);
   };
@@ -33,6 +43,19 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
     props.handleClosePopup(Number(selectedValue));
   };
 
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleChangeBot = (addr: string) => {
+    handleCloseBotMenu();
+    props.handleChangeBot(addr);
+  };
+
+  const handleCloseBotMenu = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Dialog
       open={props.openPopup}
@@ -40,6 +63,42 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
       fullWidth
       className="suggest-popup"
     >
+      <DialogTitle>
+        <Box display="flex">
+          <Typography variant="h6" alignSelf="center">
+            Suggestion bot
+          </Typography>
+          <Button
+            id="basic-button"
+            aria-controls={open ? "basic-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+            size="large"
+          >
+            {props.isSuggesting ? "waiting..." : props.currentSuggestionBot}
+          </Button>
+        </Box>
+
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleCloseBotMenu}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+        >
+          {props.botAddressList.map((addr, index) => (
+            <MenuItem
+              key={`${addr}_${index}`}
+              onClick={() => handleChangeBot(addr)}
+            >
+              {addr}
+            </MenuItem>
+          ))}
+        </Menu>
+      </DialogTitle>
       <DialogContent>
         <div className="suggest-block">
           {props.data.map((slot, index) => (

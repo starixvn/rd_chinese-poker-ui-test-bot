@@ -24,7 +24,7 @@ interface FormSettingsErrors {
   DelayTimeError: string;
 }
 
-let initialFValues = {
+export const initialGameSettings = {
   BotAddress1: "https://bots.lumigame.com/chinese-poker-bot-pick",
   BotAddress2: "https://bots.lumigame.com/chinese-poker-bot-pick",
   BotAddress3: "https://bots.lumigame.com/chinese-poker-bot-pick",
@@ -38,7 +38,7 @@ const errorStates = {
 };
 
 interface GameSettingsProps {
-  handleClosePopup?: () => void;
+  handleClosePopup: (isSaved: boolean) => void;
 }
 
 export const GameSettings = (props: GameSettingsProps) => {
@@ -49,14 +49,14 @@ export const GameSettings = (props: GameSettingsProps) => {
     if (item && item.length > 0) {
       setConfigurations(JSON.parse(item));
     } else {
-      setConfigurations(initialFValues);
+      setConfigurations(initialGameSettings);
     }
   }, []);
 
   const handleSaveSettings = () => {
     localStorage.setItem("settings", JSON.stringify(configurations));
     if (props.handleClosePopup) {
-      props.handleClosePopup();
+      props.handleClosePopup(true);
     }
   };
 
@@ -81,8 +81,11 @@ export const GameSettings = (props: GameSettingsProps) => {
 
   const handleResetSettings = () => {
     setErrors({} as FormSettingsErrors);
-    setConfigurations(initialFValues);
-    localStorage.setItem("settings", JSON.stringify(initialFValues));
+    setConfigurations(initialGameSettings);
+    localStorage.setItem("settings", JSON.stringify(initialGameSettings));
+    if (props.handleClosePopup) {
+      props.handleClosePopup(true);
+    }
   };
 
   const [configurations, setConfigurations] = useState({} as FormSettings);
