@@ -83,12 +83,19 @@ export const ResultSlot = (props: ResultSlotProps) => {
 
       <div className={`card-slot card-slot-${props.cards.length}`}>
         {props.cards.map((card, index) => (
-          <img
+          <div
             key={CardImageKeys[card]}
-            src={CardImageSources[card]}
-            alt="card"
             className={`card card-${index}`}
-          />
+            style={{ display: "inline-flex" }}
+          >
+            <img
+              src={CardImageSources[card]}
+              alt="card"
+              style={{
+                width: "100%",
+              }}
+            />
+          </div>
         ))}
       </div>
     </div>
