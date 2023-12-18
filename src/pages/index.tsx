@@ -40,7 +40,7 @@ export default function Home() {
   const [arrangeHand1, setArrangeHand1] = useState([] as number[]);
   const [arrangeHand2, setArrangeHand2] = useState([] as number[]);
   const [arrangeHand3, setArrangeHand3] = useState([] as number[]);
-  const gameData = initialMatchData;
+  const [gameData, setGameData] = useState(initialMatchData);
   const [gameResult, setGameResult] = useState(initialMatchResult);
   const [isLoadingBot1, setIsLoadingBot1] = useState(true);
   const [isLoadingBot2, setIsLoadingBot2] = useState(true);
@@ -189,9 +189,9 @@ export default function Home() {
         gameData.slot1.hand1 = playerData.slice(8, 13);
         gameData.slot1.hand2 = playerData.slice(3, 8);
         gameData.slot1.hand3 = playerData.slice(0, 3);
-        setIsSettled(true);
       }
       let result = await gameService.getSettlement(gameData);
+      setIsSettled(true);
       setGameResult({
         slot1: {
           hand1: result["1"].scores.segment_1,
