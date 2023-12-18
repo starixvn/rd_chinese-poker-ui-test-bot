@@ -452,8 +452,8 @@ body {
 
 @media screen and (max-width: 935px) {
   .game-name {
-    position: initial;
     font-size: 15px;
+    bottom: 40px;
   }
 
   .card-arrange {
@@ -472,7 +472,7 @@ body {
   .back-hand .card,
   .static-hand .card,
   .result-item .card {
-    width: 30px;
+    width: 28px;
   }
 
   .arrangement .btn-container {
@@ -541,7 +541,7 @@ body {
       display: none;
     }
     .card {
-      width: 50px;
+      width: 40px;
     }
   }
 
@@ -610,10 +610,10 @@ body {
   }
 
   .suggest-item {
-    grid-template-columns: 90px 1fr;
+    grid-template-columns: 75px 1fr;
   }
   .result-item {
-    grid-template-columns: 71px 1fr;
+    grid-template-columns: 65px 1fr;
   }
   .result-item .result-hand-type {
     transform: translateX(20px);
@@ -634,8 +634,10 @@ body {
   }
 
   .settings {
-    position: initial !important;
-    z-index: 111;
+    top: unset;
+    left: 10px;
+    right: unset;
+    bottom: 90px;
   }
 
   .back-hand .card-slot:nth-child(2) {
@@ -653,5 +655,9 @@ body {
   .bot-info > svg {
     width: 20px !important;
     height: 20px !important;
+  }
+
+  .suggest-item .hand-type {
+    font-size: 13px;
   }
 }
