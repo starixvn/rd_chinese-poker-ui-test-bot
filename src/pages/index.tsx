@@ -20,6 +20,7 @@ import { DragUpdate, DropResult } from "react-beautiful-dnd";
 import { SuggestData } from "@/interfaces/SuggestData";
 import { SuggestPopup } from "@/components/SuggestPopup";
 import { FormSettings, initialGameSettings } from "@/components/GameSettings";
+import { preloadImages } from "@/utils/CardImageSources";
 
 const arrangement = {
   player: "player",
@@ -143,6 +144,7 @@ export default function Home() {
   };
 
   useEffect(() => {
+    preloadImages();
     if (isLoading) {
       updateGameSettings();
       setIsLoadingBot1(true);
