@@ -814,10 +814,10 @@ export default function Home() {
             href="https://kami.com.ph/112525-how-play-pusoy-dos-win.html"
             target="_blank"
           >
-            Pusoy (Chinese Poker)
+            Pusoy (Chinese Poker) - Test Version
             <Help />
-          </a>{" "}
-          <p>(Testing...)</p>
+          </a>
+          <p>Match: {gameData.matchId}</p>
         </div>
 
         <GameSettingsPopup
