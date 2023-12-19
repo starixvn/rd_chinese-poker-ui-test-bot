@@ -14,6 +14,7 @@ export interface FormSettings {
   BotAddress3: string;
   BotAddress4: string;
   DelayTime: number;
+  Version?: string;
 }
 
 interface FormSettingsErrors {
@@ -25,11 +26,12 @@ interface FormSettingsErrors {
 }
 
 export const initialGameSettings = {
-  BotAddress1: "https://bots.lumigame.com/chinese-poker-bot-pick",
+  BotAddress1: "https://bots.lumigame.com/chinese-poker-bot-probability",
   BotAddress2: "https://bots.lumigame.com/chinese-poker-bot-pick",
-  BotAddress3: "https://bots.lumigame.com/chinese-poker-bot-pick",
+  BotAddress3: "https://bots.lumigame.com/chinese-poker-bot-probability",
   BotAddress4: "https://bots.lumigame.com/chinese-poker-bot-pick",
-  DelayTime: 2000,
+  DelayTime: 0,
+  Version: "1.2",
 };
 
 const errorStates = {
@@ -44,12 +46,26 @@ interface GameSettingsProps {
 export const GameSettings = (props: GameSettingsProps) => {
   const [errors, setErrors] = useState({} as FormSettingsErrors);
 
+  const initSettings = () => {
+    setErrors({} as FormSettingsErrors);
+    setConfigurations(initialGameSettings);
+    localStorage.setItem("settings", JSON.stringify(initialGameSettings));
+  };
+
   useEffect(() => {
-    const item = localStorage.getItem("settings");
-    if (item && item.length > 0) {
-      setConfigurations(JSON.parse(item));
+    const item = localStorage.getItem("settings") || "";
+    let settings = {} as FormSettings;
+
+    try {
+      settings = JSON.parse(item);
+    } catch (e) {
+      initSettings();
+    }
+
+    if (settings.Version !== initialGameSettings.Version) {
+      initSettings();
     } else {
-      setConfigurations(initialGameSettings);
+      setConfigurations(settings);
     }
   }, []);
 
@@ -80,9 +96,7 @@ export const GameSettings = (props: GameSettingsProps) => {
   };
 
   const handleResetSettings = () => {
-    setErrors({} as FormSettingsErrors);
-    setConfigurations(initialGameSettings);
-    localStorage.setItem("settings", JSON.stringify(initialGameSettings));
+    initSettings();
     if (props.handleClosePopup) {
       props.handleClosePopup(true);
     }

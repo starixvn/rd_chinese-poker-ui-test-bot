@@ -51,7 +51,7 @@ export default function Home() {
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [isSuggested, setIsSuggested] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
-  const [openArrangement, setOpenArrangement] = useState(true);
+  const [openArrangement, setOpenArrangement] = useState(false);
   const [openSuggestion, setOpenSuggestion] = useState(false);
   const [startNewGame, setStartNewGame] = useState(0);
   const [dragOVerId, setDragOVerId] = useState<string | null>(null);
@@ -135,12 +135,22 @@ export default function Home() {
   }
 
   const updateGameSettings = () => {
-    const item = localStorage.getItem("settings");
-    if (item && item.length > 0) {
-      setGameSettings(JSON.parse(item));
-    } else {
-      setGameSettings(initialGameSettings);
+    const item = localStorage.getItem("settings") || "";
+    let settings = {} as FormSettings;
+
+    try {
+      settings = JSON.parse(item);
+    } catch (e) {
+      settings = initialGameSettings;
     }
+
+    if (settings.Version !== initialGameSettings.Version) {
+      console.info("new settings applied");
+      settings = initialGameSettings;
+      localStorage.setItem("settings", JSON.stringify(initialGameSettings));
+    }
+
+    setGameSettings(settings);
   };
 
   useEffect(() => {
@@ -157,6 +167,7 @@ export default function Home() {
         setCountDown(countDown - 1);
       }, 1000);
     } else {
+      setOpenArrangement(true);
       getBotArrangement("bot1", bot1);
       getBotArrangement("bot2", bot2);
       getBotArrangement("bot3", bot3);
@@ -537,7 +548,7 @@ export default function Home() {
     }
   };
 
-  return countDown > 0 ? (
+  return countDown > 2 ? (
     <>
       <Head>
         <title>Chinese Poker</title>
@@ -756,7 +767,6 @@ export default function Home() {
           currentSuggestionBot={gameSettings.BotAddress4}
           isSuggesting={isSuggesting}
         />
-
         <div className="main-player">
           {isSettled ? (
             <SlotResultShow
@@ -778,6 +788,7 @@ export default function Home() {
               variant="contained"
               color="primary"
               onClick={handleSubmitHandCard}
+              disabled={countDown > 0}
             >
               Ready
             </Button>
@@ -785,6 +796,7 @@ export default function Home() {
               variant="contained"
               color="secondary"
               onClick={handleEditHandCard}
+              disabled={countDown > 0}
             >
               Rearrange
             </Button>
@@ -792,12 +804,12 @@ export default function Home() {
               variant="contained"
               color="info"
               onClick={handleStartNewGame}
+              disabled={countDown > 0}
             >
               New Round
             </Button>
           </div>
         </div>
-
         <Button
           className="settings"
           color="primary"
@@ -808,7 +820,6 @@ export default function Home() {
         >
           <Settings sx={{ marginRight: 1 }} /> Settings
         </Button>
-
         <div className="game-name">
           <a
             href="https://kami.com.ph/112525-how-play-pusoy-dos-win.html"
@@ -819,7 +830,6 @@ export default function Home() {
           </a>
           <p>Match: {gameData.matchId}</p>
         </div>
-
         <GameSettingsPopup
           title="Settings"
           openPopup={openSettings}

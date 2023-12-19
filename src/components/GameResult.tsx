@@ -7,6 +7,8 @@ interface SlotResultProps {
   slotResult: SlotResult;
 }
 
+const DEFAULT_DELAY_TIME = 0;
+
 export const SlotResultShow = (props: SlotResultProps) => {
   const [showSlot, setShowSlot] = useState(0);
   const getTotalSum = (sum: number): string => {
@@ -15,7 +17,7 @@ export const SlotResultShow = (props: SlotResultProps) => {
 
   useEffect(() => {
     if (showSlot < 4) {
-      let delayTime = 2000;
+      let delayTime = DEFAULT_DELAY_TIME;
       const item = localStorage.getItem("settings");
       if (item) {
         const settings = JSON.parse(item);
