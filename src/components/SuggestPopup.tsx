@@ -67,8 +67,8 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
         props.handleClosePopup(-1);
       }}
     >
-      <DialogTitle>
-        <Box display="flex">
+      <div>
+        <Box display="flex" paddingLeft={1}>
           <Typography variant="h6" alignSelf="center">
             Select bot:
           </Typography>
@@ -111,24 +111,24 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
             </MenuItem>
           ))}
         </Menu>
-      </DialogTitle>
-      <DialogContent>
-        <div className="suggest-block">
-          {props.data.map((slot, index) => (
-            <div key={`suggest_${index}`} className="suggest-slot">
-              <Radio
-                {...controlProps(index.toString())}
-                onClick={() => handleClose(index)}
-              />
-              <div className="suggest-card">
-                <SuggestSlot cards={slot.segment_3} />
-                <SuggestSlot cards={slot.segment_2} />
-                <SuggestSlot cards={slot.segment_1} />
-              </div>
+      </div>
+
+      <div className="suggest-block">
+        {props.data.map((slot, index) => (
+          <div key={`suggest_${index}`} className="suggest-slot">
+            <Radio
+              {...controlProps(index.toString())}
+              onClick={() => handleClose(index)}
+            />
+            <div className="suggest-card">
+              <SuggestSlot cards={slot.segment_3} />
+              <SuggestSlot cards={slot.segment_2} />
+              <SuggestSlot cards={slot.segment_1} />
             </div>
-          ))}
-        </div>
-      </DialogContent>
+          </div>
+        ))}
+      </div>
+
       <DialogActions className="suggest-actions"></DialogActions>
     </Dialog>
   );

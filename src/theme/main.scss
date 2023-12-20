@@ -77,7 +77,7 @@ body {
 .static-hand .card,
 .result-item .card {
   width: 70px;
-  min-height: 100px;
+  height: 97px;
 }
 
 .bot-container {
@@ -135,6 +135,7 @@ body {
 
   .card {
     width: 100px;
+    height: 143px;
   }
 
   .result-sum {
@@ -281,6 +282,8 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 10px;
+  padding: 10px;
+  padding-top: 0;
 
   .card {
     width: 55px;
@@ -478,6 +481,7 @@ body {
   .static-hand .card,
   .result-item .card {
     width: 28px;
+    height: 39px;
   }
 
   .arrangement .btn-container {
@@ -547,6 +551,7 @@ body {
     }
     .card {
       width: 40px;
+      height: 55px;
     }
   }
 
