@@ -445,7 +445,7 @@ export default function Home() {
     setIsSettled(false);
     setIsSuggesting(false);
     setIsSuggested(false);
-    setOpenArrangement(true);
+    setCountDown(2);
   };
 
   const handleDoneArrange = () => {

@@ -29,9 +29,9 @@ export const initialGameSettings = {
   BotAddress1: "https://bots.lumigame.com/chinese-poker-bot-probability",
   BotAddress2: "https://bots.lumigame.com/chinese-poker-bot-pick",
   BotAddress3: "https://bots.lumigame.com/chinese-poker-bot-probability",
-  BotAddress4: "https://bots.lumigame.com/chinese-poker-bot-pick",
+  BotAddress4: "https://bots.lumigame.com/chinese-poker-bot-probability",
   DelayTime: 0,
-  Version: "1.2",
+  Version: "1.5",
 };
 
 const errorStates = {

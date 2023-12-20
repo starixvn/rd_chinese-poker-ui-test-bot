@@ -39,8 +39,8 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
     inputProps: { "aria-label": item },
   });
 
-  const handleClose = () => {
-    props.handleClosePopup(Number(selectedValue));
+  const handleClose = (item: number) => {
+    props.handleClosePopup(item);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -66,7 +66,7 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
       <DialogTitle>
         <Box display="flex">
           <Typography variant="h6" alignSelf="center">
-            Suggestion bot
+            Select bot:
           </Typography>
           <Button
             id="basic-button"
@@ -103,7 +103,10 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
         <div className="suggest-block">
           {props.data.map((slot, index) => (
             <div key={`suggest_${index}`} className="suggest-slot">
-              <Radio {...controlProps(index.toString())} />
+              <Radio
+                {...controlProps(index.toString())}
+                onClick={() => handleClose(index)}
+              />
               <div className="suggest-card">
                 <SuggestSlot cards={slot.segment_3} />
                 <SuggestSlot cards={slot.segment_2} />
@@ -113,16 +116,7 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
           ))}
         </div>
       </DialogContent>
-      <DialogActions className="suggest-actions">
-        <Button
-          className="button-ok"
-          variant="contained"
-          color="info"
-          onClick={handleClose}
-        >
-          OK
-        </Button>
-      </DialogActions>
+      <DialogActions className="suggest-actions"></DialogActions>
     </Dialog>
   );
 };
