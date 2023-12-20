@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { SuggestSlot } from "./Slot";
 import { useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface SuggestPopupProps {
   openPopup: boolean;
@@ -62,6 +63,9 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
       maxWidth={"lg"}
       fullWidth
       className="suggest-popup"
+      onClose={() => {
+        props.handleClosePopup(-1);
+      }}
     >
       <DialogTitle>
         <Box display="flex">
@@ -77,6 +81,15 @@ export const SuggestPopup = (props: SuggestPopupProps) => {
             size="large"
           >
             {props.isSuggesting ? "waiting..." : props.currentSuggestionBot}
+          </Button>
+          <Box style={{ flexGrow: 1 }}></Box>
+          <Button
+            color="error"
+            onClick={() => {
+              props.handleClosePopup(-1);
+            }}
+          >
+            <CloseIcon />
           </Button>
         </Box>
 

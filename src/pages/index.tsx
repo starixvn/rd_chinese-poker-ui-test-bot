@@ -481,9 +481,11 @@ export default function Home() {
   };
 
   const handleCloseSuggestion = (item: number) => {
-    setArrangeHand1([...suggestData[item].segment_1]);
-    setArrangeHand2([...suggestData[item].segment_2]);
-    setArrangeHand3([...suggestData[item].segment_3]);
+    if (item > -1) {
+      setArrangeHand1([...suggestData[item].segment_1]);
+      setArrangeHand2([...suggestData[item].segment_2]);
+      setArrangeHand3([...suggestData[item].segment_3]);
+    }
     setOpenSuggestion(false);
   };
 
@@ -768,13 +770,17 @@ export default function Home() {
           isSuggesting={isSuggesting}
         />
         <div className="main-player">
-          {isSettled ? (
-            <SlotResultShow
-              slotData={gameData.slot1}
-              slotResult={gameResult.slot1}
-            />
+          {countDown <= 0 ? (
+            isSettled ? (
+              <SlotResultShow
+                slotData={gameData.slot1}
+                slotResult={gameResult.slot1}
+              />
+            ) : (
+              <StaticHand cards={playerData} />
+            )
           ) : (
-            <StaticHand cards={playerData} />
+            <BackHand />
           )}
           <div
             className={`main-profile ${isSettled ? "settled" : ""}`}
