@@ -57,11 +57,12 @@ export default function Home() {
   const [dragOVerId, setDragOVerId] = useState<string | null>(null);
   const [countDown, setCountDown] = useState(5);
   const [gameSettings, setGameSettings] = useState({} as FormSettings);
-  const botAddressList = [
+  const [botAddressList, setBotAddressList] = useState([
     "https://bots.lumigame.com/chinese-poker-bot-pick",
     "https://bots.lumigame.com/chinese-poker-bot-probability",
-  ];
+  ]);
   const defaultBot = "https://bots.lumigame.com/chinese-poker-bot-pick";
+  const [waitForSettled, setWaitForSettled] = useState(false);
 
   async function getData() {
     const body = ["1", "2", "3", "4"];
@@ -151,6 +152,19 @@ export default function Home() {
     }
 
     setGameSettings(settings);
+
+    let bots = new Set<string>([
+      settings.BotAddress1,
+      settings.BotAddress2,
+      settings.BotAddress3,
+      settings.BotAddress4,
+    ]);
+
+    botAddressList.forEach((address) => {
+      bots.add(address);
+    });
+
+    setBotAddressList([...Array.from(bots)]);
   };
 
   useEffect(() => {
@@ -192,6 +206,7 @@ export default function Home() {
 
   const handleSubmitHandCard = async () => {
     if (!isLoadingBot1 && !isLoadingBot2 && !isLoadingBot3) {
+      setWaitForSettled(true);
       if (isSettled) {
         if (currentArrangement === arrangement.player) {
           gameData.slot1.hand1 = [...arrangeHand1];
@@ -204,6 +219,7 @@ export default function Home() {
         gameData.slot1.hand3 = playerData.slice(0, 3);
       }
       let result = await gameService.getSettlement(gameData);
+      setWaitForSettled(false);
       setIsSettled(true);
       setGameResult({
         slot1: {
@@ -793,11 +809,11 @@ export default function Home() {
           <div className="button-group">
             <Button
               variant="contained"
-              color="primary"
+              color={waitForSettled ? "warning" : "primary"}
               onClick={handleSubmitHandCard}
               disabled={countDown > 0}
             >
-              Ready
+              {waitForSettled ? "Waiting..." : "Ready"}
             </Button>
             <Button
               variant="contained"
