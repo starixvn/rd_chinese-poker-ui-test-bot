@@ -135,8 +135,8 @@ export default function Home() {
   }
 
   const updateGameSettings = () => {
-    const item = localStorage.getItem("settings") || "";
-    let settings = {} as FormSettings;
+    const item = localStorage.getItem("settings") ?? "";
+    let settings: FormSettings = {} as FormSettings;
 
     try {
       settings = JSON.parse(item);
@@ -440,6 +440,7 @@ export default function Home() {
   };
 
   const handleStartNewGame = () => {
+    setCurrentArrangement(arrangement.player);
     setStartNewGame(startNewGame + 1);
     setIsLoading(true);
     setIsSettled(false);
