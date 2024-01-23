@@ -69,8 +69,9 @@ function getBotSuggestion(data: any, botArr: string): Promise<any> {
   body.private.input = data;
   return fetchWrapper.post(botArr + "/suggest", body);
 }
-function getSettlement(data: MatchData): Promise<any> {
+function getSettlement(data: MatchData, host: string): Promise<any> {
   let body = {
+    host: host,
     match_id: data.matchId,
     slot_1: {
       arrangement_id: "string",

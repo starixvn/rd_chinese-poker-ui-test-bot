@@ -29,6 +29,13 @@ const arrangement = {
   bot3: "bot3",
 };
 
+const hostName = new Map<string, string>(
+  [["slot_1", "Player"],
+  ["slot_2", "Bot 1"],
+  ["slot_3", "Bot 2"],
+  ["slot_4", "Bot 3"]]
+);
+
 export default function Home() {
   const [bot1, setBot1] = useState([] as number[]);
   const [bot2, setBot2] = useState([] as number[]);
@@ -218,7 +225,7 @@ export default function Home() {
         gameData.slot1.hand2 = playerData.slice(3, 8);
         gameData.slot1.hand3 = playerData.slice(0, 3);
       }
-      let result = await gameService.getSettlement(gameData);
+      let result = await gameService.getSettlement(gameData, gameSettings.Host);
       setWaitForSettled(false);
       setIsSettled(true);
       setGameResult({
@@ -227,24 +234,32 @@ export default function Home() {
           hand2: result["1"].scores.segment_2,
           hand3: result["1"].scores.segment_3,
           sum: result["1"].scores_sum,
+          is_break: result["1"].is_break,
+          has_natural: result["1"].has_natural,
         },
         slot2: {
           hand1: result["2"].scores.segment_1,
           hand2: result["2"].scores.segment_2,
           hand3: result["2"].scores.segment_3,
           sum: result["2"].scores_sum,
+          is_break: result["2"].is_break,
+          has_natural: result["2"].has_natural,
         },
         slot3: {
           hand1: result["3"].scores.segment_1,
           hand2: result["3"].scores.segment_2,
           hand3: result["3"].scores.segment_3,
           sum: result["3"].scores_sum,
+          is_break: result["3"].is_break,
+          has_natural: result["3"].has_natural,
         },
         slot4: {
           hand1: result["4"].scores.segment_1,
           hand2: result["4"].scores.segment_2,
           hand3: result["4"].scores.segment_3,
           sum: result["4"].scores_sum,
+          is_break: result["4"].is_break,
+          has_natural: result["4"].has_natural,
         },
       });
     }
@@ -852,10 +867,12 @@ export default function Home() {
             <Help />
           </a>
           <p>Match: {gameData.matchId}</p>
+          <p>Host: {hostName.get(gameSettings.Host) ?? "Unknown"}</p>
         </div>
         <GameSettingsPopup
           title="Settings"
           openPopup={openSettings}
+          oldConfigurations={gameSettings}
           handleClosePopup={handleCloseSettings}
         />
       </div>

@@ -5,6 +5,11 @@ import {
   TextField,
   Typography,
   Button,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  SelectChangeEvent
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 
@@ -14,6 +19,7 @@ export interface FormSettings {
   BotAddress3: string;
   BotAddress4: string;
   DelayTime: number;
+  Host: string;
   Version?: string;
 }
 
@@ -22,6 +28,7 @@ interface FormSettingsErrors {
   BotAddress2Error: string;
   BotAddress3Error: string;
   BotAddress4Error: string;
+  Host: string;
   DelayTimeError: string;
 }
 
@@ -31,6 +38,7 @@ export const initialGameSettings = {
   BotAddress3: "https://bots.lumigame.com/chinese-poker-bot-probability",
   BotAddress4: "https://bots.lumigame.com/chinese-poker-bot-probability",
   DelayTime: 0,
+  Host: "slot_2",
   Version: "1.5",
 };
 
@@ -41,6 +49,7 @@ const errorStates = {
 
 interface GameSettingsProps {
   handleClosePopup: (isSaved: boolean) => void;
+  oldConfigurations?: FormSettings;
 }
 
 export const GameSettings = (props: GameSettingsProps) => {
@@ -77,7 +86,7 @@ export const GameSettings = (props: GameSettingsProps) => {
   };
 
   const handleSettingsChanged = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement > | SelectChangeEvent
   ) => {
     const { name, value } = e.target;
     setConfigurations({
@@ -102,7 +111,7 @@ export const GameSettings = (props: GameSettingsProps) => {
     }
   };
 
-  const [configurations, setConfigurations] = useState({} as FormSettings);
+  const [configurations, setConfigurations] = useState(props.oldConfigurations ?? {} as FormSettings);
 
   return (
     <Container maxWidth="sm">
@@ -168,6 +177,24 @@ export const GameSettings = (props: GameSettingsProps) => {
             error={errors.DelayTimeError === errorStates.DelayTimeError}
             helperText={errors.DelayTimeError}
           />
+        </Grid>
+        <Grid item xs={12}>
+        <FormControl fullWidth>
+        <InputLabel id="host-select-label">Host</InputLabel>
+          <Select
+          defaultValue={configurations.Host}
+          name="Host"
+          labelId="host-select-label"
+          value={configurations.Host}
+          label="Host"
+          onChange={handleSettingsChanged}
+        >
+          <MenuItem value={"slot_2"}>Bot 1</MenuItem>
+          <MenuItem value={"slot_3"}>Bot 2</MenuItem>
+          <MenuItem value={"slot_4"}>Bot 3</MenuItem>
+          <MenuItem value={"slot_1"}>Player</MenuItem>
+        </Select>
+        </FormControl>
         </Grid>
         <Grid item xs={6}>
           <Button

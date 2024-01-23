@@ -6,6 +6,7 @@ export interface SlotData {
 }
 
 export interface MatchData {
+  host: string;
   matchId: string;
   slot1: SlotData;
   slot2: SlotData;

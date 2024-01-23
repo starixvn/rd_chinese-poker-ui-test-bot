@@ -3,6 +3,8 @@ export interface SlotResult {
   hand2: number;
   hand3: number;
   sum: number;
+  is_break: boolean;
+  has_natural: boolean;
 }
 
 export interface MatchResult {

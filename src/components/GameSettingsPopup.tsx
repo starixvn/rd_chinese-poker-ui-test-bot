@@ -7,12 +7,13 @@ import {
   Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { GameSettings } from "./GameSettings";
+import { FormSettings, GameSettings } from "./GameSettings";
 
 interface SettingsPopupProps {
   title: string;
   openPopup: boolean;
   handleClosePopup: (isSaved: boolean) => void;
+  oldConfigurations?: FormSettings;
 }
 export const GameSettingsPopup = (props: SettingsPopupProps) => {
   return (
@@ -38,7 +39,7 @@ export const GameSettingsPopup = (props: SettingsPopupProps) => {
         </Box>
       </DialogTitle>
       <DialogContent dividers>
-        <GameSettings handleClosePopup={props.handleClosePopup} />
+        <GameSettings handleClosePopup={props.handleClosePopup} oldConfigurations={props.oldConfigurations}/>
       </DialogContent>
     </Dialog>
   );

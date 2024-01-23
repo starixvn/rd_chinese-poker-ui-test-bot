@@ -9,6 +9,18 @@ interface SlotResultProps {
 
 const DEFAULT_DELAY_TIME = 0;
 
+const getColorClass = (slotResult: SlotResult) =>{
+  if ((slotResult.sum < 0) || (slotResult.is_break)) {
+    return "result-red";
+  }
+
+  if (slotResult.has_natural) {
+    return "result-purple";
+  }
+
+  return "result-green";
+};
+
 export const SlotResultShow = (props: SlotResultProps) => {
   const [showSlot, setShowSlot] = useState(0);
   const getTotalSum = (sum: number): string => {
@@ -61,11 +73,11 @@ export const SlotResultShow = (props: SlotResultProps) => {
 
       {showSlot > 3 ? (
         <div
-          className={`result-sum ${
-            props.slotResult.sum < 0 ? "result-red" : "result-green"
+          className={`result-sum ${        
+            getColorClass(props.slotResult)
           }`}
         >
-          Total: {getTotalSum(props.slotResult.sum)}
+          {props.slotResult.is_break ? "Break": `${getTotalSum(props.slotResult.sum)}`}
         </div>
       ) : (
         ""
