@@ -3,6 +3,16 @@ export interface SlotResult {
   hand2: number;
   hand3: number;
   sum: number;
+  break: number;
+  natural: {
+    [key: string]: number;
+  };
+  bonus: {
+    [key: string]: number;
+  };
+  superBonus: {
+    [key: number]: number;
+  };
 }
 
 export interface MatchResult {

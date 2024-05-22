@@ -1,15 +1,21 @@
 import { fetchWrapper } from "@/helpers/fetchWrapper";
 import { MatchData } from "../interfaces";
+import { NewMatchData } from "@/interfaces/NewMatchData";
+import { SettleResult, SettleResultMap } from "@/interfaces/SettleResult";
 
 export const gameService = {
   getHandCards,
   getBotArrangement,
   getSettlement,
   getBotSuggestion,
+  getNewSettlement,
 };
 
 function getHandCards(data: any): Promise<any> {
-  return fetchWrapper.post("https://bots.lumigame.com/chinese-poker-game-service/play", data);
+  return fetchWrapper.post(
+    "https://bots.lumigame.com/chinese-poker-game-service/play",
+    data
+  );
 }
 
 function getBotArrangement(data: any, botArr: string): Promise<any> {
@@ -118,5 +124,12 @@ function getSettlement(data: MatchData): Promise<any> {
     },
   };
 
-  return fetchWrapper.post("https://bots.lumigame.com/chinese-poker-game-service/settle-game-client", body);
+  return fetchWrapper.post(
+    "https://bots.lumigame.com/chinese-poker-game-service/settle-game-client",
+    body
+  );
+}
+
+function getNewSettlement(data: NewMatchData): Promise<SettleResultMap> {
+  return fetchWrapper.post("http://localhost:5000/settle", data);
 }

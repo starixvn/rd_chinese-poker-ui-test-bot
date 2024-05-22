@@ -2,6 +2,7 @@ import { CardImageSources, CardImageKeys } from "../utils/CardImageSources";
 import { Box, Grid } from "@mui/material";
 import { Draggable } from "@/utils/react-beautiful-dnd";
 import { TypeChecker } from "@/utils/TypeChecker";
+import { useEffect } from "react";
 
 interface SlotProps {
   name?: string;
@@ -12,6 +13,7 @@ interface SlotProps {
 interface ResultSlotProps {
   cards: number[];
   result: number;
+  bonus?: number;
 }
 
 interface StaticHandProps {
@@ -60,6 +62,9 @@ export const Slot = (props: SlotProps) => {
 
 export const ResultSlot = (props: ResultSlotProps) => {
   const showResult = (num?: number): string => {
+    if (num === 0) {
+      return "0";
+    }
     if (num) {
       return num > 0 ? "+" + num : num.toString();
     }
@@ -71,7 +76,9 @@ export const ResultSlot = (props: ResultSlotProps) => {
   return (
     <div className="result-item">
       <div className="result-hand-type">
-        {slotHandType}
+        <span className={(props?.bonus ?? 0) > 0 ? "highlight" : ""}>
+          {slotHandType}
+        </span>
         <span
           className={`result-count ${
             props.result < 0 ? "result-red" : "result-green"

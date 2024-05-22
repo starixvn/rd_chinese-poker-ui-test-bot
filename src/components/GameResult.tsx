@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ResultSlot, ResultSlotBack, StaticSlot } from "./Slot";
 import { SlotData, SlotResult } from "@/interfaces";
 
@@ -14,6 +14,22 @@ export const SlotResultShow = (props: SlotResultProps) => {
   const getTotalSum = (sum: number): string => {
     return sum > 0 ? "+" + sum : sum.toString();
   };
+
+  const calculate_bonus_win = (bonus: { [key: string]: number }) => {
+    let result: any = {};
+    Object.keys(bonus).forEach((key) => {
+      let segment = key.split(".")[0];
+      if (bonus[key] > 0) {
+        result[segment] = bonus[key];
+        Object.assign(result, { [segment]: bonus[key] });
+      }
+    });
+    return result;
+  };
+
+  const bonus_win = useMemo(() => {
+    return calculate_bonus_win(props.slotResult.bonus);
+  }, [props.slotResult.bonus]);
 
   useEffect(() => {
     if (showSlot < 4) {
@@ -37,6 +53,7 @@ export const SlotResultShow = (props: SlotResultProps) => {
         <ResultSlot
           cards={props.slotData.hand3}
           result={props.slotResult.hand3}
+          bonus={bonus_win["front"]}
         />
       ) : (
         <ResultSlotBack result={0} cards={[52, 52, 52]} />
@@ -45,6 +62,7 @@ export const SlotResultShow = (props: SlotResultProps) => {
         <ResultSlot
           cards={props.slotData.hand2}
           result={props.slotResult.hand2}
+          bonus={bonus_win["middle"]}
         />
       ) : (
         <ResultSlotBack result={0} cards={[52, 52, 52, 52, 52]} />
@@ -54,6 +72,7 @@ export const SlotResultShow = (props: SlotResultProps) => {
         <ResultSlot
           cards={props.slotData.hand1}
           result={props.slotResult.hand1}
+          bonus={bonus_win["back"]}
         />
       ) : (
         <ResultSlotBack result={0} cards={[52, 52, 52, 52, 52]} />

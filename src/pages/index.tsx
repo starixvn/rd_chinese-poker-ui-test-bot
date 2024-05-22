@@ -218,33 +218,64 @@ export default function Home() {
         gameData.slot1.hand2 = playerData.slice(3, 8);
         gameData.slot1.hand3 = playerData.slice(0, 3);
       }
-      let result = await gameService.getSettlement(gameData);
+      const newGameData = {
+        arrangements: [
+          gameData.slot1,
+          gameData.slot2,
+          gameData.slot3,
+          gameData.slot4,
+        ].map((item) => {
+          return {
+            front: item.hand3,
+            middle: item.hand2,
+            back: item.hand1,
+          };
+        }),
+      };
+      let result = await gameService.getNewSettlement(newGameData);
+      console.log(result);
       setWaitForSettled(false);
       setIsSettled(true);
       setGameResult({
         slot1: {
-          hand1: result["1"].scores.segment_1,
-          hand2: result["1"].scores.segment_2,
-          hand3: result["1"].scores.segment_3,
-          sum: result["1"].scores_sum,
+          hand1: result["0"].normal_score.back,
+          hand2: result["0"].normal_score.middle,
+          hand3: result["0"].normal_score.front,
+          sum: result["0"].sum_score,
+          bonus: result["0"].bonus_win_score,
+          superBonus: result["0"].super_bonus_win,
+          natural: result["0"].natural_score,
+          break: result["0"].break_score,
         },
         slot2: {
-          hand1: result["2"].scores.segment_1,
-          hand2: result["2"].scores.segment_2,
-          hand3: result["2"].scores.segment_3,
-          sum: result["2"].scores_sum,
+          hand1: result["1"].normal_score.back,
+          hand2: result["1"].normal_score.middle,
+          hand3: result["1"].normal_score.front,
+          sum: result["1"].sum_score,
+          bonus: result["1"].bonus_win_score,
+          superBonus: result["1"].super_bonus_win,
+          natural: result["1"].natural_score,
+          break: result["1"].break_score,
         },
         slot3: {
-          hand1: result["3"].scores.segment_1,
-          hand2: result["3"].scores.segment_2,
-          hand3: result["3"].scores.segment_3,
-          sum: result["3"].scores_sum,
+          hand1: result["2"].normal_score.back,
+          hand2: result["2"].normal_score.middle,
+          hand3: result["2"].normal_score.front,
+          sum: result["2"].sum_score,
+          bonus: result["2"].bonus_win_score,
+          superBonus: result["2"].super_bonus_win,
+          natural: result["2"].natural_score,
+          break: result["2"].break_score,
         },
         slot4: {
-          hand1: result["4"].scores.segment_1,
-          hand2: result["4"].scores.segment_2,
-          hand3: result["4"].scores.segment_3,
-          sum: result["4"].scores_sum,
+          hand1: result["3"].normal_score.back,
+          hand2: result["3"].normal_score.middle,
+          hand3: result["3"].normal_score.front,
+          sum: result["3"].sum_score,
+          bonus: result["3"].bonus_win_score,
+          superBonus: result["3"].super_bonus_win,
+          natural: result["3"].natural_score,
+          break: result["3"].break_score,
         },
       });
     }
