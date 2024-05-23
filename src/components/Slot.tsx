@@ -3,6 +3,7 @@ import { Box, Grid } from "@mui/material";
 import { Draggable } from "@/utils/react-beautiful-dnd";
 import { TypeChecker } from "@/utils/TypeChecker";
 import { useEffect } from "react";
+import { showResult } from "@/helpers";
 
 interface SlotProps {
   name?: string;
@@ -61,31 +62,27 @@ export const Slot = (props: SlotProps) => {
 };
 
 export const ResultSlot = (props: ResultSlotProps) => {
-  const showResult = (num?: number): string => {
-    if (num === 0) {
-      return "0";
-    }
-    if (num) {
-      return num > 0 ? "+" + num : num.toString();
-    }
-    return "";
-  };
   const slotTypeChecker = new TypeChecker([...props.cards]);
   const slotHandType = slotTypeChecker.getType();
 
   return (
     <div className="result-item">
       <div className="result-hand-type">
-        <span className={(props?.bonus ?? 0) > 0 ? "highlight" : ""}>
+        <span className={(props?.bonus ?? 0) > 0 ? "bonus-win" : ""}>
           {slotHandType}
         </span>
-        <span
+        <div
           className={`result-count ${
             props.result < 0 ? "result-red" : "result-green"
           }`}
         >
-          {showResult(props.result)}
-        </span>
+          {showResult(props.result)}{" "}
+          {(props?.bonus ?? 0) != 0 ? (
+            <span className="bonus-win">({showResult(props?.bonus)})</span>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
 
       <div className={`card-slot card-slot-${props.cards.length}`}>

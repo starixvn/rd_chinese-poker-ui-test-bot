@@ -1,11 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
 import { ResultSlot, ResultSlotBack, StaticSlot } from "./Slot";
 import { SlotData, SlotResult } from "@/interfaces";
+import { showResult } from "@/helpers";
 
 interface SlotResultProps {
   slotData: SlotData;
   slotResult: SlotResult;
 }
+
+const NATURAL: any = {
+  three_flushes: "Three Flushes",
+  three_straight: "Three Straight",
+  six_pairs: "Six Pairs",
+  three_straight_flushes: "Three Straight Flushes",
+  dragon: "Dragon",
+  super_dragon: "Super Dragon",
+};
 
 const DEFAULT_DELAY_TIME = 0;
 
@@ -15,21 +25,38 @@ export const SlotResultShow = (props: SlotResultProps) => {
     return sum > 0 ? "+" + sum : sum.toString();
   };
 
-  const calculate_bonus_win = (bonus: { [key: string]: number }) => {
+  const bonus_win = useMemo(() => {
     let result: any = {};
-    Object.keys(bonus).forEach((key) => {
+    Object.keys(props.slotResult.bonus).forEach((key) => {
       let segment = key.split(".")[0];
-      if (bonus[key] > 0) {
-        result[segment] = bonus[key];
-        Object.assign(result, { [segment]: bonus[key] });
-      }
+      result[segment] = props.slotResult.bonus[key];
     });
     return result;
-  };
-
-  const bonus_win = useMemo(() => {
-    return calculate_bonus_win(props.slotResult.bonus);
   }, [props.slotResult.bonus]);
+
+  const natural = useMemo(() => {
+    let result: any = {};
+    let lose = 0;
+    Object.keys(props.slotResult.natural).forEach((key) => {
+      if (props.slotResult.natural[key] > 0) {
+        result[NATURAL[key]] = props.slotResult.natural[key];
+      } else {
+        lose += props.slotResult.natural[key];
+      }
+    });
+    return {
+      win: result,
+      lose: lose,
+    };
+  }, [props.slotResult.natural]);
+
+  const superLose = useMemo(() => {
+    let result = 0;
+    Object.values(props.slotResult.superBonus).forEach((a) => {
+      result += a;
+    });
+    return result;
+  }, [props.slotResult.superBonus]);
 
   useEffect(() => {
     if (showSlot < 4) {
@@ -89,6 +116,34 @@ export const SlotResultShow = (props: SlotResultProps) => {
       ) : (
         ""
       )}
+      <div className="special-case">
+        {Object.keys(natural.win).map((key) => (
+          <div className="natural" key={key}>
+            {key} <br /> {showResult(natural.win[key])}
+          </div>
+        ))}
+        {natural.lose != 0 ? (
+          <div className="natural">
+            Natural Lose <br /> {showResult(natural.lose)}
+          </div>
+        ) : (
+          <></>
+        )}
+        {props.slotResult.break != 0 ? (
+          <div className="break">
+            Break <br /> {showResult(props.slotResult.break)}
+          </div>
+        ) : (
+          <></>
+        )}
+        {superLose != 0 ? (
+          <div className="super-lose">
+            Pusoy <br /> {showResult(superLose)}
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 };
