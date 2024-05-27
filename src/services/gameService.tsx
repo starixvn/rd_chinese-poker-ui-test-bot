@@ -132,7 +132,7 @@ function getSettlement(data: MatchData): Promise<any> {
 
 function getNewSettlement(data: NewMatchData): Promise<SettleResultMap> {
   return fetchWrapper.post(
-    "https://bots.lumigame.com/chinese-poker-service-rust/settle",
+    "https://bots.lumigame.com/chinese-poker-service-rust/settle-game-client",
     data
   );
 }
