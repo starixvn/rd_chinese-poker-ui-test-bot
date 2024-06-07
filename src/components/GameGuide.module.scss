@@ -1,0 +1,39 @@
+.guide-container {
+    background: rgb(0, 0, 32);
+    position: absolute;
+    margin-left: auto;
+    padding: 2rem;
+    padding-top: 1rem;
+    left: 10%;
+    top: 10vh;
+    width: calc(100% - 20%);
+    max-height: 80vh;
+    border-radius: 1rem;
+    color: #ffffff;
+    overflow-y: auto;
+    text-align: center;
+
+    h2 {
+        margin-left: auto;
+    }
+}
+
+.guide-content {
+    text-align: start;
+    margin-top: 1rem;
+    line-height: 1.6rem;
+}
+
+.guide-list {
+    margin-left: 1.4rem;
+    margin-top: 0.8rem;
+    li {
+        margin-top: 0.4rem;
+    }
+    margin-bottom: 0.8rem;
+}
+
+.formular {
+    color: #ddec07;
+    font-weight: 900;
+}
