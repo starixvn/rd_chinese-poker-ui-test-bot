@@ -72,8 +72,9 @@ const GameGuide = ({
                                 point, and drawing will neither add nor
                                 subtract. During the comparison process, if that
                                 hand wins with special cases, the winner will
-                                receive an additional y points, and the loser
-                                will subtract{" "}
+                                receive an additional{" "}
+                                <span className={styles["formular"]}>y</span>{" "}
+                                points, and the loser will subtract{" "}
                                 <span className={styles["formular"]}>y</span>{" "}
                                 points. In addition, if three hands lose (the
                                 pusoy), the loser will have{" "}
