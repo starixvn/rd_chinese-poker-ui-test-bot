@@ -59,10 +59,10 @@ export default function Home() {
     const [countDown, setCountDown] = useState(5);
     const [gameSettings, setGameSettings] = useState({} as FormSettings);
     const [botAddressList, setBotAddressList] = useState([
-        "https://bots.lumigame.com/chinese-poker-bot-pick",
-        "https://bots.lumigame.com/chinese-poker-bot-probability",
+        "https://bots.lumigame.com/pusoy-bot-simple",
+        "https://bots.lumigame.com/pusoy-bot-probability",
     ]);
-    const defaultBot = "https://bots.lumigame.com/chinese-poker-bot-pick";
+    const defaultBot = "https://bots.lumigame.com/pusoy-bot-simple";
     const [waitForSettled, setWaitForSettled] = useState(false);
     const [openGameGuide, setOpenGameGuide] = useState(false);
     const [scoreConfig, setScoreConfig] = useState<ScoreConfig>({
@@ -675,7 +675,7 @@ export default function Home() {
     return countDown > 2 ? (
         <>
             <Head>
-                <title>Chinese Poker</title>
+                <title>Pusoy</title>
                 <meta
                     name="viewport"
                     content="width=device-width, initial-scale=1"
@@ -696,7 +696,7 @@ export default function Home() {
     ) : (
         <>
             <Head>
-                <title>Chinese Poker</title>
+                <title>Pusoy</title>
                 <meta
                     name="viewport"
                     content="width=device-width, initial-scale=1"

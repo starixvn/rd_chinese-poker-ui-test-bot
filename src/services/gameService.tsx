@@ -15,7 +15,7 @@ export const gameService = {
 
 function getHandCards(data: any): Promise<any> {
     return fetchWrapper.post(
-        "https://bots.lumigame.com/chinese-poker-game-service/play",
+        "https://bots.lumigame.com/pusoy-game-service/play",
         data
     );
 }
@@ -127,20 +127,20 @@ function getSettlement(data: MatchData): Promise<any> {
     };
 
     return fetchWrapper.post(
-        "https://bots.lumigame.com/chinese-poker-game-service/settle-game-client",
+        "https://bots.lumigame.com/pusoy-game-service/settle-game-client",
         body
     );
 }
 
 function getNewSettlement(data: NewMatchData): Promise<SettleResultMap> {
     return fetchWrapper.post(
-        "https://bots.lumigame.com/chinese-poker-service-rust/settle-game-client",
+        "https://bots.lumigame.com/pusoy-service-rust/settle-game-client",
         data
     );
 }
 
 function getScoreConfig(): Promise<ScoreConfig> {
     return fetchWrapper.get(
-        "https://bots.lumigame.com/chinese-poker-service-rust/config"
+        "https://bots.lumigame.com/pusoy-service-rust/config"
     );
 }
