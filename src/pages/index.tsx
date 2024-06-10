@@ -8,7 +8,7 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { BackHand, Slot, StaticHand } from "../components/Slot";
 import { gameService } from "@/services/gameService";
 import { CheckCircle, ImportExport, Settings, Help } from "@mui/icons-material";
@@ -21,7 +21,7 @@ import { SuggestData } from "@/interfaces/SuggestData";
 import { SuggestPopup } from "@/components/SuggestPopup";
 import { FormSettings, initialGameSettings } from "@/components/GameSettings";
 import { preloadImages } from "@/utils/CardImageSources";
-import GameGuide from "@/components/GameGuide";
+import GameGuide, { ScoreConfig } from "@/components/GameGuide";
 
 const arrangement = {
     player: "player",
@@ -65,6 +65,21 @@ export default function Home() {
     const defaultBot = "https://bots.lumigame.com/chinese-poker-bot-pick";
     const [waitForSettled, setWaitForSettled] = useState(false);
     const [openGameGuide, setOpenGameGuide] = useState(false);
+    const [scoreConfig, setScoreConfig] = useState<ScoreConfig>({
+        bonus_score: {},
+        id: 0,
+        normal_score: 0,
+        natural_score: {
+            dragon: 0,
+            super_dragon: 0,
+            six_pairs: 0,
+            three_flushes: 0,
+            three_straight: 0,
+            three_straight_flushes: 0,
+        },
+        super_bonus_score: 0,
+        break_score: 0,
+    });
 
     const handleCloseGameGuide = () => {
         setOpenGameGuide(false);
@@ -648,6 +663,15 @@ export default function Home() {
         }
     };
 
+    useEffect(() => {
+        const getScoreConfig = async () => {
+            const scoreConfig = await gameService.getScoreConfig();
+            setScoreConfig(scoreConfig);
+        };
+
+        getScoreConfig();
+    }, []);
+
     return countDown > 2 ? (
         <>
             <Head>
@@ -971,7 +995,7 @@ export default function Home() {
                             setOpenGameGuide(true);
                         }}
                     >
-                        Pusoy (Chinese Poker) - Guide
+                        Pusoy - Guide
                         <Help />
                     </a>
                     <p>Match: {gameData.matchId}</p>
@@ -984,6 +1008,7 @@ export default function Home() {
                 <GameGuide
                     open={openGameGuide}
                     handleClose={handleCloseGameGuide}
+                    scoreConfig={scoreConfig}
                 />
             </div>
         </>

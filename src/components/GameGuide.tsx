@@ -1,15 +1,36 @@
-import { Box, Container, Modal, Typography } from "@mui/material";
+import { Container, Modal } from "@mui/material";
 import styles from "./GameGuide.module.scss";
 import { Barlow } from "next/font/google";
+import { showSpecialCase } from "@/helpers";
+
+export interface ScoreConfig {
+    id: number;
+    break_score: number;
+    normal_score: number;
+    natural_score: {
+        three_flushes: number;
+        three_straight: number;
+        six_pairs: number;
+        three_straight_flushes: number;
+        dragon: number;
+        super_dragon: number;
+    };
+    bonus_score: {
+        [key: string]: number;
+    };
+    super_bonus_score: number;
+}
 
 const barlow = Barlow({ weight: "400", subsets: ["latin"] });
 
 const GameGuide = ({
     open,
     handleClose,
+    scoreConfig,
 }: {
     open: boolean;
     handleClose: () => void;
+    scoreConfig: ScoreConfig;
 }) => {
     return (
         <Modal
@@ -22,7 +43,7 @@ const GameGuide = ({
                 <div
                     className={`${styles["guide-container"]} ${barlow.className}`}
                 >
-                    <h2>Chinese Poker Settle Rules</h2>
+                    <h2>Pusoy Settle Rules</h2>
                     <div className={styles["guide-content"]}>
                         With <span className={styles["formular"]}>n</span>{" "}
                         players participating in the game, after receiving the
@@ -33,10 +54,12 @@ const GameGuide = ({
                                 Check to see if the current player&apos;s
                                 arrangement is broken. If the arrangement is
                                 broken, the other players will have{" "}
-                                <span className={styles["formular"]}>6</span>{" "}
+                                <span className={styles["formular"]}>
+                                    {scoreConfig.break_score}
+                                </span>{" "}
                                 points added, and the current player will have{" "}
                                 <span className={styles["formular"]}>
-                                    (n - 1) * 6
+                                    (n - 1) * {scoreConfig.break_score}
                                 </span>{" "}
                                 points deducted.
                             </li>
@@ -54,11 +77,37 @@ const GameGuide = ({
                                 <span className={styles["formular"]}>x</span> is
                                 depends on the natural type:
                                 <ul className={styles["guide-list"]}>
-                                    <li>Three Flushes: 3 points</li>
-                                    <li>Three Straight: 3 points</li>
-                                    <li>Six Pairs: 6 points</li>
-                                    <li>Dragon: 6 points</li>
-                                    <li>Super Dragon: 6 points</li>
+                                    <li>
+                                        Three Flushes:{" "}
+                                        {
+                                            scoreConfig.natural_score
+                                                .three_flushes
+                                        }{" "}
+                                        points
+                                    </li>
+                                    <li>
+                                        Three Straight:{" "}
+                                        {
+                                            scoreConfig.natural_score
+                                                .three_straight
+                                        }{" "}
+                                        points
+                                    </li>
+                                    <li>
+                                        Six Pairs:{" "}
+                                        {scoreConfig.natural_score.six_pairs}{" "}
+                                        points
+                                    </li>
+                                    <li>
+                                        Dragon:{" "}
+                                        {scoreConfig.natural_score.dragon}{" "}
+                                        points
+                                    </li>
+                                    <li>
+                                        Super Dragon:{" "}
+                                        {scoreConfig.natural_score.super_dragon}{" "}
+                                        points
+                                    </li>
                                 </ul>
                             </li>
                             <li>
@@ -66,9 +115,13 @@ const GameGuide = ({
                                 <span className={styles["formular"]}>n</span>{" "}
                                 players compares their hand to each other; the
                                 higher hand will be added with{" "}
-                                <span className={styles["formular"]}>1</span>{" "}
+                                <span className={styles["formular"]}>
+                                    {scoreConfig.normal_score}
+                                </span>{" "}
                                 point, losing will subtract{" "}
-                                <span className={styles["formular"]}>1</span>{" "}
+                                <span className={styles["formular"]}>
+                                    {scoreConfig.normal_score}
+                                </span>{" "}
                                 point, and drawing will neither add nor
                                 subtract. During the comparison process, if that
                                 hand wins with special cases, the winner will
@@ -78,18 +131,25 @@ const GameGuide = ({
                                 <span className={styles["formular"]}>y</span>{" "}
                                 points. In addition, if three hands lose (the
                                 pusoy), the loser will have{" "}
-                                <span className={styles["formular"]}>9</span>{" "}
+                                <span className={styles["formular"]}>
+                                    {scoreConfig.super_bonus_score}
+                                </span>{" "}
                                 points deducted, and the winner will have{" "}
-                                <span className={styles["formular"]}>9</span>{" "}
+                                <span className={styles["formular"]}>
+                                    {scoreConfig.super_bonus_score}
+                                </span>{" "}
                                 points added. The{" "}
                                 <span className={styles["formular"]}>y</span>{" "}
                                 depends on the special case:
                                 <ul className={styles["guide-list"]}>
-                                    <li>Three Of A Kind in front: 4 points</li>
-                                    <li>Full House in middle: 7 points</li>
-                                    <li>Four Of A Kind in middle: 8 points</li>
-                                    <li>Straight Flush in middle: 9 points</li>
-                                    <li>Four Of A Kind in back: 8 points</li>
+                                    {Object.entries(
+                                        scoreConfig.bonus_score
+                                    ).map(([key, value]) => (
+                                        <li key={key}>
+                                            {showSpecialCase(key)}: {value}{" "}
+                                            points
+                                        </li>
+                                    ))}
                                 </ul>
                             </li>
                         </ol>
@@ -111,7 +171,7 @@ const GameGuide = ({
                                 existing player B in that game has a natural win
                                 set of cards, Player A will have{" "}
                                 <span className={styles["formular"]}>
-                                    x + 6
+                                    x + {scoreConfig.break_score}
                                 </span>{" "}
                                 points deducted.
                             </li>
