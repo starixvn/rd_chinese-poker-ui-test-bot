@@ -1,728 +1,740 @@
 body {
-  background: url("/images/tienlen_table.png") no-repeat top #172d4d;
-  background-attachment: fixed;
+    background: url("/images/tienlen_table.png") no-repeat top #172d4d;
+    background-attachment: fixed;
 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 @mixin glow {
-  text-align: center;
-  -webkit-animation: glow 1s ease-in-out infinite alternate;
-  -moz-animation: glow 1s ease-in-out infinite alternate;
-  animation: glow 1s ease-in-out infinite alternate;
+    text-align: center;
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
 }
 
 @keyframes glow {
-  from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073,
-      0 0 40px #f7ca04, 0 0 50px #d3c60e, 0 0 60px #ecb706b6, 0 0 70px #f1ee12ee;
-  }
-  to {
-    text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6,
-      0 0 50px #f0c60b, 0 0 60px #eed811, 0 0 70px #ecfc0a, 0 0 80px #d6da0f;
-  }
+    from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073,
+            0 0 40px #f7ca04, 0 0 50px #d3c60e, 0 0 60px #ecb706b6,
+            0 0 70px #f1ee12ee;
+    }
+    to {
+        text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6,
+            0 0 50px #f0c60b, 0 0 60px #eed811, 0 0 70px #ecfc0a,
+            0 0 80px #d6da0f;
+    }
 }
 
 .game-name {
-  position: absolute;
-  left: 10px;
-  color: antiquewhite;
-  font-size: 25px;
-
-  a {
+    position: absolute;
+    left: 10px;
     color: antiquewhite;
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
+    font-size: 25px;
+
+    a {
+        color: antiquewhite;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
     }
-  }
 }
 
 .settings {
-  position: absolute !important;
-  top: 10px;
-  right: 10px;
+    position: absolute !important;
+    top: 10px;
+    right: 10px;
 }
 
 .card-slot {
-  text-align: center;
-  position: relative;
+    text-align: center;
+    position: relative;
 }
 
 .back-hand .card-slot-3,
 .static-hand .card-slot-3,
 .result-item .card-slot-3 {
-  .card-0 {
-    transform: rotate(-10deg) translate(30px, 10px);
-  }
+    .card-0 {
+        transform: rotate(-10deg) translate(30px, 10px);
+    }
 
-  .card-1 {
-    transform: rotate(0) translateY(0%);
-  }
+    .card-1 {
+        transform: rotate(0) translateY(0%);
+    }
 
-  .card-2 {
-    transform: rotate(10deg) translate(-30px, 10px);
-  }
+    .card-2 {
+        transform: rotate(10deg) translate(-30px, 10px);
+    }
 }
 
 .back-hand .card-slot-5,
 .static-hand .card-slot-5,
 .result-item .card-slot-5 {
-  .card-0 {
-    transform: rotate(-20deg) translate(60px, 38px);
-  }
-  .card-1 {
-    transform: rotate(-10deg) translate(30px, 10px);
-  }
+    .card-0 {
+        transform: rotate(-20deg) translate(60px, 38px);
+    }
+    .card-1 {
+        transform: rotate(-10deg) translate(30px, 10px);
+    }
 
-  .card-2 {
-    transform: rotate(0) translateY(0%);
-  }
+    .card-2 {
+        transform: rotate(0) translateY(0%);
+    }
 
-  .card-3 {
-    transform: rotate(10deg) translate(-30px, 10px);
-  }
+    .card-3 {
+        transform: rotate(10deg) translate(-30px, 10px);
+    }
 
-  .card-4 {
-    transform: rotate(20deg) translate(-60px, 38px);
-  }
+    .card-4 {
+        transform: rotate(20deg) translate(-60px, 38px);
+    }
 }
 
 .back-hand .card,
 .static-hand .card,
 .result-item .card {
-  width: 70px;
-  height: 97px;
+    width: 70px;
+    height: 97px;
 }
 
 .bot-container {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 
-  .result-item {
-    &:nth-child(2) {
-      transform: translateY(-42px);
+    .result-item {
+        &:nth-child(2) {
+            transform: translateY(-42px);
+        }
+        &:nth-child(3) {
+            transform: translateY(-80px);
+        }
     }
-    &:nth-child(3) {
-      transform: translateY(-80px);
-    }
-  }
 }
 
 .bot-name {
-  color: white;
-  font-size: 20px;
+    color: white;
+    font-size: 20px;
 }
 
 .bot-info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  bottom: -25px;
-  right: 108px;
-
-  .bot-profile {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .bot-avatar {
-    width: 60px;
-  }
-}
-
-.back-hand .card-slot {
-  &:nth-child(2) {
-    transform: translateY(-40px);
-  }
-  &:nth-child(3) {
-    transform: translateY(-80px);
-  }
-}
-
-.main-player {
-  display: flex;
-  justify-content: center;
-  position: relative;
-  margin-top: 50px;
-
-  .card {
-    width: 100px;
-    height: 143px;
-  }
-
-  .result-sum {
-    position: absolute;
-    bottom: 100px;
-    transform: translateX(-22px);
-  }
-
-  .static-hand .card-slot-3 .card-0,
-  .result-item .card-slot-3 .card-0 {
-    transform: rotate(-12deg) translate(44px, 15px);
-  }
-  .static-hand .card-slot-3 .card-2,
-  .result-item .card-slot-3 .card-2 {
-    transform: rotate(12deg) translate(-44px, 18px);
-  }
-
-  .static-hand .card-slot-5 .card-0,
-  .result-item .card-slot-5 .card-0 {
-    transform: rotate(-25deg) translate(80px, 62px);
-  }
-  .static-hand .card-slot-5 .card-1,
-  .result-item .card-slot-5 .card-1 {
-    transform: rotate(-12deg) translate(44px, 15px);
-  }
-
-  .static-hand .card-slot-5 .card-3,
-  .result-item .card-slot-5 .card-3 {
-    transform: rotate(12deg) translate(-44px, 18px);
-  }
-
-  .static-hand .card-slot-5 .card-4,
-  .result-item .card-slot-5 .card-4 {
-    transform: rotate(25deg) translate(-80px, 67px);
-  }
-
-  .result-item {
-    &:nth-child(2) {
-      transform: translateY(-60px);
-    }
-    &:nth-child(3) {
-      transform: translateY(-120px);
-    }
-  }
-
-  .main-profile {
-    display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     position: absolute;
     bottom: -25px;
-    transform: translateX(-16px);
+    right: 108px;
 
-    &.settled {
-      transform: translateX(-11px);
+    .bot-profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .bot-avatar {
-      width: 100px;
+        width: 60px;
     }
-  }
+}
+
+.back-hand .card-slot {
+    &:nth-child(2) {
+        transform: translateY(-40px);
+    }
+    &:nth-child(3) {
+        transform: translateY(-80px);
+    }
+}
+
+.main-player {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-top: 50px;
+
+    .card {
+        width: 100px;
+        height: 143px;
+    }
+
+    .result-sum {
+        position: absolute;
+        bottom: 100px;
+        transform: translateX(-22px);
+    }
+
+    .static-hand .card-slot-3 .card-0,
+    .result-item .card-slot-3 .card-0 {
+        transform: rotate(-12deg) translate(44px, 15px);
+    }
+    .static-hand .card-slot-3 .card-2,
+    .result-item .card-slot-3 .card-2 {
+        transform: rotate(12deg) translate(-44px, 18px);
+    }
+
+    .static-hand .card-slot-5 .card-0,
+    .result-item .card-slot-5 .card-0 {
+        transform: rotate(-25deg) translate(80px, 62px);
+    }
+    .static-hand .card-slot-5 .card-1,
+    .result-item .card-slot-5 .card-1 {
+        transform: rotate(-12deg) translate(44px, 15px);
+    }
+
+    .static-hand .card-slot-5 .card-3,
+    .result-item .card-slot-5 .card-3 {
+        transform: rotate(12deg) translate(-44px, 18px);
+    }
+
+    .static-hand .card-slot-5 .card-4,
+    .result-item .card-slot-5 .card-4 {
+        transform: rotate(25deg) translate(-80px, 67px);
+    }
+
+    .result-item {
+        &:nth-child(2) {
+            transform: translateY(-60px);
+        }
+        &:nth-child(3) {
+            transform: translateY(-120px);
+        }
+    }
+
+    .main-profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        bottom: -25px;
+        transform: translateX(-16px);
+
+        &.settled {
+            transform: translateX(-11px);
+        }
+
+        .bot-avatar {
+            width: 100px;
+        }
+    }
 }
 
 .slot {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 5px;
 
-  .result {
-    color: white;
-    font-size: 20px;
-    margin-right: 10px;
-    width: 200px;
-    text-align: right;
-    height: 40px;
-    line-height: 35px;
-    font-weight: 800;
-  }
+    .result {
+        color: white;
+        font-size: 20px;
+        margin-right: 10px;
+        width: 200px;
+        text-align: right;
+        height: 40px;
+        line-height: 35px;
+        font-weight: 800;
+    }
 }
 
 .drag-drop-container {
-  position: relative;
+    position: relative;
 
-  .btn-switch {
-    position: absolute;
-    right: 35px;
-    bottom: 120px;
-  }
+    .btn-switch {
+        position: absolute;
+        right: 35px;
+        bottom: 120px;
+    }
 }
 
 .button-group {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  gap: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    gap: 15px;
 
-  > button {
-    width: 150px;
-    margin: 0;
-    height: 50px;
-  }
+    > button {
+        width: 150px;
+        margin: 0;
+        height: 50px;
+    }
 }
 
 .arrangement {
-  width: 900px;
-  margin: 0 auto;
-  position: relative;
+    width: 900px;
+    margin: 0 auto;
+    position: relative;
 
-  .btn-container {
-    margin-left: 210px;
-    margin-top: 20px;
+    .btn-container {
+        margin-left: 210px;
+        margin-top: 20px;
 
-    > button:first-child {
-      margin-right: 20px;
+        > button:first-child {
+            margin-right: 20px;
+        }
     }
-  }
 }
 
 .card-arrange {
-  width: 100px;
+    width: 100px;
 }
 
 .popup-arrangement {
-  display: block;
-  @media screen and (orientation: portrait) {
-    display: none;
-  }
+    display: block;
+    @media screen and (orientation: portrait) {
+        display: none;
+    }
 }
 
 .popup-arrangement .MuiPaper-rounded {
-  background-color: transparent !important;
-  box-shadow: none !important;
-  max-height: calc(100% - 10px);
+    background-color: transparent !important;
+    box-shadow: none !important;
+    max-height: calc(100% - 10px);
 }
 
 .popup-arrangement .MuiModal-backdrop {
-  background-color: rgba(0, 0, 0, 0.7) !important;
+    background-color: rgba(0, 0, 0, 0.7) !important;
 }
 
 .suggest-block {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 10px;
-  padding: 10px;
-  padding-top: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    padding: 10px;
+    padding-top: 0;
 
-  .card {
-    width: 55px;
-  }
-
-  .suggest-slot {
-    position: relative;
-    border: 1px dashed;
-    height: 260px;
-  }
-
-  .MuiRadio-root {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-    color: transparent !important;
-  }
-
-  .Mui-checked {
-    background-color: #ffe6b8 !important;
-  }
-
-  .suggest-card {
-    position: absolute;
-    top: 10px;
-    left: 0;
-    right: 0;
-
-    .card-slot {
-      text-align: left;
-
-      img {
-        margin-right: 5px;
-      }
+    .card {
+        width: 55px;
     }
-  }
+
+    .suggest-slot {
+        position: relative;
+        border: 1px dashed;
+        height: 260px;
+    }
+
+    .MuiRadio-root {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        color: transparent !important;
+    }
+
+    .Mui-checked {
+        background-color: #ffe6b8 !important;
+    }
+
+    .suggest-card {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        right: 0;
+
+        .card-slot {
+            text-align: left;
+
+            img {
+                margin-right: 5px;
+            }
+        }
+    }
 }
 
 .result-item {
-  position: relative;
-  display: grid;
-  grid-auto-flow: column;
-  align-items: center;
-  grid-template-columns: 130px 1fr;
-
-  .result-hand-type {
-    color: whitesmoke;
-    font-size: 18px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transform: translateX(55px);
-
-    .bonus-win {
-      @include glow;
-      color: rgb(227, 252, 5);
-      font-weight: bolder;
-    }
-  }
-}
-
-.result-count {
-  width: 100px;
-  text-align: center;
-  color: whitesmoke;
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: -5px;
-
-  &.result-red {
-    color: rgb(250, 53, 53);
-  }
-
-  &.result-green {
-    color: rgb(64, 204, 71);
-  }
-}
-
-.result-sum {
-  position: absolute;
-  color: white;
-  font-size: 26px;
-  padding: 5px 30px;
-  border-radius: 10px;
-  text-align: center;
-  font-weight: bold;
-  bottom: 68px;
-  right: 88px;
-
-  &.result-red {
-    background-color: rgb(250, 53, 53);
-  }
-
-  &.result-green {
-    background-color: rgb(64, 204, 71);
-  }
-}
-
-.bot-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.natural {
-  @include glow;
-  color: #fcfcf5;
-}
-
-.break {
-  @include glow;
-  color: #1f0602;
-}
-
-.super-lose {
-  @include glow;
-  color: #9c0404;
-}
-
-.special-case {
-  position: absolute;
-  top: 210px;
-  font-weight: 700;
-  font-size: 20px;
-  left: 90px;
-  text-align: center;
-}
-
-.main-player .special-case {
-  top: 290px;
-  left: 90px;
-  font-size: 23px;
-  text-align: center;
-}
-
-.main-player .result-slot {
-  position: relative;
-
-  .result-sum {
-    transform: translateX(-92px);
-  }
-}
-
-.suggest-actions {
-  justify-content: center !important;
-}
-
-.button-ok {
-  width: 150px;
-}
-
-.suggest-item {
-  position: relative;
-  display: grid;
-  grid-auto-flow: column;
-  align-items: center;
-  grid-gap: 5px;
-  grid-template-columns: 130px 1fr;
-
-  .hand-type {
-    justify-self: center;
-    text-align: center;
-    font-size: 13px;
-  }
-}
-
-.static-hand-block {
-  .static-hand {
     position: relative;
     display: grid;
     grid-auto-flow: column;
     align-items: center;
     grid-template-columns: 130px 1fr;
 
-    &:nth-child(2) {
-      transform: translateY(-60px);
-    }
+    .result-hand-type {
+        color: whitesmoke;
+        font-size: 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transform: translateX(55px);
 
-    &:nth-child(3) {
-      transform: translateY(-120px);
+        .bonus-win {
+            @include glow;
+            color: rgb(227, 252, 5);
+            font-weight: bolder;
+        }
     }
-  }
+}
 
-  .hand-type {
+.result-count {
+    width: 100px;
+    text-align: center;
     color: whitesmoke;
     font-size: 20px;
+    font-weight: bold;
+    margin-top: -5px;
+
+    &.result-red {
+        color: rgb(250, 53, 53);
+    }
+
+    &.result-green {
+        color: rgb(64, 204, 71);
+    }
+}
+
+.result-sum {
+    position: absolute;
+    color: white;
+    font-size: 26px;
+    padding: 5px 30px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    bottom: 68px;
+    right: 88px;
+
+    &.result-red {
+        background-color: rgb(250, 53, 53);
+    }
+
+    &.result-green {
+        background-color: rgb(64, 204, 71);
+    }
+}
+
+.bot-item {
+    position: relative;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    transform: translateX(55px);
-  }
+}
+
+.natural {
+    @include glow;
+    color: #fcfcf5;
+}
+
+.break {
+    @include glow;
+    color: #1f0602;
+}
+
+.super-lose {
+    @include glow;
+    color: #9c0404;
+}
+
+.special-case {
+    position: absolute;
+    top: 210px;
+    font-weight: 700;
+    font-size: 20px;
+    left: 90px;
+    text-align: center;
+    @media screen and (max-width: 935px) {
+        font-size: 15px;
+        top: 5px;
+        left: -23px;
+    }
+}
+
+.main-player .special-case {
+    top: 290px;
+    left: 90px;
+    font-size: 23px;
+    text-align: center;
+    @media screen and (max-width: 935px) {
+        font-size: 17px;
+        top: 12px;
+        left: -40px;
+    }
+}
+
+.main-player .result-slot {
+    position: relative;
+
+    .result-sum {
+        transform: translateX(-92px);
+    }
+}
+
+.suggest-actions {
+    justify-content: center !important;
+}
+
+.button-ok {
+    width: 150px;
+}
+
+.suggest-item {
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    grid-gap: 5px;
+    grid-template-columns: 130px 1fr;
+
+    .hand-type {
+        justify-self: center;
+        text-align: center;
+        font-size: 13px;
+    }
+}
+
+.static-hand-block {
+    .static-hand {
+        position: relative;
+        display: grid;
+        grid-auto-flow: column;
+        align-items: center;
+        grid-template-columns: 130px 1fr;
+
+        &:nth-child(2) {
+            transform: translateY(-60px);
+        }
+
+        &:nth-child(3) {
+            transform: translateY(-120px);
+        }
+    }
+
+    .hand-type {
+        color: whitesmoke;
+        font-size: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transform: translateX(55px);
+    }
 }
 
 .rotate {
-  display: none;
-  font-size: 20px;
-  color: wheat;
-  padding: 10px;
-  @media screen and (orientation: portrait) {
-    display: block;
-  }
+    display: none;
+    font-size: 20px;
+    color: wheat;
+    padding: 10px;
+    @media screen and (orientation: portrait) {
+        display: block;
+    }
 }
 
 .main-container {
-  display: block;
-  padding-top: 10px;
-  @media screen and (orientation: portrait) {
-    display: none;
-  }
+    display: block;
+    padding-top: 10px;
+    @media screen and (orientation: portrait) {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 935px) {
-  .game-name {
-    font-size: 15px;
-    bottom: 10px;
-  }
-
-  .card-arrange {
-    width: 45px;
-  }
-
-  .slot .result {
-    font-size: 16px;
-    width: 140px;
-  }
-  .drag-drop-container .btn-switch {
-    right: 360px;
-    bottom: 50px;
-  }
-
-  .back-hand .card,
-  .static-hand .card,
-  .result-item .card {
-    width: 28px;
-    height: 39px;
-  }
-
-  .arrangement .btn-container {
-    margin-top: 4px;
-    margin-left: 155px;
-  }
-
-  .back-hand .card-slot-3 .card-2,
-  .static-hand .card-slot-3 .card-2,
-  .result-item .card-slot-3 .card-2 {
-    transform: rotate(10deg) translate(-20px, 6px);
-  }
-
-  .back-hand .card-slot-3 .card-0,
-  .static-hand .card-slot-3 .card-0,
-  .result-item .card-slot-3 .card-0 {
-    transform: rotate(-10deg) translate(20px, 6px);
-  }
-
-  .back-hand .card-slot-5 .card-1,
-  .static-hand .card-slot-5 .card-1,
-  .result-item .card-slot-5 .card-1 {
-    transform: rotate(-10deg) translate(20px, 6px);
-  }
-
-  .back-hand .card-slot-5 .card-3,
-  .static-hand .card-slot-5 .card-3,
-  .result-item .card-slot-5 .card-3 {
-    transform: rotate(10deg) translate(-20px, 6px);
-  }
-
-  .back-hand .card-slot-5 .card-4,
-  .static-hand .card-slot-5 .card-4,
-  .result-item .card-slot-5 .card-4 {
-    transform: rotate(20deg) translate(-33px, 22px);
-  }
-
-  .back-hand .card-slot-5 .card-0,
-  .static-hand .card-slot-5 .card-0,
-  .result-item .card-slot-5 .card-0 {
-    transform: rotate(-20deg) translate(33px, 22px);
-  }
-
-  .bot-info {
-    right: 42px;
-    bottom: -16px;
-  }
-
-  .bot-info .bot-avatar {
-    width: 30px;
-  }
-
-  .main-player {
-    margin-top: 10px;
-    .result-item:nth-child(2) {
-      transform: translateY(-30px);
+    .game-name {
+        font-size: 15px;
+        bottom: 10px;
     }
-    .result-item:nth-child(3) {
-      transform: translateY(-60px);
+
+    .card-arrange {
+        width: 45px;
     }
-    .result-slot .result-sum {
-      transform: translateX(-35px);
-      bottom: 49px;
+
+    .slot .result {
+        font-size: 16px;
+        width: 140px;
     }
-    .main-profile {
-      display: none;
+    .drag-drop-container .btn-switch {
+        right: 360px;
+        bottom: 50px;
     }
-    .card {
-      width: 40px;
-      height: 55px;
+
+    .back-hand .card,
+    .static-hand .card,
+    .result-item .card {
+        width: 28px;
+        height: 39px;
     }
-  }
 
-  .main-player .static-hand .card-slot-5 .card-0,
-  .main-player .result-item .card-slot-5 .card-0 {
-    transform: rotate(-20deg) translate(33px, 30px);
-  }
-
-  .main-player .static-hand .card-slot-5 .card-1,
-  .main-player .result-item .card-slot-5 .card-1,
-  .main-player .static-hand .card-slot-3 .card-0,
-  .main-player .result-item .card-slot-3 .card-0 {
-    transform: rotate(-10deg) translate(20px, 10px);
-  }
-
-  .main-player .static-hand .card-slot-5 .card-3,
-  .main-player .result-item .card-slot-5 .card-3,
-  .main-player .static-hand .card-slot-3 .card-2,
-  .main-player .result-item .card-slot-3 .card-2 {
-    transform: rotate(10deg) translate(-20px, 10px);
-  }
-
-  .main-player .static-hand .card-slot-5 .card-4,
-  .main-player .result-item .card-slot-5 .card-4 {
-    transform: rotate(20deg) translate(-33px, 30px);
-  }
-
-  .static-hand-block .static-hand:nth-child(2) {
-    transform: translateY(-35px);
-  }
-
-  .static-hand-block .static-hand:nth-child(3) {
-    transform: translateY(-70px);
-  }
-
-  .static-hand-block {
-    margin-top: 10px;
-    .hand-type {
-      transform: translateX(36px);
-      font-size: 15px;
+    .arrangement .btn-container {
+        margin-top: 4px;
+        margin-left: 155px;
     }
-  }
 
-  .button-group > button {
-    height: 40px;
-    width: 116px;
-  }
+    .back-hand .card-slot-3 .card-2,
+    .static-hand .card-slot-3 .card-2,
+    .result-item .card-slot-3 .card-2 {
+        transform: rotate(10deg) translate(-20px, 6px);
+    }
 
-  .button-group {
-    justify-content: flex-start;
-  }
+    .back-hand .card-slot-3 .card-0,
+    .static-hand .card-slot-3 .card-0,
+    .result-item .card-slot-3 .card-0 {
+        transform: rotate(-10deg) translate(20px, 6px);
+    }
 
-  .result-sum {
-    padding: 0 5px;
-    font-size: 13px;
-    bottom: 41px;
-    right: 41px;
-  }
+    .back-hand .card-slot-5 .card-1,
+    .static-hand .card-slot-5 .card-1,
+    .result-item .card-slot-5 .card-1 {
+        transform: rotate(-10deg) translate(20px, 6px);
+    }
 
-  .suggest-block .suggest-slot {
-    height: 157px;
-  }
+    .back-hand .card-slot-5 .card-3,
+    .static-hand .card-slot-5 .card-3,
+    .result-item .card-slot-5 .card-3 {
+        transform: rotate(10deg) translate(-20px, 6px);
+    }
 
-  .suggest-block .card {
-    width: 30px;
-  }
+    .back-hand .card-slot-5 .card-4,
+    .static-hand .card-slot-5 .card-4,
+    .result-item .card-slot-5 .card-4 {
+        transform: rotate(20deg) translate(-33px, 22px);
+    }
 
-  .suggest-item {
-    grid-template-columns: 75px 1fr;
-  }
-  .result-item {
-    grid-template-columns: 65px 1fr;
-  }
-  .result-item .result-hand-type {
-    transform: translateX(20px);
-    font-size: 14px;
-  }
+    .back-hand .card-slot-5 .card-0,
+    .static-hand .card-slot-5 .card-0,
+    .result-item .card-slot-5 .card-0 {
+        transform: rotate(-20deg) translate(33px, 22px);
+    }
 
-  .bot-container .result-item:nth-child(2) {
-    transform: translateY(-22px);
-  }
+    .bot-info {
+        right: 42px;
+        bottom: -16px;
+    }
 
-  .bot-container .result-item:nth-child(3) {
-    transform: translateY(-44px);
-  }
+    .bot-info .bot-avatar {
+        width: 30px;
+    }
 
-  .result-count {
-    margin-top: -10px;
-    font-size: 14px;
-  }
+    .main-player {
+        margin-top: 10px;
+        .result-item:nth-child(2) {
+            transform: translateY(-30px);
+        }
+        .result-item:nth-child(3) {
+            transform: translateY(-60px);
+        }
+        .result-slot .result-sum {
+            transform: translateX(-35px);
+            bottom: 49px;
+        }
+        .main-profile {
+            display: none;
+        }
+        .card {
+            width: 40px;
+            height: 55px;
+        }
+    }
 
-  .settings {
-    top: unset;
-    left: 10px;
-    right: unset;
-    bottom: 60px;
-  }
+    .main-player .static-hand .card-slot-5 .card-0,
+    .main-player .result-item .card-slot-5 .card-0 {
+        transform: rotate(-20deg) translate(33px, 30px);
+    }
 
-  .back-hand .card-slot:nth-child(2) {
-    transform: translateY(-25px);
-  }
+    .main-player .static-hand .card-slot-5 .card-1,
+    .main-player .result-item .card-slot-5 .card-1,
+    .main-player .static-hand .card-slot-3 .card-0,
+    .main-player .result-item .card-slot-3 .card-0 {
+        transform: rotate(-10deg) translate(20px, 10px);
+    }
 
-  .back-hand .card-slot:nth-child(3) {
-    transform: translateY(-50px);
-  }
+    .main-player .static-hand .card-slot-5 .card-3,
+    .main-player .result-item .card-slot-5 .card-3,
+    .main-player .static-hand .card-slot-3 .card-2,
+    .main-player .result-item .card-slot-3 .card-2 {
+        transform: rotate(10deg) translate(-20px, 10px);
+    }
 
-  .bot-name {
-    font-size: 14px;
-  }
+    .main-player .static-hand .card-slot-5 .card-4,
+    .main-player .result-item .card-slot-5 .card-4 {
+        transform: rotate(20deg) translate(-33px, 30px);
+    }
 
-  .bot-info > svg {
-    width: 20px !important;
-    height: 20px !important;
-  }
+    .static-hand-block .static-hand:nth-child(2) {
+        transform: translateY(-35px);
+    }
 
-  .suggest-item .hand-type {
-    font-size: 13px;
-  }
+    .static-hand-block .static-hand:nth-child(3) {
+        transform: translateY(-70px);
+    }
+
+    .static-hand-block {
+        margin-top: 10px;
+        .hand-type {
+            transform: translateX(36px);
+            font-size: 15px;
+        }
+    }
+
+    .button-group > button {
+        height: 40px;
+        width: 116px;
+    }
+
+    .button-group {
+        justify-content: flex-start;
+    }
+
+    .result-sum {
+        padding: 0 5px;
+        font-size: 13px;
+        bottom: 41px;
+        right: 41px;
+    }
+
+    .suggest-block .suggest-slot {
+        height: 157px;
+    }
+
+    .suggest-block .card {
+        width: 30px;
+    }
+
+    .suggest-item {
+        grid-template-columns: 75px 1fr;
+    }
+    .result-item {
+        grid-template-columns: 65px 1fr;
+    }
+    .result-item .result-hand-type {
+        transform: translateX(20px);
+        font-size: 14px;
+    }
+
+    .bot-container .result-item:nth-child(2) {
+        transform: translateY(-22px);
+    }
+
+    .bot-container .result-item:nth-child(3) {
+        transform: translateY(-44px);
+    }
+
+    .result-count {
+        margin-top: -10px;
+        font-size: 14px;
+    }
+
+    .settings {
+        top: unset;
+        left: 10px;
+        right: unset;
+        bottom: 60px;
+    }
+
+    .back-hand .card-slot:nth-child(2) {
+        transform: translateY(-25px);
+    }
+
+    .back-hand .card-slot:nth-child(3) {
+        transform: translateY(-50px);
+    }
+
+    .bot-name {
+        font-size: 14px;
+    }
+
+    .bot-info > svg {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .suggest-item .hand-type {
+        font-size: 13px;
+    }
 }
