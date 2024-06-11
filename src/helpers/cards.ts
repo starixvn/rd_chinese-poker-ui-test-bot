@@ -8,4 +8,5 @@ export const segmentTypeMap: Record<number, string> = {
     7: "Full House",
     8: "Four Of Kinds",
     9: "Straight Flush",
+    10: "Royal Flush",
 };
