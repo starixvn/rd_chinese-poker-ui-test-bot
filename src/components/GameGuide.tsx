@@ -8,12 +8,12 @@ export interface ScoreConfig {
     break_score: number;
     normal_score: number;
     natural_score: {
-        three_flushes: number;
-        three_straight: number;
-        six_pairs: number;
-        three_straight_flushes: number;
-        dragon: number;
-        super_dragon: number;
+        three_flushes?: number;
+        three_straight?: number;
+        six_pairs?: number;
+        three_straight_flushes?: number;
+        dragon?: number;
+        super_dragon?: number;
     };
     bonus_score: {
         [key: string]: number;
@@ -85,14 +85,14 @@ const GameGuide = ({
                                         }{" "}
                                         points
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         Three Straight:{" "}
                                         {
                                             scoreConfig.natural_score
                                                 .three_straight
                                         }{" "}
                                         points
-                                    </li>
+                                    </li> */}
                                     <li>
                                         Six Pairs:{" "}
                                         {scoreConfig.natural_score.six_pairs}{" "}
@@ -103,11 +103,11 @@ const GameGuide = ({
                                         {scoreConfig.natural_score.dragon}{" "}
                                         points
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         Super Dragon:{" "}
                                         {scoreConfig.natural_score.super_dragon}{" "}
                                         points
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </li>
                             <li>
