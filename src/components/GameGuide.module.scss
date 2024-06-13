@@ -1,27 +1,79 @@
+$left: 8rem;
 .guide-container {
     background: rgb(0, 0, 32);
     position: absolute;
     margin-left: auto;
+    font-weight: 500;
+    font-size: 1rem;
     padding: 2rem;
-    padding-top: 1rem;
-    left: 10%;
+    padding-top: 0rem;
     top: 10vh;
-    width: calc(100% - 20%);
+    width: calc(100% - 2 * $left);
+    left: $left;
     max-height: 80vh;
     border-radius: 1rem;
     color: #ffffff;
     overflow-y: auto;
     text-align: center;
+    scrollbar-width: thin;
+    @media (orientation: portrait) {
+        left: 0;
+        width: 100%;
+        padding: 1rem;
+        padding-top: 0;
+    }
+
+    @media screen and (min-width: 950px) {
+        width: calc(100% - 2 * 25%);
+        left: 25%;
+    }
 
     h2 {
         margin-left: auto;
     }
 }
 
+.guide-tabs {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: rgb(0, 0, 32);
+}
+
 .guide-content {
     text-align: start;
-    margin-top: 1rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
     line-height: 1.6rem;
+    margin-left: 1rem;
+
+    h3 {
+        font-size: 1.1rem;
+    }
+}
+
+.card {
+    position: relative;
+    width: 3rem;
+    height: 5rem;
+}
+
+.card-segment {
+    display: flex;
+
+    :not(:first-child) {
+        margin-left: -1.7rem;
+    }
+}
+
+.card-segment-container {
+    display: flex;
+    align-items: center;
+
+    hr {
+        border: #d5ec07 0.5px;
+        border-style: solid;
+    }
 }
 
 .guide-list {
@@ -30,10 +82,33 @@
     li {
         margin-top: 0.4rem;
     }
-    margin-bottom: 0.8rem;
 }
 
-.formular {
-    color: #ddec07;
-    font-weight: 900;
+.highlight {
+    color: #d5ec07;
+}
+
+.guide-list-special {
+    @extend .guide-list;
+
+    li {
+        color: #d5ec07;
+    }
+}
+
+.normal-text {
+    color: #ffffff;
+}
+
+.table {
+    color: #ffffff;
+
+    tbody > tr > td {
+        color: #ffffff;
+    }
+}
+
+.table-container {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
