@@ -1,5 +1,3 @@
-import { segmentTypeMap } from "./cards";
-
 export const showResult = (num?: number): string => {
     if (num === 0) {
         return "0";

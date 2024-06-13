@@ -220,8 +220,8 @@ const HowToPlayBlock = () => {
                                     key={crypto.randomUUID()}
                                 >
                                     <Image
-                                        src="/images/K_spades.png"
-                                        alt="K_spades"
+                                        src={`/images/${card}.png`}
+                                        alt={card}
                                         fill
                                         objectFit="contain"
                                     />
