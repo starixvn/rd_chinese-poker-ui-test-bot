@@ -281,6 +281,31 @@ const RankingBlock = () => {
                     </div>{" "}
                 </li>
                 <li className={styles["highlight"]}>
+                    {ranking.p3} <br />{" "}
+                    <span className={styles["normal-text"]}>
+                        Diamonds&nbsp;(
+                        {
+                            <span
+                                className={styles["suit"]}
+                                style={{ color: "red" }}
+                            >
+                                ♦️
+                            </span>
+                        }
+                        )&nbsp;- Groups (
+                        {<span className={styles["suit"]}>♣</span>}) - Hearts (
+                        {
+                            <span
+                                className={styles["suit"]}
+                                style={{ color: "red" }}
+                            >
+                                ♥
+                            </span>
+                        }
+                        ) - Spades ({<span className={styles["suit"]}>♠</span>})
+                    </span>
+                </li>
+                <li className={styles["highlight"]}>
                     {ranking.p4} <br />{" "}
                     <span className={styles["normal-text"]}>
                         Royal Flush - High card
@@ -288,7 +313,10 @@ const RankingBlock = () => {
                 </li>
             </ul>
             <span className={styles["highlight"]}>NOTE:</span> <br />
-            {ranking.note1}
+            <ul>
+                <li>{ranking.note1}</li>
+                <li>{ranking.note2}</li>
+            </ul>
         </>
     );
 };
