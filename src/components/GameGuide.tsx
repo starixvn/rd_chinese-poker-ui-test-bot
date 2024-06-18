@@ -70,7 +70,7 @@ const GameGuide = ({
         let middle = [...front];
         let back = [...front];
         Object.entries(scoreConfig.bonus_score).forEach(([key, value]) => {
-            const [segment, position] = key.split(".");
+            const [position, segment] = key.split(".");
             console.log(position, segment);
             const segmentType = segmentTypeMap[Number.parseInt(segment || "0")];
             if (position === "front") {
