@@ -1,22 +1,23 @@
 export interface SettleResult {
-  bonus_win_score: {
-    [key: string]: number;
-  };
-  break_score: number;
-  natural_score: {
-    [key: string]: number;
-  };
-  normal_score: {
-    back: number;
-    front: number;
-    middle: number;
-  };
-  sum_score: number;
-  super_bonus_win: {
-    [key: number]: number;
-  };
+    royalty_score: {
+        [key: string]: number;
+    };
+    crack_score: number;
+    natural_score: {
+        [key: string]: number;
+    };
+    normal_score: {
+        back: number;
+        front: number;
+        middle: number;
+    };
+    sum_score: number;
+    pusoy_score: {
+        [key: number]: number;
+    };
+    full_pusoy_score: number;
 }
 
 export interface SettleResultMap {
-  [key: string]: SettleResult;
+    [key: string]: SettleResult;
 }

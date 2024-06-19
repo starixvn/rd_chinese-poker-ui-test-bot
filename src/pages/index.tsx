@@ -66,7 +66,7 @@ export default function Home() {
     const [waitForSettled, setWaitForSettled] = useState(false);
     const [openGameGuide, setOpenGameGuide] = useState(false);
     const [scoreConfig, setScoreConfig] = useState<ScoreConfig>({
-        bonus_score: {},
+        royalty_score: {},
         id: 0,
         normal_score: 0,
         natural_score: {
@@ -77,8 +77,8 @@ export default function Home() {
             three_straight: 0,
             three_straight_flushes: 0,
         },
-        super_bonus_score: 0,
-        break_score: 0,
+        pusoy_score: 0,
+        crack_score: 0,
     });
 
     const handleCloseGameGuide = () => {
@@ -266,40 +266,40 @@ export default function Home() {
                     hand2: result["0"].normal_score.middle,
                     hand3: result["0"].normal_score.front,
                     sum: result["0"].sum_score,
-                    bonus: result["0"].bonus_win_score,
-                    superBonus: result["0"].super_bonus_win,
+                    bonus: result["0"].royalty_score,
+                    superBonus: result["0"].pusoy_score,
                     natural: result["0"].natural_score,
-                    break: result["0"].break_score,
+                    break: result["0"].crack_score,
                 },
                 slot2: {
                     hand1: result["1"].normal_score.back,
                     hand2: result["1"].normal_score.middle,
                     hand3: result["1"].normal_score.front,
                     sum: result["1"].sum_score,
-                    bonus: result["1"].bonus_win_score,
-                    superBonus: result["1"].super_bonus_win,
+                    bonus: result["1"].royalty_score,
+                    superBonus: result["1"].pusoy_score,
                     natural: result["1"].natural_score,
-                    break: result["1"].break_score,
+                    break: result["1"].crack_score,
                 },
                 slot3: {
                     hand1: result["2"].normal_score.back,
                     hand2: result["2"].normal_score.middle,
                     hand3: result["2"].normal_score.front,
                     sum: result["2"].sum_score,
-                    bonus: result["2"].bonus_win_score,
-                    superBonus: result["2"].super_bonus_win,
+                    bonus: result["2"].royalty_score,
+                    superBonus: result["2"].pusoy_score,
                     natural: result["2"].natural_score,
-                    break: result["2"].break_score,
+                    break: result["2"].crack_score,
                 },
                 slot4: {
                     hand1: result["3"].normal_score.back,
                     hand2: result["3"].normal_score.middle,
                     hand3: result["3"].normal_score.front,
                     sum: result["3"].sum_score,
-                    bonus: result["3"].bonus_win_score,
-                    superBonus: result["3"].super_bonus_win,
+                    bonus: result["3"].royalty_score,
+                    superBonus: result["3"].pusoy_score,
                     natural: result["3"].natural_score,
-                    break: result["3"].break_score,
+                    break: result["3"].crack_score,
                 },
             });
         }

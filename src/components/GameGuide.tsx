@@ -20,7 +20,7 @@ import { segmentTypeMap } from "@/helpers/cards";
 
 export interface ScoreConfig {
     id: number;
-    break_score: number;
+    crack_score: number;
     normal_score: number;
     natural_score: {
         three_flushes?: number;
@@ -30,10 +30,10 @@ export interface ScoreConfig {
         dragon?: number;
         super_dragon?: number;
     };
-    bonus_score: {
+    royalty_score: {
         [key: string]: number;
     };
-    super_bonus_score: number;
+    pusoy_score: number;
 }
 
 interface RoyaltiesData {
@@ -69,7 +69,7 @@ const GameGuide = ({
         let front: { segmentType: string | null; value: number }[] = [];
         let middle = [...front];
         let back = [...front];
-        Object.entries(scoreConfig.bonus_score).forEach(([key, value]) => {
+        Object.entries(scoreConfig.royalty_score).forEach(([key, value]) => {
             const [position, segment] = key.split(".");
             console.log(position, segment);
             const segmentType = segmentTypeMap[Number.parseInt(segment || "0")];
@@ -99,7 +99,7 @@ const GameGuide = ({
 
         console.log(result);
         return result;
-    }, [scoreConfig.bonus_score]);
+    }, [scoreConfig.royalty_score]);
 
     const naturals = useMemo(() => {
         let result: NaturalsData[] = [];
