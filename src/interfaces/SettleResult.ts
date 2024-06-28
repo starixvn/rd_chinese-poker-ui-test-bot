@@ -1,23 +1,18 @@
-export interface SettleResult {
-    royalty_score: {
-        [key: string]: number;
-    };
-    crack_score: number;
-    natural_score: {
-        [key: string]: number;
-    };
-    normal_score: {
-        back: number;
-        front: number;
-        middle: number;
-    };
-    sum_score: number;
-    pusoy_score: {
-        [key: number]: number;
-    };
-    full_pusoy_score: number;
-}
+import { Hand } from "./Hand";
 
-export interface SettleResultMap {
-    [key: string]: SettleResult;
+export interface SettleResult {
+    royalty: Hand<{ [key: string]: number }>;
+    crack: {
+        isCrack: boolean;
+        score: number;
+    };
+    natural: {
+        [key: string]: number;
+    };
+    normal: Hand<number>;
+    sum: number;
+    pusoy: {
+        partial: { [key: string]: number };
+        full: number;
+    };
 }

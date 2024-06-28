@@ -1,7 +1,7 @@
 import { fetchWrapper } from "@/helpers/fetchWrapper";
 import { MatchData } from "../interfaces";
 import { NewMatchData } from "@/interfaces/NewMatchData";
-import { SettleResult, SettleResultMap } from "@/interfaces/SettleResult";
+import { SettleResult } from "@/interfaces/SettleResult";
 import { ScoreConfig } from "@/components/GameGuide";
 
 export const gameService = {
@@ -16,7 +16,7 @@ export const gameService = {
 function getHandCards(data: any): Promise<any> {
     return fetchWrapper.post(
         "https://bots.lumigame.com/pusoy-game-service/play",
-        data
+        data,
     );
 }
 
@@ -128,19 +128,19 @@ function getSettlement(data: MatchData): Promise<any> {
 
     return fetchWrapper.post(
         "https://bots.lumigame.com/pusoy-game-service/settle-game-client",
-        body
+        body,
     );
 }
 
-function getNewSettlement(data: NewMatchData): Promise<SettleResultMap> {
+function getNewSettlement(data: NewMatchData): Promise<SettleResult[]> {
     return fetchWrapper.post(
-        "https://bots.lumigame.com/pusoy-service-rust/settle-game-client",
-        data
+        "https://bots.lumigame.com/pusoy-service-demo-node/settle-game-client",
+        data,
     );
 }
 
 function getScoreConfig(): Promise<ScoreConfig> {
     return fetchWrapper.get(
-        "https://bots.lumigame.com/pusoy-service-rust/config"
+        "https://bots.lumigame.com/pusoy-service-demo-node/config",
     );
 }

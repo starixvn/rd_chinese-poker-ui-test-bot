@@ -20,9 +20,9 @@ import { segmentTypeMap } from "@/helpers/cards";
 
 export interface ScoreConfig {
     id: number;
-    crack_score: number;
-    normal_score: number;
-    natural_score: {
+    crack: number;
+    normal: number;
+    natural: {
         three_flushes?: number;
         three_straight?: number;
         six_pairs?: number;
@@ -30,10 +30,21 @@ export interface ScoreConfig {
         dragon?: number;
         super_dragon?: number;
     };
-    royalty_score: {
-        [key: string]: number;
+    royalty: {
+        front: {
+            [key: string]: number;
+        };
+        middle: {
+            [key: string]: number;
+        };
+        back: {
+            [key: string]: number;
+        };
     };
-    pusoy_score: number;
+    pusoy: {
+        partial: number;
+        full: number;
+    };
 }
 
 interface RoyaltiesData {
@@ -66,21 +77,24 @@ const GameGuide = ({
         setTab(newValue);
     };
     const royalties = useMemo(() => {
-        let front: { segmentType: string | null; value: number }[] = [];
-        let middle = [...front];
-        let back = [...front];
-        Object.entries(scoreConfig.royalty_score).forEach(([key, value]) => {
-            const [position, segment] = key.split(".");
-            console.log(position, segment);
-            const segmentType = segmentTypeMap[Number.parseInt(segment || "0")];
-            if (position === "front") {
-                front.push({ segmentType, value });
-            } else if (position === "middle") {
-                middle.push({ segmentType, value });
-            } else if (position === "back") {
-                back.push({ segmentType, value });
-            }
-        });
+        const front = Object.entries(scoreConfig.royalty.front).map(
+            ([key, value]) => ({
+                segmentType: segmentTypeMap[key],
+                value,
+            }),
+        );
+        const middle = Object.entries(scoreConfig.royalty.middle).map(
+            ([key, value]) => ({
+                segmentType: segmentTypeMap[key],
+                value,
+            }),
+        );
+        const back = Object.entries(scoreConfig.royalty.back).map(
+            ([key, value]) => ({
+                segmentType: segmentTypeMap[key],
+                value,
+            }),
+        );
         front.sort((a, b) => a.value - b.value);
         middle.sort((a, b) => a.value - b.value);
         back.sort((a, b) => a.value - b.value);
@@ -99,16 +113,16 @@ const GameGuide = ({
 
         console.log(result);
         return result;
-    }, [scoreConfig.royalty_score]);
+    }, [scoreConfig.royalty]);
 
     const naturals = useMemo(() => {
         let result: NaturalsData[] = [];
-        Object.entries(scoreConfig.natural_score).forEach(([key, value]) => {
+        Object.entries(scoreConfig.natural).forEach(([key, value]) => {
             result.push({ name: showNatural[key], value });
         });
         result.sort((a, b) => a.value - b.value);
         return result;
-    }, [scoreConfig.natural_score]);
+    }, [scoreConfig.natural]);
 
     return (
         <Modal

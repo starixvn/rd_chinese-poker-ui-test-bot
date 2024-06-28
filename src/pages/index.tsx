@@ -37,7 +37,7 @@ export default function Home() {
     const [suggestData, setSuggestData] = useState([] as SuggestData[]);
     const [playerData, setPlayerData] = useState([] as number[]);
     const [currentArrangement, setCurrentArrangement] = useState(
-        arrangement.player
+        arrangement.player,
     );
     const [arrangeHand1, setArrangeHand1] = useState([] as number[]);
     const [arrangeHand2, setArrangeHand2] = useState([] as number[]);
@@ -66,19 +66,19 @@ export default function Home() {
     const [waitForSettled, setWaitForSettled] = useState(false);
     const [openGameGuide, setOpenGameGuide] = useState(false);
     const [scoreConfig, setScoreConfig] = useState<ScoreConfig>({
-        royalty_score: {},
-        id: 0,
-        normal_score: 0,
-        natural_score: {
-            dragon: 0,
-            super_dragon: 0,
-            six_pairs: 0,
-            three_flushes: 0,
-            three_straight: 0,
-            three_straight_flushes: 0,
+        royalty: {
+            front: {},
+            middle: {},
+            back: {},
         },
-        pusoy_score: 0,
-        crack_score: 0,
+        id: 0,
+        normal: 0,
+        natural: {},
+        pusoy: {
+            partial: 0,
+            full: 0,
+        },
+        crack: 0,
     });
 
     const handleCloseGameGuide = () => {
@@ -171,7 +171,7 @@ export default function Home() {
             settings = initialGameSettings;
             localStorage.setItem(
                 "settings",
-                JSON.stringify(initialGameSettings)
+                JSON.stringify(initialGameSettings),
             );
         }
 
@@ -215,7 +215,7 @@ export default function Home() {
     const removeCardFromSlot = (
         data: number[],
         card: number,
-        setSlot: Dispatch<SetStateAction<number[]>>
+        setSlot: Dispatch<SetStateAction<number[]>>,
     ) => {
         let index = data.indexOf(card);
         data.splice(index, 1);
@@ -262,44 +262,44 @@ export default function Home() {
             setIsSettled(true);
             setGameResult({
                 slot1: {
-                    hand1: result["0"].normal_score.back,
-                    hand2: result["0"].normal_score.middle,
-                    hand3: result["0"].normal_score.front,
-                    sum: result["0"].sum_score,
-                    bonus: result["0"].royalty_score,
-                    superBonus: result["0"].pusoy_score,
-                    natural: result["0"].natural_score,
-                    break: result["0"].crack_score,
+                    hand1: result[0].normal.back,
+                    hand2: result[0].normal.middle,
+                    hand3: result[0].normal.front,
+                    sum: result[0].sum,
+                    royalty: result[0].royalty,
+                    pusoy: result[0].pusoy,
+                    natural: result[0].natural,
+                    crack: result[0].crack,
                 },
                 slot2: {
-                    hand1: result["1"].normal_score.back,
-                    hand2: result["1"].normal_score.middle,
-                    hand3: result["1"].normal_score.front,
-                    sum: result["1"].sum_score,
-                    bonus: result["1"].royalty_score,
-                    superBonus: result["1"].pusoy_score,
-                    natural: result["1"].natural_score,
-                    break: result["1"].crack_score,
+                    hand1: result["1"].normal.back,
+                    hand2: result["1"].normal.middle,
+                    hand3: result["1"].normal.front,
+                    sum: result["1"].sum,
+                    royalty: result["1"].royalty,
+                    pusoy: result["1"].pusoy,
+                    natural: result["1"].natural,
+                    crack: result["1"].crack,
                 },
                 slot3: {
-                    hand1: result["2"].normal_score.back,
-                    hand2: result["2"].normal_score.middle,
-                    hand3: result["2"].normal_score.front,
-                    sum: result["2"].sum_score,
-                    bonus: result["2"].royalty_score,
-                    superBonus: result["2"].pusoy_score,
-                    natural: result["2"].natural_score,
-                    break: result["2"].crack_score,
+                    hand1: result["2"].normal.back,
+                    hand2: result["2"].normal.middle,
+                    hand3: result["2"].normal.front,
+                    sum: result["2"].sum,
+                    royalty: result["2"].royalty,
+                    pusoy: result["2"].pusoy,
+                    natural: result["2"].natural,
+                    crack: result["2"].crack,
                 },
                 slot4: {
-                    hand1: result["3"].normal_score.back,
-                    hand2: result["3"].normal_score.middle,
-                    hand3: result["3"].normal_score.front,
-                    sum: result["3"].sum_score,
-                    bonus: result["3"].royalty_score,
-                    superBonus: result["3"].pusoy_score,
-                    natural: result["3"].natural_score,
-                    break: result["3"].crack_score,
+                    hand1: result["3"].normal.back,
+                    hand2: result["3"].normal.middle,
+                    hand3: result["3"].normal.front,
+                    sum: result["3"].sum,
+                    royalty: result["3"].royalty,
+                    pusoy: result["3"].pusoy,
+                    natural: result["3"].natural,
+                    crack: result["3"].crack,
                 },
             });
         }
@@ -313,7 +313,7 @@ export default function Home() {
             const data = [...arrangeHand3, ...arrangeHand2, ...arrangeHand1];
             const result = await gameService.getBotSuggestion(
                 data,
-                gameSettings.BotAddress4
+                gameSettings.BotAddress4,
             );
 
             setIsSuggesting(false);
@@ -335,20 +335,20 @@ export default function Home() {
                 let destinationCard = UpdateDestinationSlot(
                     destination.index,
                     card,
-                    destination.droppableId
+                    destination.droppableId,
                 );
 
                 UpdateSourceSlot(
                     source.index,
                     card,
                     destinationCard,
-                    source.droppableId
+                    source.droppableId,
                 );
             } else {
                 UpdateSameSlot(
                     source.index,
                     destination.index,
-                    source.droppableId
+                    source.droppableId,
                 );
             }
         } else if (combine) {
@@ -369,13 +369,13 @@ export default function Home() {
                 let destinationCard = UpdateDestinationSlot(
                     index,
                     card,
-                    combine.droppableId
+                    combine.droppableId,
                 );
                 UpdateSourceSlot(
                     source.index,
                     card,
                     destinationCard,
-                    source.droppableId
+                    source.droppableId,
                 );
             }
         }
@@ -388,7 +388,7 @@ export default function Home() {
     const UpdateDestinationSlot = (
         index: number,
         card: number,
-        droppableId: string
+        droppableId: string,
     ): number => {
         let destinationCard = -1;
 
@@ -402,7 +402,7 @@ export default function Home() {
                     setArrangeHand1,
                     5,
                     card,
-                    index
+                    index,
                 );
                 break;
             case "DropSlot2":
@@ -414,7 +414,7 @@ export default function Home() {
                     setArrangeHand2,
                     5,
                     card,
-                    index
+                    index,
                 );
                 break;
             case "DropSlot3":
@@ -426,7 +426,7 @@ export default function Home() {
                     setArrangeHand3,
                     3,
                     card,
-                    index
+                    index,
                 );
                 break;
         }
@@ -438,7 +438,7 @@ export default function Home() {
         index: number,
         card: number,
         destinationCard: number,
-        droppableId: string
+        droppableId: string,
     ) => {
         switch (droppableId) {
             case "DropSlot1":
@@ -471,7 +471,7 @@ export default function Home() {
     const UpdateSameSlot = (
         sourceIndex: number,
         destinationIndex: number,
-        droppableId: string
+        droppableId: string,
     ) => {
         let orderSlot = [] as number[];
         switch (droppableId) {
@@ -479,7 +479,7 @@ export default function Home() {
                 orderSlot = reorder(
                     arrangeHand1,
                     sourceIndex,
-                    destinationIndex
+                    destinationIndex,
                 );
                 setArrangeHand1([...orderSlot]);
                 break;
@@ -487,7 +487,7 @@ export default function Home() {
                 orderSlot = reorder(
                     arrangeHand2,
                     sourceIndex,
-                    destinationIndex
+                    destinationIndex,
                 );
                 setArrangeHand2([...orderSlot]);
                 break;
@@ -495,7 +495,7 @@ export default function Home() {
                 orderSlot = reorder(
                     arrangeHand3,
                     sourceIndex,
-                    destinationIndex
+                    destinationIndex,
                 );
                 setArrangeHand3([...orderSlot]);
                 break;
@@ -505,7 +505,7 @@ export default function Home() {
     const reorder = (
         arr: number[],
         startIndex: number,
-        endIndex: number
+        endIndex: number,
     ): number[] => {
         const result = Array.from(arr);
         const [removed] = result.splice(startIndex, 1);
@@ -519,7 +519,7 @@ export default function Home() {
         setSlot: Dispatch<SetStateAction<number[]>>,
         limit: number,
         card: number,
-        index: number
+        index: number,
     ) => {
         if (index < limit) {
             if (slotData.length > index) {

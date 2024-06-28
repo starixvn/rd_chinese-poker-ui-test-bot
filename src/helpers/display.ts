@@ -9,7 +9,8 @@ export const showResult = (num?: number): string => {
 };
 
 export const showNatural: Record<string, string> = {
-    three_flushes: "Three Flushes",
-    six_pairs: "Six Pairs",
+    threeFlushes: "Three Flushes",
+    sixPairs: "Six Pairs",
     dragon: "Dragon",
+    threeStraights: "Three Straights",
 };

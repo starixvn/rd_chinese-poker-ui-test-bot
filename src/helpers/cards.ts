@@ -1,12 +1,12 @@
-export const segmentTypeMap: Record<number, string> = {
-    1: "High Card",
-    2: "Pair",
-    3: "Two Pairs",
-    4: "Three Of Kinds",
-    5: "Straight",
-    6: "Flush",
-    7: "Full House",
-    8: "Four Of Kinds",
-    9: "Straight Flush",
-    10: "Royal Flush",
+export const segmentTypeMap: Record<string, string> = {
+    highCard: "High Card",
+    onePair: "Pair",
+    twoPairs: "Two Pairs",
+    threeOfAKind: "Three Of A Kind",
+    straight: "Straight",
+    flush: "Flush",
+    fullHouse: "Full House",
+    fourOfAKind: "Four Of A Kind",
+    straightFlush: "Straight Flush",
+    royalFlush: "Royal Flush",
 };
