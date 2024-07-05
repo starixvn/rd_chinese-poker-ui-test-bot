@@ -1,21 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { ResultSlot, ResultSlotBack, StaticSlot } from "./Slot";
 import { SlotData, SlotResult } from "@/interfaces";
-import { showResult } from "@/helpers";
+import { showNatural, showResult } from "@/helpers";
 
 interface SlotResultProps {
     slotData: SlotData;
     slotResult: SlotResult;
 }
-
-const NATURAL: any = {
-    three_flushes: "Three Flushes",
-    three_straight: "Three Straight",
-    six_pairs: "Six Pairs",
-    three_straight_flushes: "Three Straight Flushes",
-    dragon: "Dragon",
-    super_dragon: "Super Dragon",
-};
 
 const DEFAULT_DELAY_TIME = 0;
 
@@ -47,7 +38,7 @@ export const SlotResultShow = (props: SlotResultProps) => {
         let lose = 0;
         Object.keys(props.slotResult.natural).forEach((key) => {
             if (props.slotResult.natural[key] > 0) {
-                result[NATURAL[key]] = props.slotResult.natural[key];
+                result[showNatural[key]] = props.slotResult.natural[key];
             } else {
                 lose += props.slotResult.natural[key];
             }
