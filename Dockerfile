@@ -1,9 +1,9 @@
-FROM node:21.2.0-alpine AS base
+FROM hub.lumigame.com/docker-hub/library/node:lts-alpine AS base
 WORKDIR /app
 COPY package.json .
 RUN npm install 
 
-FROM node:21.2.0-alpine AS builder
+FROM hub.lumigame.com/docker-hub/library/node:lts-alpine AS builder
 WORKDIR /app
 COPY --from=base /app/node_modules ./node_modules
 COPY --from=base /root/.npm /root/.npm
@@ -12,7 +12,7 @@ RUN npm run build \
     && rm -rf node_modules \
     && npm install --omit=dev
 
-FROM node:21.2.0-alpine AS prod
+FROM hub.lumigame.com/docker-hub/library/node:lts-alpine AS prod
 WORKDIR /app
 
 ENV NEXT_SHARP_PATH=/app/node_modules/sharp
