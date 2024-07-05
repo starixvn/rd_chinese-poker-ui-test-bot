@@ -1,18 +1,22 @@
 import { Hand } from "./Hand";
 
 export interface SettleResult {
-    royalty: Hand<{ [key: string]: number }>;
+    royalty: Hand<{
+        name: string;
+        units: number;
+    }>;
     crack: {
         isCrack: boolean;
-        score: number;
+        units: number;
     };
     natural: {
-        [key: string]: number;
+        name: string;
+        units: number;
     };
     normal: Hand<number>;
     sum: number;
     pusoy: {
-        partial: { [key: string]: number };
+        mini: { [key: string]: number };
         full: number;
     };
 }

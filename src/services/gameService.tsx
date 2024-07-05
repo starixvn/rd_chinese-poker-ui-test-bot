@@ -1,5 +1,5 @@
 import { fetchWrapper } from "@/helpers/fetchWrapper";
-import { MatchData } from "../interfaces";
+import { FailedCase, MatchData } from "../interfaces";
 import { NewMatchData } from "@/interfaces/NewMatchData";
 import { SettleResult } from "@/interfaces/SettleResult";
 import { ScoreConfig } from "@/components/GameGuide";
@@ -11,6 +11,8 @@ export const gameService = {
     getBotSuggestion,
     getNewSettlement,
     getScoreConfig,
+    reportFailedCase,
+    getNewMatchData,
 };
 
 function getHandCards(data: any): Promise<any> {
@@ -142,5 +144,18 @@ function getNewSettlement(data: NewMatchData): Promise<SettleResult[]> {
 function getScoreConfig(): Promise<ScoreConfig> {
     return fetchWrapper.get(
         "https://bots.lumigame.com/pusoy-service-demo-node/config",
+    );
+}
+
+function getNewMatchData(matchId: string): Promise<NewMatchData> {
+    return fetchWrapper.get(
+        `https://bots.lumigame.com/pusoy-service-demo-node/match/${matchId}`,
+    );
+}
+
+function reportFailedCase(failedCase: FailedCase) {
+    return fetchWrapper.post(
+        "https://bots.lumigame.com/pusoy-service-demo-node/report",
+        failedCase,
     );
 }

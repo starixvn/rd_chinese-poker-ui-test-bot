@@ -18,44 +18,23 @@ export const SlotResultShow = (props: SlotResultProps) => {
 
     const royalty = useMemo(() => {
         return {
-            front: Object.values(props.slotResult.royalty.front).reduce(
-                (acc, value) => acc + value,
-                0,
-            ),
-            middle: Object.values(props.slotResult.royalty.middle).reduce(
-                (acc, value) => acc + value,
-                0,
-            ),
-            back: Object.values(props.slotResult.royalty.back).reduce(
-                (acc, value) => acc + value,
-                0,
-            ),
+            front: props.slotResult.royalty.front.units,
+            middle: props.slotResult.royalty.middle.units,
+            back: props.slotResult.royalty.back.units,
         };
     }, [props.slotResult.royalty]);
 
     const natural = useMemo(() => {
-        let result: any = {};
-        let lose = 0;
-        Object.keys(props.slotResult.natural).forEach((key) => {
-            if (props.slotResult.natural[key] > 0) {
-                result[showNatural[key]] = props.slotResult.natural[key];
-            } else {
-                lose += props.slotResult.natural[key];
-            }
-        });
-        return {
-            win: result,
-            lose: lose,
-        };
+        return props.slotResult.natural;
     }, [props.slotResult.natural]);
 
     const superLose = useMemo(() => {
         let result = 0;
-        Object.values(props.slotResult.pusoy.partial).forEach((a) => {
+        Object.values(props.slotResult.pusoy.mini).forEach((a) => {
             result += a;
         });
         return result;
-    }, [props.slotResult.pusoy.partial]);
+    }, [props.slotResult.pusoy.mini]);
 
     useEffect(() => {
         if (showSlot < 4) {
@@ -116,29 +95,32 @@ export const SlotResultShow = (props: SlotResultProps) => {
                 ""
             )}
             <div className="special-case">
-                {Object.keys(natural.win).map((key) => (
-                    <div className="natural" key={key}>
-                        {key} <br /> {showResult(natural.win[key])}
-                    </div>
-                ))}
-                {natural.lose != 0 ? (
+                {natural.units < 0 ? (
                     <div className="natural">
-                        Natural Lose <br /> {showResult(natural.lose)}
+                        Natural Lose <br /> {showResult(natural.units)}
+                    </div>
+                ) : (
+                    <></>
+                )}
+                {natural.units > 0 ? (
+                    <div className="natural">
+                        {showNatural[natural.name]} <br />{" "}
+                        {showResult(natural.units)}
                     </div>
                 ) : (
                     <></>
                 )}
                 {props.slotResult.crack.isCrack ? (
                     <div className="break">
-                        Break <br /> {showResult(props.slotResult.crack.score)}
+                        Break <br /> {showResult(props.slotResult.crack.units)}
                     </div>
                 ) : (
                     <></>
                 )}
-                {props.slotResult.crack.score > 0 ? (
+                {props.slotResult.crack.units > 0 ? (
                     <div className="break-win">
                         Break win <br />{" "}
-                        {showResult(props.slotResult.crack.score)}
+                        {showResult(props.slotResult.crack.units)}
                     </div>
                 ) : (
                     <></>

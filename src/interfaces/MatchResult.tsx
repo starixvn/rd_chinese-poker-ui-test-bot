@@ -7,14 +7,15 @@ export interface SlotResult {
     sum: number;
     crack: {
         isCrack: boolean;
-        score: number;
+        units: number;
     };
     natural: {
-        [key: string]: number;
+        name: string;
+        units: number;
     };
-    royalty: Hand<{ [key: string]: number }>;
+    royalty: Hand<{ name: string; units: number }>;
     pusoy: {
-        partial: {
+        mini: {
             [key: string]: number;
         };
         full: number;
