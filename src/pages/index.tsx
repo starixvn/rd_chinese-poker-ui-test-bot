@@ -5,6 +5,7 @@ import {
     CircularProgress,
     Dialog,
     DialogContent,
+    Snackbar,
     Tooltip,
     Typography,
 } from "@mui/material";
@@ -92,6 +93,7 @@ export default function Home() {
     const handleCloseGameGuide = () => {
         setOpenGameGuide(false);
     };
+    const [isOpenSnack, setIsOpenSnack] = useState<boolean>(false);
 
     const handleReport = async () => {
         const newGameData = {
@@ -115,6 +117,10 @@ export default function Home() {
             settleResult: settleData,
         };
         await gameService.reportFailedCase(data);
+        setIsOpenSnack(true);
+        setTimeout(() => {
+            setIsOpenSnack(false);
+        }, 1000);
     };
 
     async function getData() {
@@ -1029,12 +1035,8 @@ export default function Home() {
                 </Button>
                 <div className="game-name">
                     <a
-                        href="https://kami.com.ph/112525-how-play-pusoy-dos-win.html"
+                        href="https://docs.google.com/spreadsheets/d/15mBnUYdlj-mPzjmSoAOY1g8huB6qEbMUrjuvRnNXVx8/edit?gid=0#gid=0"
                         target="_blank"
-                        onClick={(e: any) => {
-                            e.preventDefault();
-                            setOpenGameGuide(true);
-                        }}
                     >
                         Pusoy - Guide
                         <Help />
@@ -1046,11 +1048,21 @@ export default function Home() {
                     openPopup={openSettings}
                     handleClosePopup={handleCloseSettings}
                 />
-                <GameGuide
-                    open={openGameGuide}
-                    handleClose={handleCloseGameGuide}
-                    scoreConfig={scoreConfig}
-                />
+                <Snackbar
+                    anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                    open={isOpenSnack}
+                >
+                    <div
+                        style={{
+                            backgroundColor: "black",
+                            padding: "0.5rem",
+                            borderRadius: "5px",
+                            color: "white",
+                        }}
+                    >
+                        This match reported!
+                    </div>
+                </Snackbar>
             </div>
         </>
     );
